@@ -32,10 +32,7 @@ const Comment = ({ comment }) => {
     const [updateComment] = useUpdateCommentMutation();
     const [editMode, setEditMode] = useState(false);
     const [editedComment, setEditedComment] = useState(comment.comment);
-    const { useInfo } = useSelector((state) => state.auth)
-    const postId = useParams().id;
-
-
+    const { useInfo } = useSelector((state) => state.auth);
 
     const deleteCommentHandler = async () => {
         try {
@@ -51,19 +48,22 @@ const Comment = ({ comment }) => {
     const handleUpdateComment = async () => {
         try {
             const id = comment._id;
-            const updatedData = await updateComment({ id: id, comment: editedComment, author: userInfo?.user?.id });
-            const updatedComment = updatedData?.data?.updateComment
+            await updateComment({ id: id, comment: editedComment, author: userInfo?.user?.id });
             setEditMode(false);
             toast.success("Comment updated successfully!");
+            window.location.reload();
         } catch (err) {
             console.log(err);
             toast.error(err?.message || "Try again later!!");
         }
     };
 
+    useEffect(() => {
+        setEditedComment(comment.comment)
+    },[comment.comment])
+
     return (
         <>
-            {/* Comments */}
             <div>
                 <div className='px-2 py-2 bg-gray-200 my-2 rounded-md'>
                     <div className='flex items-center justify-between'>
@@ -81,27 +81,25 @@ const Comment = ({ comment }) => {
                         </div>
                     </div>
                     {editMode &&
-                        <div>
-                            <textarea
-                                className="px-4 mt-2 border rounded-md"
-                                value={editedComment}
-                                onChange={(e) => setEditedComment(e.target.value)}
-                            />
-                            <button onClick={handleUpdateComment} className="bg-zinc-900  text-white font-bold py-2 px-4 rounded mt-2">
-                                Save
-                            </button>
-
-
+                        <div className='mt-2'>
+                            <div className='flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4'>
+                                <textarea
+                                    value={editedComment}
+                                    onChange={(e) => setEditedComment(e.target.value)}
+                                    className='w-full md:w-2/3 px-4 py-2 bg-white rounded-md text-gray-800 placeholder-gray-500 focus:outline-none focus:ring focus:ring-blue-200 h-10'
+                                    placeholder='Write your comment here...'
+                                ></textarea>
+                                <button
+                                    type='submit'
+                                    onClick={handleUpdateComment}
+                                    className='w-full md:w-auto h-auto px-6 bg-black text-white rounded-md hover:bg-gray-800 transition duration-300'
+                                >
+                                    Update
+                                </button>
+                            </div>
                         </div>
                     }
-
-                    {editMode ? <>
-                        <p>{comment.comment}</p>
-                    </> : <><p>{editedComment}</p></>
-                    }
-
-
-
+                    {!editMode && <p className='text-gray-600'>{comment.comment}</p>}
                 </div>
             </div>
         </>

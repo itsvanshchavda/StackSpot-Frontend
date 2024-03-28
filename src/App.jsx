@@ -10,6 +10,8 @@ import EditPost from './pages/EditPost'
 import Profile from './pages/Profile'
 import Notfound from './components/Notfound'
 import CreatePost from './pages/CreatePost'
+import MyBlogs from './components/MyBlogs'
+import EditProfile from './pages/EditProfile'
 
 
 const App = () => {
@@ -22,7 +24,9 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/posts/post/:id" element={<PostDetails />} />
         <Route path="/edit/:id" element={<EditPost />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path='/myblogs/:id' element={<MyBlogs />} />
+        <Route path="/profile/:id" element={<Profile />} />
+        <Route path='/profile/edit/:id' element={<EditProfile />} />
         <Route path="*" element={<Notfound />} />
         <Route path='/write' element={<CreatePost />} />
 

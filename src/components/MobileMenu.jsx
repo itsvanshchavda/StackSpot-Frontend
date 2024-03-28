@@ -29,7 +29,7 @@ const MobileMenu = () => {
   }
 
   return (
-    <div className='shadow-2xl w-[200px] flex flex-col space-y-4 absolute top-14 right-6 md:right-32 bg-zinc-900 p-4 rounded-md '>
+    <div className='shadow-2xl z-10 w-[200px] flex flex-col space-y-4 absolute top-14 right-6 md:right-32 bg-zinc-900 p-4 rounded-md '>
       {!userInfo && <>
         <Link to='/login'>
           <h3 className='text-white hover:text-gray-500 cursor-pointer'>Login</h3>
@@ -39,11 +39,15 @@ const MobileMenu = () => {
         </Link>
       </>}
       {userInfo && <>
-        <h3 className='text-white hover:text-gray-500 cursor-pointer'>Profile</h3>
+        <Link to={`/profile/${userInfo?.user?._id}`} >
+          <h3 className='text-white hover:text-gray-500 cursor-pointer'>Profile</h3>
+        </Link>
         <Link to='/write'>
           <h3 className='text-white hover:text-gray-500 cursor-pointer'>Write</h3>
         </Link>
-        <h3 className='text-white hover:text-gray-500 cursor-pointer'>MyBlogs</h3>
+        <Link to={`/myblogs/${userInfo?.user?._id}`}>
+          <h3 className='text-white hover:text-gray-500 cursor-pointer'>My blogs</h3>
+        </Link>
         <h3 className='text-white hover:text-gray-500 cursor-pointer' onClick={handleLogout}>Logout</h3>
       </>}
     </div>

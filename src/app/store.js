@@ -3,6 +3,7 @@ import authReducer from "../slices/AuthSlice";
 import { authApi } from "../api/auth";
 import { postApi } from "../api/post";
 import { commentApi } from "../api/comment";
+import { userApi } from "../api/user";
 
 const store = configureStore({
   reducer: {
@@ -10,12 +11,14 @@ const store = configureStore({
     [authApi.reducerPath]: authApi.reducer,
     [postApi.reducerPath]: postApi.reducer,
     [commentApi.reducerPath]: commentApi.reducer,
+    [userApi.reducerPath]: userApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
       authApi.middleware,
       postApi.middleware,
-      commentApi.middleware
+      commentApi.middleware,
+      userApi.middleware
     ),
 
   devTools: true,
