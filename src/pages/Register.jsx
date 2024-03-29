@@ -13,13 +13,10 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
-
+  const [firstname, setFirstname] = useState('');
+  const [lastname, setLastname] = useState('');
   const navigate = useNavigate();
-
-
   const dispatch = useDispatch();
-
-
   const { userInfo } = useSelector((state) => state.auth);
 
   const [register, { isLoading, isError }] = useRegisterMutation();
@@ -33,7 +30,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await register({ email, password, username }).unwrap();
+      const res = await register({ email, password, username, firstname, lastname }).unwrap();
       dispatch(setCredentials(res))
       toast.success(res?.message || 'Registered successfully')
       navigate('/')
@@ -68,6 +65,47 @@ const Register = () => {
               <div className="left-0 right-0 inline-block border-gray-200 px-2 py-2.5 sm:px-4">
                 <form className="flex flex-col gap-4 pb-4" onSubmit={handleSubmit}>
                   <h1 className="mb-4 text-2xl font-bold">Register</h1>
+
+
+                  <div className="flex w-full">
+                    {/* Left Div */}
+                    <div className="w-1/2 pr-2">
+                      <div className="mb-2">
+                        <label className="text-sm font-medium text-gray-900" htmlFor="firstname">Firstname:</label>
+                      </div>
+                      <div className="relative">
+                        <input
+                          value={firstname}
+                          onChange={(e) => setFirstname(e.target.value)}
+                          className="block w-full border bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 placeholder-gray-400 focus:ring-cyan-500 p-2.5 text-sm rounded-lg"
+                          type="text"
+                          name="firstname"
+                          placeholder="Firstname"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    {/* Right Div */}
+                    <div className="w-1/2 pl-2">
+                      <div className="mb-2">
+                        <label className="text-sm font-medium text-gray-900" htmlFor="lastname">Lastname:</label>
+                      </div>
+                      <div className="relative">
+                        <input
+                          value={lastname}
+                          onChange={(e) => setLastname(e.target.value)}
+                          className="block w-full border bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 placeholder-gray-400 focus:ring-cyan-500 p-2.5 text-sm rounded-lg"
+                          type="text"
+                          name="lastname"
+                          placeholder="Lastname"
+                          required
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+
 
                   <div>
                     <div className="mb-2">
@@ -108,7 +146,7 @@ const Register = () => {
                         />
                       </div>
                     </div>
-                    <p className="mt-2 cursor-pointer text-blue-500 hover:text-blue-600">Forgot password?</p>
+                    {/* <p className="mt-2 cursor-pointer text-blue-500 hover:text-blue-600">Forgot password?</p> */}
                   </div>
                   <div className="flex flex-col gap-2">
                     <button type="submit"

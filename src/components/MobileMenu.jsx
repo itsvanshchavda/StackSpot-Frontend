@@ -42,9 +42,7 @@ const MobileMenu = () => {
         <Link to={`/profile/${userInfo?.user?._id}`} >
           <h3 className='text-white hover:text-gray-500 cursor-pointer'>Profile</h3>
         </Link>
-        <Link to='/write'>
-          <h3 className='text-white hover:text-gray-500 cursor-pointer'>Write</h3>
-        </Link>
+    
         <Link to={`/myblogs/${userInfo?.user?._id}`}>
           <h3 className='text-white hover:text-gray-500 cursor-pointer'>My blogs</h3>
         </Link>

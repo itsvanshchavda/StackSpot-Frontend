@@ -10,7 +10,26 @@ export const userApi = createApi({
     getUser: builder.query({
       query: (userId) => `/user/${userId}`,
     }),
+
+    updateUser: builder.mutation({
+      query: ({ userid, user }) => ({
+        url: `/user/${userid}`,
+        method: "PUT",
+        body: user,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+
+    addProfilePhoto: builder.mutation({
+      query: (photo) => ({
+        url: `/user/upload`,
+        method: "POST",
+        body: photo,
+      }),
+    }),
   }),
 });
 
-export const { useGetUserQuery } = userApi;
+export const { useGetUserQuery, useUpdateUserMutation ,  useAddProfilePhotoMutation } = userApi;

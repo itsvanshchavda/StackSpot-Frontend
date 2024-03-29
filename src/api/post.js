@@ -64,6 +64,10 @@ export const postApi = createApi({
         },
       }),
     }),
+
+    getUserPost: builder.query({
+      query: (userId) => `/post/user/${userId}`,
+    }),
   }),
 });
 
@@ -75,4 +79,5 @@ export const {
   usePostUploadMutation,
   useDeletePostMutation,
   useUpdatePostMutation,
+  useGetUserPostQuery,
 } = postApi;

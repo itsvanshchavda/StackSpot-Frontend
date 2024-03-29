@@ -6,11 +6,13 @@ import { MdDelete } from "react-icons/md";
 import Comment from '../components/Comment';
 import { useDeletePostMutation, useGetPostByIdQuery } from '../api/post';
 import { useNavigate, useParams } from 'react-router-dom';
-
 import { useSelector } from 'react-redux';
 import Loader from '../components/Loader';
 import { toast } from 'react-toastify';
 import { useCreateCommentMutation, useGetAllCommentQuery } from '../api/comment';
+import DOMPurify from 'dompurify';
+import avatar from '../assets/avatar.jpg';
+import Profile from './Profile';
 
 const PostDetails = () => {
     const img = import.meta.env.VITE_IMG_URL;
@@ -21,8 +23,13 @@ const PostDetails = () => {
     const [deletePost] = useDeletePostMutation();
     const [createComment] = useCreateCommentMutation();
     const [comment, setComment] = useState('');
-
+    const sanitizedDescription = DOMPurify.sanitize(data?.getPost?.description);
     const { userInfo } = useSelector((state) => state.auth);
+
+    const profileImg = img + userInfo?.user?.profilePhoto;
+    <Profile postId={postId} />
+
+
 
     const handleDelete = async () => {
         try {
@@ -54,7 +61,7 @@ const PostDetails = () => {
         }
     };
 
-    const hanleNavigate = (path) => {
+    const handleNavigate = (path) => {
         navigate(path);
     };
 
@@ -69,15 +76,27 @@ const PostDetails = () => {
                         <span>|</span>
                         <p>{new Date(data?.getPost.updatedAt).toLocaleTimeString()}</p>
                     </div>
-                    <p className="text-[16px] font-semibold text-gray-800 mb-2">{data?.getPost.username}</p>
+
+                    <div className='flex gap-3 mb-5 justify-start items-center'>
+                        <img src={profileImg ? avatar  : profileImg} className='w-12 h-12 object-cover rounded-full' alt="" />
+                        <p className="text-[16px] font-sans text-gray-800 mb-2 cursor-pointer" onClick={() =>navigate(`/profile/${data?.getPost?.userId}`)}>{data?.getPost?.firstname} {data?.getPost?.lastname}</p>
+                        <span className='mb-2 text-gray-400'>•</span>
+                        <p className='text-green-600 font-sans mb-2'>Follow</p>
+                    </div>
+
+
                     <img
                         src={img + data?.getPost.photo}
                         alt=""
                         className='w-full rounded-lg mb-6 shadow-xl'
                     />
-                    <div className='text-lg text-gray-800 leading-relaxed mb-6 font-serif'>
-                        {data?.getPost.description}
-                    </div>
+                    <div className='text-lg text-gray-800 leading-relaxed mb-6 font-serif' dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
+
+
+                    />
+
+                    { }
+
                     <div className='flex flex-wrap items-center space-x-2 mb-6'>
                         {data?.getPost?.categories.map((item, index) => (
                             <div key={index} className='bg-gray-200 rounded-md px-3 py-1 text-sm text-gray-600'>{item}</div>
@@ -86,10 +105,11 @@ const PostDetails = () => {
                     <div className='flex items-center justify-between'>
                         {data?.getPost?.userId === userInfo?.user._id && (
                             <div className='flex items-center space-x-2'>
-                                <button onClick={() => hanleNavigate(`/edit/${postId}`)} className='flex items-center px-3 py-2 text-sm text-gray-600 bg-gray-100 rounded-md'><BiEdit size={20} />Edit</button>
+                                <button onClick={() => handleNavigate(`/edit/${postId}`)} className='flex items-center px-3 py-2 text-sm text-gray-600 bg-gray-100 rounded-md'><BiEdit size={20} />Edit</button>
                                 <button onClick={handleDelete} className='flex items-center px-3 py-2 text-sm text-gray-600 bg-gray-100 rounded-md'><MdDelete size={20} />Delete</button>
                             </div>
                         )}
+
                     </div>
 
                     {/* Comment Section */}

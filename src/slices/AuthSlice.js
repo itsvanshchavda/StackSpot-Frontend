@@ -25,6 +25,12 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       localStorage.clear();
     },
+
+    updateCredentials: (state, action) => {
+      state.userInfo = action.payload;
+      state.isAuthenticated = action.payload ? true : false;
+      localStorage.setItem("userInfo", JSON.stringify(action.payload));
+    },
   },
 });
 

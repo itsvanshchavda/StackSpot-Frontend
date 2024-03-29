@@ -6,6 +6,8 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { usePostUploadMutation, useUploadFileMutation } from '../api/post.js';
 import { useNavigate } from 'react-router-dom';
+import 'react-quill/dist/quill.snow.css'; // Import Quill styles
+import ReactQuill from 'react-quill';
 
 const CreatePost = () => {
     const [category, setCategory] = useState('');
@@ -46,6 +48,8 @@ const CreatePost = () => {
                     title,
                     description,
                     username: userInfo.user?.username,
+                    firstname: userInfo.user?.firstname,
+                    lastname: userInfo.user?.lastname,
                     userId: userInfo.user?._id,
                     categories: categoryList,
                     photo: res?.img?.filename
@@ -77,6 +81,10 @@ const CreatePost = () => {
         }
     };
 
+    const handleEditorChange = (content) => {
+        setDescription(content);
+      };
+
     return (
         <>
             <Navbar />
@@ -84,8 +92,21 @@ const CreatePost = () => {
                 <h1 className='font-bold md:text-2xl text-xl mt-8'>Create a post</h1>
                 <form className='w-full flex flex-col space-y-4 md:space-y-8 mt-4' onSubmit={submitHandler}>
                     <input value={title} onChange={(e) => setTitle(e.target.value)} type="text" className='bg-zinc-100 outline-none px-4 py-2 rounded-md' placeholder='Enter post title...' />
-                    <textarea value={description} onChange={(e) => setDescription(e.target.value)} className='bg-zinc-100 outline-none px-4 py-2 rounded-md' placeholder='Write description...' rows="6"></textarea>
-                    <input onChange={(e) => setFile(e.target.files[0])} type="file" className='px-4 py-2 rounded-md' name='image' />
+                    <ReactQuill value={description} onChange={handleEditorChange} className="bg-zinc-50 w-full  outline-none px-4 py-2 rounded-md" placeholder="Write description..." />
+                    {file ? (
+                        <div>
+                            <p className='font-semibold text-md'>File Name:{file.name}</p>
+                            <img src={URL.createObjectURL(file)} alt="Uploaded File" width={500} className="mt-2 object-cover rounded-lg" />
+                        </div>
+                    ) : (
+                        <div className="relative top-5 bottom-5 border-2 border-dashed border-gray-300 rounded-lg p-8 flex justify-center items-center cursor-pointer">
+                            <input type="file" className="absolute inset-0 opacity-0" onChange={(e) => setFile(e.target.files[0])} />
+                            <div className="text-center">
+                                <p className="text-gray-500">Drag & Drop or Click to Upload</p>
+                                <p className="text-sm text-gray-500">(Max file size: 10MB)</p>
+                            </div>
+                        </div>
+                    )}
                     <div className='flex items-center space-x-4 md:space-x-8 '>
                         <input value={category} onChange={(e) => setCategory(e.target.value)} type="text" name="category" id="category" className='px-4 bg-zinc-100 py-2 outline-none rounded-md' placeholder='Enter category...' />
                         <button type="button" onClick={addCategory} className='bg-black text-white px-4 py-2 font-semibold cursor-pointer rounded-md '>

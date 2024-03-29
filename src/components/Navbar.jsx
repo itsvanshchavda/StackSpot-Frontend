@@ -5,14 +5,19 @@ import { FaBars } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import MobileMenu from './MobileMenu';
+import { TfiPencilAlt } from "react-icons/tfi";
+import avatar from '../assets/avatar.jpg';
+
 
 const Navbar = () => {
     const [search, setSearch] = useState('');
     const [nav, setNav] = useState(false);
     const navigate = useNavigate();
 
-    const { userInfo } = useSelector((state) => state.auth);
 
+    const { userInfo } = useSelector((state) => state.auth);
+    const img = import.meta.env.VITE_IMG_URL;
+    const profilePhoto = img + userInfo?.user?.profilePhoto;
     const toggleNav = () => {
         setNav(!nav);
     };
@@ -41,7 +46,7 @@ const Navbar = () => {
     const path = useLocation().pathname
 
     if (!userInfo) {
-       return navigate('/login')
+        return navigate('/login')
     }
 
 
@@ -69,8 +74,11 @@ const Navbar = () => {
             </div>}
             <div className='hidden md:flex items-center justify-center space-x-4'>
                 {userInfo ? (
-                    <div className='flex gap-5'>
-                        <h3>{userInfo?.user?.username}</h3>
+                    <div className='flex flex-row'>
+                        <Link to='/write' className='flex items-center gap-2 text-black cursor-pointer'>
+                            <TfiPencilAlt size={17} />
+                            <h3>Write</h3>
+                        </Link>
                     </div>
                 ) : (
                     <h3>
@@ -83,7 +91,13 @@ const Navbar = () => {
                     </h3>
                 )}
                 <div className='cursor-pointer' onClick={toggleNav}>
-                    {nav ? <MdClose size={20} /> : <FaBars size={20} />}
+                    {
+                     !userInfo?.user?.profilePhoto ? (
+                            <img src={avatar} className='w-10 h-10 mb-2 rounded-full object-cover' />
+                        ) : (
+                            <img src={profilePhoto} className='w-10 h-10 rounded-full object-cover' />
+                        )
+                    }
                 </div>
             </div>
             <div className='md:hidden cursor-pointer' onClick={toggleNav}>
