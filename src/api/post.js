@@ -56,7 +56,7 @@ export const postApi = createApi({
     }),
     updatePost: builder.mutation({
       query: ({ updateData, postId }) => ({
-        url: `/post/${postId}`, 
+        url: `/post/${postId}`,
         method: "PUT",
         body: updateData,
         headers: {
@@ -67,6 +67,32 @@ export const postApi = createApi({
 
     getUserPost: builder.query({
       query: (userId) => `/post/user/${userId}`,
+    }),
+
+    likePost: builder.mutation({
+      query: ({ id, userId }) => ({
+        url: `/post/like/${id}`,
+        method: "PUT",
+        body: { userId },
+      }),
+    }),
+
+    unlikePost: builder.mutation({
+      query: ({ id, userId }) => ({
+        url: `/post/unlike/${id}`,
+        method: "PUT",
+        body: { userId },
+      }),
+    }),
+
+    addBookmark: builder.mutation({
+      query: (id) => ({
+        url: `/post/bookmark/${id}`,
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
     }),
   }),
 });
@@ -80,4 +106,7 @@ export const {
   useDeletePostMutation,
   useUpdatePostMutation,
   useGetUserPostQuery,
+  useLikePostMutation,
+  useUnlikePostMutation,
+  useAddBookmarkMutation,
 } = postApi;

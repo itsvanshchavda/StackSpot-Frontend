@@ -22,6 +22,32 @@ const CreatePost = () => {
     const [postUpload] = usePostUploadMutation();
     const navigate = useNavigate();
 
+     //React quill module options 
+     const [editorHtml, setEditorHtml] = useState('');
+
+     const modules = {
+         toolbar: [
+             [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
+             [{ size: [] }],
+             ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+            //  [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+             ['link'],
+             [{ 'color': [] }, { 'background': [] }],          
+             [{ 'align': [] }],
+             ['clean']
+         ],
+     }
+ 
+     const formats = [
+         'header', 'font', 'size',
+         'bold', 'italic', 'underline', 'strike', 'blockquote',
+         'list', 'bullet', 'indent',
+         'link', 'image', 'video',
+         'color', 'background',
+         'align'
+     ]
+ 
+
     const addCategory = () => {
         setCategoryList([...categoryList, category]);
         setCategory('');
@@ -54,8 +80,6 @@ const CreatePost = () => {
                     categories: categoryList,
                     photo: res?.img?.filename
                 };
-
-                console.log("Post Data", post);
 
                 // Create post
                 const data = await postUpload(post).unwrap();
@@ -92,7 +116,7 @@ const CreatePost = () => {
                 <h1 className='font-bold md:text-2xl text-xl mt-8'>Create a post</h1>
                 <form className='w-full flex flex-col space-y-4 md:space-y-8 mt-4' onSubmit={submitHandler}>
                     <input value={title} onChange={(e) => setTitle(e.target.value)} type="text" className='bg-zinc-100 outline-none px-4 py-2 rounded-md' placeholder='Enter post title...' />
-                    <ReactQuill value={description} onChange={handleEditorChange} className="bg-zinc-50 w-full  outline-none px-4 py-2 rounded-md" placeholder="Write description..." />
+                    <ReactQuill value={description} modules={modules} formats={formats} onChange={handleEditorChange} className="bg-zinc-50 w-full  outline-none px-4 py-2 rounded-md" placeholder="Write description..." />
                     {file ? (
                         <div>
                             <p className='font-semibold text-md'>File Name:{file.name}</p>

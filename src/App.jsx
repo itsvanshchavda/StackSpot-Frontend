@@ -12,6 +12,8 @@ import Notfound from './components/Notfound'
 import CreatePost from './pages/CreatePost'
 import MyBlogs from './components/MyBlogs'
 import EditProfile from './pages/EditProfile'
+import MyBookmark from './pages/MyBookmark'
+import FiindAllUsers from './pages/FiindAllUsers'
 
 
 
@@ -25,7 +27,8 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/posts/post/:id" element={<PostDetails />} />
         <Route path="/edit/:id" element={<EditPost />} />
-        <Route path='/myblogs/:id' element={<MyBlogs />} />
+        <Route path="/bookmark/:id" element={<MyBookmark />} />
+        <Route path='/finduser' element={<FiindAllUsers />} />
         <Route path="/profile/:id" element={<Profile />} />
         <Route path='/profile/edit/:id' element={<EditProfile />} />
         <Route path="*" element={<Notfound />} />

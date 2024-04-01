@@ -17,27 +17,29 @@ const EditProfile = () => {
     const [preview, setPreview] = useState('');
     const [firstname, setFirstname] = useState('');
     const [lastname, setLastname] = useState('');
+
     const [updateUser] = useUpdateUserMutation();
     const [addProfilePhoto] = useAddProfilePhotoMutation();
 
     const { userInfo } = useSelector((state) => state.auth);
     const id = useParams().id;
-    const img = import.meta.env.VITE_IMG_URL
+    const img = import.meta.env.VITE_IMG_URL;
     const dispatch = useDispatch();
     const { data, error } = useGetUserQuery(id);
 
     useEffect(() => {
         if (data && data.user) {
-            const user = data?.user;
-            setUserId(user?._id);
-            setUsername(user?.username);
-            setEmail(user?.email);
-            setPassword(user?.password);
-            setBio(user?.bio);
-            setFirstname(user?.firstname);
-            setLastname(user?.lastname);
-            if (user?.profilePhoto) {
-                setPreview(user?.profilePhoto);
+            const user = data.user;
+            setUserId(user._id);
+            setUsername(user.username);
+            setEmail(user.email);
+            setPassword(user.password);
+            setBio(user.bio);
+            setFirstname(user.firstname);
+            setLastname(user.lastname);
+
+            if (user.profilePhoto) {
+                setPreview(`${img}${user.profilePhoto}`);
             }
         }
     }, [data]);
@@ -46,10 +48,11 @@ const EditProfile = () => {
         const selectedFile = e.target.files[0];
         if (selectedFile) {
             setFile(selectedFile);
-            // Optionally, if you want to display the image preview:
-            setPreview(URL.createObjectURL(selectedFile));
+            const imageUrl = URL.createObjectURL(selectedFile);
+            setPreview(imageUrl);
         }
-    }
+    };
+    
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -60,7 +63,7 @@ const EditProfile = () => {
                 const formData = new FormData();
                 formData.append('profilePhoto', file);
                 const res = await addProfilePhoto(formData).unwrap();
-                profilePhotoFilename = res?.profilePhoto;
+                profilePhotoFilename = res.profilePhoto;
                 toast.success('Profile photo updated');
             }
 
@@ -84,18 +87,19 @@ const EditProfile = () => {
         }
     };
 
-
-
     return (
         <>
             <Navbar />
 
-            <div className="bg-white w-full flex flex-col mt-2 gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-black">
+            <div className="bg-white w-full flex flex-col mt-2 gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-black ">
+                {/* Sidebar */}
                 <aside className="hidden py-4 md:w-1/3 lg:w-1/4 md:block">
                     <div className="sticky flex flex-col gap-2 p-4 text-sm border-r border-zinc-100 top-12">
                         <h2 className="pl-[2.8em] mb-4 text-2xl font-semibold">Settings</h2>
                     </div>
                 </aside>
+
+                {/* Main Content */}
                 <main className="w-full min-h-screen py-1 md:w-2/3 lg:w-3/4">
                     <div className="p-2 md:p-4">
                         <div className="w-full px-6 pb-8 mt-8 sm:max-w-xl sm:rounded-lg">
@@ -103,10 +107,11 @@ const EditProfile = () => {
 
                             <form onSubmit={handleSubmit}>
                                 <div className="grid max-w-2xl mx-auto mt-8">
+                                    {/* Profile Picture */}
                                     <div className="flex flex-col space-y-5 sm:flex-row sm:space-y-0">
                                         <img
                                             className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-zinc-300 dark:ring-zinc-500"
-                                            src={preview ? `${img}${preview}` : `${avatar}`}
+                                            src={preview ? preview : (data?.user?.profilePhoto ? `${img}${data?.user?.profilePhoto}` : avatar)}
                                             alt="Profile Avatar"
                                         />
                                         <div className="flex flex-col space-y-5 sm:ml-8">
@@ -135,6 +140,7 @@ const EditProfile = () => {
                                         </div>
                                     </div>
 
+                                    {/* Other Form Fields */}
                                     <div className="items-center mt-8 sm:mt-14 text-black">
                                         <div className="flex space-x-6">
                                             <div className="w-1/2">
@@ -226,6 +232,7 @@ const EditProfile = () => {
                 </main>
             </div>
         </>
+
     );
 };
 

@@ -1,69 +1,98 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import avatar from '../assets/avatar.jpg';
 import { useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import MyBlogs from '../components/MyBlogs';
-import { useGetPostByIdQuery } from '../api/post.js';
+import { useGetUserQuery } from '../api/user';
+import Loader from '../components/Loader';
+import MyBookmark from './MyBookmark';
 
-const Profile = ({postId}) => {
+const Profile = () => {
   const { userInfo } = useSelector((state) => state.auth);
-  const { id: userId } = useParams(); 
-  console.log(postId)
-  const { data: postData } = useGetPostByIdQuery(userId); 
-  console
+  const userId = useParams().id;
+  const navigate = useNavigate();
+  const [userData, setUserData] = useState(null);
+  const [activeLink, setActiveLink] = useState('posts');
+  const { data, isLoading } = useGetUserQuery(userId);
 
   const IMG = import.meta.env.VITE_IMG_URL;
-  const navigate = useNavigate();
 
-  // Fixing user data fetch by the specific post like not just one fetch proper
-  
+  useEffect(() => {
+    if (!isLoading && data) {
+      setUserData(data.user);
+    }
+  }, [isLoading, data]);
 
   return (
     <>
       <Navbar />
-      <div className='px-8 md:px-[200px] h-[100vh] mt-8 flex md:flex-row flex-row-reverse md:items-start items-start'>
-        <div className='flex flex-col md:w-[70%] w-full mt-8  md:mt-0'>
-          <h1 className='text-xl font-bold mb-2'>Your posts</h1>
-          <MyBlogs userId={userId} />
-        </div>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <div className='px-4 h-screen'>
 
-        {/* right */}
-        <div className='flex sm:sticky justify-start items-center space-y-4 md:w-[30%] w-full md:items-start md:justify-end'>
-          <div className='rotate-90 border-b-2 border-gray'></div>
-          <div className='flex flex-col items-start'>
+          <div className='flex md:flex-row justify-center flex-col-reverse '>
 
-            <h1 className='text-xl font-bold mb-6 px-5'>Profile</h1>
+            <div className='md:w-2/3 md:px-4 '>
+              <div className='flex justify-start items-center gap-6'>
+                <h1 className={`text-xl  font-semibold cursor-pointer ${activeLink === 'posts' ? 'border-b-2 border-zinc-800  duration-300 ' : ''}`} onClick={() => setActiveLink('posts')}>Your posts</h1>
+                <h1 className={`text-xl font-semibold cursor-pointer ${activeLink === 'bookmarks' ? 'border-b-2 border-zinc-800  duration-300 ' : ''}`} onClick={() => setActiveLink('bookmarks')}>Bookmarks</h1>
+              </div>
+              {activeLink === 'posts' ? (
+                <>
+                  <h1 className='text-xl font-bold mt-5'>Posts</h1>
+                  <MyBlogs userId={userId} />
+                </>
+              ) : (
+                <>
+                  <h1 className='text-xl font-bold mt-5'>Bookmarks</h1>
+                  <MyBookmark userId={userId} />
+                </>
 
-            {!userInfo?.user?.profilePhoto ? (
-              <img src={avatar} alt='profile' className='w-24 h-24 rounded-full' />
-            ) : (
-              <img src={IMG + userInfo?.user?.profilePhoto} alt='profile' className='w-24 h-24 rounded-full object-cover' />
-            )}
-            <div>
-              <h1 className='text-lg mx-2  font-semibold mt-5'>
-                {postData?.getPost?.firstname} {postData?.lastname} 
-              </h1>
-
-              <p className='mx-2 mt-2'>{userInfo?.user?.bio}</p>
+              )}
             </div>
 
-            {/* Edit profile */}
-            {userInfo?.user?._id === userId && (
-              <div>
-                <button className='btn-donate mt-3 btn-custom' onClick={() => navigate(`/profile/edit/${userInfo?.user?._id}`)}>Edit profile</button>
+            {/* right */}
+            <div className='md:w-1/3 pl-4 mt-8 md:mt-20'>
+              <div className='border-b-2 border-gray-100 mb-5'></div>
+              <div className='px-4'>
+                {/* <h1 className='text-xl font-bold mb-4'>Profile</h1> */}
+                {!userData ? (
+                  <Loader />
+                ) : (
+                  <>
+                    <div className='flex items-center mb-4'>
+                      {!userData?.profilePhoto ? (
+                        <img src={avatar} alt='profile' className='w-24 h-24 rounded-full mr-4' />
+                      ) : (
+                        <img src={IMG + userData?.profilePhoto} alt='profile' className='w-24 h-24 rounded-full object-cover mr-4' />
+                      )}
+                      <div>
+                        <h1 className='text-lg font-semibold'>
+                          {userData?.firstname} {userData?.lastname}
+                        </h1>
+                        <p>{userData?.bio}</p>
+                      </div>
+                    </div>
+                    {/* Edit profile */}
+                    {userInfo?.user?._id === userId && (
+                      <div>
+                        <button className='btn-donate mt-3 btn-custom' onClick={() => navigate(`/profile/edit/${userInfo?.user?._id}`)}>Edit profile</button>
+                      </div>
+                    )}
+                  </>
+                )}
               </div>
-            )}
-
+              <div className='border-b-2 border-gray-100 mb-3 mt-8'></div>
+            </div>
           </div>
         </div>
-
-      </div>
-
+      )}
       <Footer />
     </>
-  )
-}
+  );
+};
 
 export default Profile;

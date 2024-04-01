@@ -4,9 +4,11 @@ import { MdDelete } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import { useDeleteCommentMutation, useUpdateCommentMutation } from '../api/comment';
 import { toast } from 'react-toastify';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useGetUserQuery } from '../api/user';
+import avatar from '../assets/avatar.jpg'
 
-const Comment = ({ comment }) => {
+const Comment = ({ comment, userData }) => {
     const getTimeElapsed = (timestamp) => {
         const currentDate = new Date();
         const commentDate = new Date(timestamp);
@@ -33,6 +35,10 @@ const Comment = ({ comment }) => {
     const [editMode, setEditMode] = useState(false);
     const [editedComment, setEditedComment] = useState(comment.comment);
     const { useInfo } = useSelector((state) => state.auth);
+    const navigate = useNavigate();
+    const { data } = useGetUserQuery(userData);
+
+    const img = import.meta.env.VITE_IMG_URL
 
     const deleteCommentHandler = async () => {
         try {
@@ -60,15 +66,19 @@ const Comment = ({ comment }) => {
 
     useEffect(() => {
         setEditedComment(comment.comment)
-    },[comment.comment])
+    }, [comment.comment])
 
     return (
         <>
             <div>
-                <div className='px-2 py-2 bg-gray-200 my-2 rounded-md'>
+                <div className='border-b-2 border-gray-100'></div>
+                <div className='px-2 py-2  my-2 rounded-md'>
                     <div className='flex items-center justify-between'>
-                        <p className='font-bold text-gray-600'>{comment.author}</p>
-                        <div className='flex justify-center items-center space-x-4 text-sm' >
+                        <div className='flex items-center'> 
+                            <img src={img + (data?.user?.profilePhoto || avatar)} alt="" className='w-10 h-10 rounded-full mt-2' /> {/* Corrected image source */}
+                            <p className='font-bold text-gray-600 cursor-pointer ml-2' onClick={() => navigate(`/profile/${comment.userId}`)}>{comment.author}</p> {/* Added margin for spacing */}
+                        </div>
+                        <div className='flex justify-center items-center space-x-4 text-sm'>
                             <p>{getTimeElapsed(comment.updatedAt)}</p>
                             <div className='flex justify-center items-center space-x-2'>
                                 {userInfo?.user?._id === comment.userId && !editMode && (
@@ -99,9 +109,11 @@ const Comment = ({ comment }) => {
                             </div>
                         </div>
                     }
-                    {!editMode && <p className='text-gray-600'>{comment.comment}</p>}
+                    {!editMode && <p className='text-gray-600 mx-14'>{comment.comment}</p>}
                 </div>
+                <div className='border-b-2 border-gray-100'></div>
             </div>
+
         </>
     );
 };

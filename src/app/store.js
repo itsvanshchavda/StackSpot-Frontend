@@ -4,10 +4,12 @@ import { authApi } from "../api/auth";
 import { postApi } from "../api/post";
 import { commentApi } from "../api/comment";
 import { userApi } from "../api/user";
+import PostSlice from "../slices/PostSlice";
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
+    post: PostSlice,
     [authApi.reducerPath]: authApi.reducer,
     [postApi.reducerPath]: postApi.reducer,
     [commentApi.reducerPath]: commentApi.reducer,

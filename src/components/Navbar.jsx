@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import MobileMenu from './MobileMenu';
 import { TfiPencilAlt } from "react-icons/tfi";
 import avatar from '../assets/avatar.jpg';
+import logo from '../assets/logo.png';
 
 
 const Navbar = () => {
@@ -53,8 +54,10 @@ const Navbar = () => {
 
     return (
         <div className='flex items-center justify-between px-6 md:px-[200px] py-4'>
-            <h1 className='font-bold md:text-lg text-xl'>
-                <Link to='/'>Stack Spot</Link>
+            <h1 className='font-bold md:text-lg text-xs'>
+                <Link to='/'>
+                    <img src={logo} className='w-11 h-11 mt-1 rounded-full object-cover' alt="" />
+                </Link>
             </h1>
 
             {path === '/' && <div className='flex justify-center items-center space-x-2'>
@@ -72,7 +75,8 @@ const Navbar = () => {
                     onKeyDown={handleKeyPress}
                 />
             </div>}
-            <div className='hidden md:flex items-center justify-center space-x-4'>
+          
+            <div className='flex items-center justify-center space-x-4 '>
                 {userInfo ? (
                     <div className='flex flex-row'>
                         <Link to='/write' className='flex items-center gap-2 text-black cursor-pointer'>
@@ -92,16 +96,13 @@ const Navbar = () => {
                 )}
                 <div className='cursor-pointer' onClick={toggleNav}>
                     {
-                     !userInfo?.user?.profilePhoto ? (
+                        !userInfo?.user?.profilePhoto ? (
                             <img src={avatar} className='w-10 h-10 mb-2 rounded-full object-cover' />
                         ) : (
                             <img src={profilePhoto} className='w-10 h-10 rounded-full object-cover' />
                         )
                     }
                 </div>
-            </div>
-            <div className='md:hidden cursor-pointer' onClick={toggleNav}>
-                {nav ? <MdClose size={20} /> : <FaBars size={20} />}
             </div>
             {nav && <MobileMenu />}
         </div>
