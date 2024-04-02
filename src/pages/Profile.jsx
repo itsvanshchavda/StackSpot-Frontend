@@ -31,7 +31,7 @@ const Profile = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className='px-4 h-screen'>
+        <div className='px-4 overflow-y-auto  md:h-screen'>
 
           <div className='flex md:flex-row justify-center flex-col-reverse '>
 

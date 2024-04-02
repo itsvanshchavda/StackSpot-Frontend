@@ -87,8 +87,18 @@ export const postApi = createApi({
 
     addBookmark: builder.mutation({
       query: (id) => ({
-        url: `/post/bookmark/${id}`,
-        method: "POST",
+        url: `/post/addbookmark/${id}`,
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+
+    removeBookmark: builder.mutation({
+      query: (id) => ({
+        url: `/post/removebookmark/${id}`,
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
@@ -109,4 +119,5 @@ export const {
   useLikePostMutation,
   useUnlikePostMutation,
   useAddBookmarkMutation,
+  useRemoveBookmarkMutation
 } = postApi;

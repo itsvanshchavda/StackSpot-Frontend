@@ -4,11 +4,16 @@ const initialState = {
   postData: localStorage.getItem("postData")
     ? JSON.parse(localStorage.getItem("postData"))
     : null,
-  likedPosts: [],
-  bookmarkedPosts: [],
+  likedPosts: localStorage.getItem("likedPosts")
+    ? JSON.parse(localStorage.getItem("likedPosts"))
+    : [],
+  bookmarkedPosts: localStorage.getItem("bookmarkedPosts")
+    ? JSON.parse(localStorage.getItem("bookmarkedPosts"))
+    : [],
+  isBookmarked: false,
   color: "white",
   likesCount: 0,
-  postLiked:false
+  postLiked: false,
 };
 
 const postSlice = createSlice({
@@ -24,24 +29,66 @@ const postSlice = createSlice({
     },
 
     addLike: (state, action) => {
-      state.likesCount += 1;
-      state.postLiked = true;
+      const userId = action.payload;
+      const postId = state.postData._id;
+      const existingPostIndex = state.likedPosts.findIndex(
+        (post) => post.userId === userId && post.postId === postId
+      );
+
+      if (existingPostIndex === -1) {
+        state.likedPosts.push({ userId: userId, postId: postId });
+        state.postLiked = true;
+        state.likesCount += 1;
+        localStorage.setItem("likedPosts", JSON.stringify(state.likedPosts));
+      }
     },
 
     removeLike: (state, action) => {
-      state.likesCount -= 1;
+      const userId = action.payload;
+
+      const existingPostIndex = state.likedPosts.findIndex(
+        (post) => post.userId === userId
+      );
+      if (existingPostIndex !== -1) {
+        state.likedPosts.splice(existingPostIndex, 1);
+      }
+
+      // Update state
       state.postLiked = false;
+      state.likesCount -= 1;
+
+      // Update localStorage
+      localStorage.setItem("likedPosts", JSON.stringify(state.likedPosts));
     },
 
-    addBookmark: (state, action) => {
+    addBookmarkPost: (state, action) => {
       const postId = action.payload;
-      state.bookmarkedPosts.push(postId);
+      const existingPostIndex = state.bookmarkedPosts.findIndex(
+        (post) => post.postId === postId
+      );
+      if (existingPostIndex === -1) {
+        state.bookmarkedPosts.push({
+          postId: postId,
+          postData: state.postData,
+        });
+        state.isBookmarked = true;
+        localStorage.setItem(
+          "bookmarkedPosts",
+          JSON.stringify(state.bookmarkedPosts)
+        );
+      }
     },
 
-    removeBookmark: (state, action) => {
+    removeBookmarkPost: (state, action) => {
       const postId = action.payload;
-      state.bookmarkedPosts = state.bookmarkedPosts.filter(
-        (id) => id !== postId
+      const existingPostIndex = state.bookmarkedPosts.findIndex(
+        (post) => post.postId === postId
+      );
+      state.bookmarkedPosts.splice(existingPostIndex, 1);
+      state.isBookmarked = false;
+      localStorage.setItem(
+        "bookmarkedPosts",
+        JSON.stringify(state.bookmarkedPosts)
       );
     },
   },
@@ -49,5 +96,10 @@ const postSlice = createSlice({
 
 export default postSlice.reducer;
 
-export const { getPost, addLike, removeLike, addBookmark, removeBookmark } =
-  postSlice.actions;
+export const {
+  getPost,
+  addLike,
+  removeLike,
+  addBookmarkPost,
+  removeBookmarkPost,
+} = postSlice.actions;

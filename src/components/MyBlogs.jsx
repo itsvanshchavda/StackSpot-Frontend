@@ -11,7 +11,7 @@ const MyBlogs = () => {
     const navigate = useNavigate();
 
     return (
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mt-8 max-xl:grid-cols-1'>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mt-8 max-xl:grid-cols-1 h-auto'>
             {/* Left */}
                 
             {/* Right */}

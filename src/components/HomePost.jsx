@@ -3,7 +3,7 @@ import DOMPurify from 'dompurify';
 
 const HomePost = ({ post }) => {
   const imgURL = `${import.meta.env.VITE_IMG_URL}/${post.photo}`;
-  const desc = DOMPurify.sanitize(post.description.slice(0, 80) + "..Read More");
+  const desc = DOMPurify.sanitize(post.description.slice(0, 100) + "..Read More");
   const [showLoader, setShowLoader] = useState(true);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const HomePost = ({ post }) => {
           </div >
         </div >) : (<div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mt-8 max-xl:grid-cols-1'>
           {/* Left (Image) */}
-          <div className='h-[200px] md:h-auto'>
+          <div className='h-[150px] md:h-auto'>
             <img src={imgURL} alt="" className={`w-full h-full max-xl:object-contain object-cover rounded-lg`} />
           </div>
           {/* Right (Text) */}

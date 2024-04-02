@@ -9,6 +9,7 @@ import {
     useDeletePostMutation,
     useAddBookmarkMutation,
     useUnlikePostMutation,
+    useRemoveBookmarkMutation,
 } from '../api/post';
 import { useCreateCommentMutation, useGetAllCommentQuery } from '../api/comment';
 import Navbar from '../components/Navbar';
@@ -16,7 +17,7 @@ import Footer from '../components/Footer';
 import Comment from '../components/Comment';
 import Loader from '../components/Loader';
 import avatar from '../assets/avatar.jpg';
-import { addLike, getPost, removeLike } from '../slices/PostSlice';
+import { addBookmarkPost, addLike, getPost, removeBookmarkPost, removeLike } from '../slices/PostSlice';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { BiEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
@@ -24,6 +25,8 @@ import { BsBookmark } from 'react-icons/bs';
 import { IoPlayCircleOutline, IoShareOutline } from "react-icons/io5";
 import { useGetUserQuery } from '../api/user';
 import PostDetailSkeleton from '../components/PostDetailSkeleton';
+import { FaBookmark } from "react-icons/fa6";
+
 
 const PostDetails = () => {
     const postId = useParams().id;
@@ -32,23 +35,22 @@ const PostDetails = () => {
     const navigate = useNavigate();
     const [deletePost] = useDeletePostMutation();
     const [addBookmark] = useAddBookmarkMutation();
+    const [removeBookmark] = useRemoveBookmarkMutation();
     const [createComment] = useCreateCommentMutation();
     const [likePost, { data: LikedData }] = useLikePostMutation();
     const [unlikePost] = useUnlikePostMutation();
     const [comment, setComment] = useState('');
     const { userInfo } = useSelector((state) => state.auth);
-    const {postLiked} = useSelector((state) => state.post);
     const [showLoader, setShowLoader] = useState(true);
-    const likesArray = useMemo(() => data?.getPost?.likes.map((item) => item._id) || [], [data]);
-    const isUserLiked = useMemo(() => likesArray.includes(userInfo?.user?._id), [likesArray, userInfo]);
-    const [likeCount, setLikeCount] = useState(likesArray?.length || 0);
-    const [isLiked, setIsLiked] = useState(isUserLiked);
+    const { bookmarkedPosts } = useSelector((state) => state.post);
+    const { likedPosts } = useSelector((state) => state.post);
+    const [likecount, setLikeCount] = useState(false);
+    const { data: userData } = useGetUserQuery(data?.getPost?.userId);
 
-   
-   
+
+
     const img = import.meta.env.VITE_IMG_URL;
     const dispatch = useDispatch();
-
 
     useEffect(() => {
         const delay = setTimeout(() => {
@@ -58,27 +60,49 @@ const PostDetails = () => {
         return () => clearTimeout(delay);
     }, []);
 
+
     useEffect(() => {
         if (data && data.getPost) {
             dispatch(getPost(data?.getPost));
-            setLikeCount(data?.getPost?.likes.length);
+
         }
-    }, [data, dispatch,]);
+    }, [data, dispatch, bookmarkedPosts, likedPosts]);
 
-
+    useEffect(() => {
+        if (data && data?.getPost) {
+            setLikeCount(data?.getPost?.likes?.length)
+        }
+    }, [data])
 
 
 
     const handleBookmark = async () => {
         try {
-            await addBookmark(postId, userInfo?.user?._id);
-            dispatch(addBookmark(postId));
+            const res = await addBookmark(postId).unwrap();
             toast.success("Post bookmarked successfully");
+            console.log(res);
+            await dispatch(addBookmarkPost(postId))// Update Redux state with postId in an array
         } catch (err) {
             toast.error(err?.message || "Failed to bookmark the post");
             console.log(err);
         }
     };
+
+    const handleRemoveBookmark = async () => {
+        try {
+            const res = await removeBookmark(postId).unwrap();
+            toast.success("Bookmark removed successfully");
+            console.log(res);
+            await dispatch(removeBookmarkPost(postId))
+        } catch (err) {
+            toast.error(err?.message || "Failed to remove bookmark");
+            console.log(err);
+        }
+    };
+
+
+
+
 
     const handleDelete = async () => {
         try {
@@ -93,6 +117,7 @@ const PostDetails = () => {
 
     const commentHandler = async (e) => {
         e.preventDefault();
+        if (comment.trim() === '') return toast.warning("Comment can't be empty");
         try {
             const commentData = {
                 comment,
@@ -103,7 +128,7 @@ const PostDetails = () => {
             await createComment(commentData);
             setComment("");
             toast.success("Comment added successfully");
-            refetch(); // Refresh comments
+            refetch();
         } catch (err) {
             toast.error(err?.message || "Failed to add comment");
             console.log(err);
@@ -116,19 +141,23 @@ const PostDetails = () => {
 
 
 
+
+
     //User details of post liked 
-    
+
+    const userId = userInfo?.user?._id; // Get userId from userInfo
 
     const handleLike = async () => {
         try {
 
-            if (isLiked) return toast.warning("You have already liked this post");
+            if (likedPosts?.some((post) => post.postId === postId)) {
+                return toast.error("You have already liked this post");
+
+            }
             await likePost({ id: postId, userId: userInfo?.user?._id });
             toast.success("Post liked");
-            setLikeCount((prevCount) => prevCount + 1);
-            setIsLiked(true);
-            dispatch(addLike());
-
+            dispatch(addLike(userId)); // Dispatch addLike action with userId
+            setLikeCount((prevCount) => Math.max(prevCount + 1, 1));
         } catch (err) {
             console.log(err);
         }
@@ -138,18 +167,13 @@ const PostDetails = () => {
         try {
             await unlikePost({ id: postId, userId: userInfo?.user?._id });
             toast.success("Post unliked");
+            dispatch(removeLike(userId)); // Dispatch removeLike action with userId
             setLikeCount((prevCount) => Math.max(prevCount - 1, 0)); // Ensure like count doesn't go below 0
-            setIsLiked(false);
-            dispatch(removeLike());
 
         } catch (err) {
             console.log(err);
         }
     };
-
-
-
-
 
 
 
@@ -165,24 +189,24 @@ const PostDetails = () => {
                         <p>{new Date(data?.getPost?.updatedAt).toLocaleTimeString()}</p>
                     </div>
 
-                    <div className='flex gap-3 mb-5 justify-start items-center'>
-                      {isUserLiked || postLiked ? <FaHeart size={21} className='cursor-pointer' color='red' onClick={handleUnlike} /> : <FaRegHeart size={21} className='cursor-pointer' onClick={handleLike} />}
-                        <span className='mx-2'>{likeCount}</span>
-                    </div>
-
-                    <div className='border-gray-100 border-b-2 mb-2'>
-                        <div>
-                            
-                        </div>
-                    </div>
-
-                       
-
-                 
+                    <div className='border-gray-100 border-b-2 mb-2'></div>
 
                     <div className="flex mb-5 mt-4">
+
+                        {/* Like  */}
+                        <div className='flex gap-3 justify-start items-center mx-2'>
+                            {likedPosts?.some((post) => post.userId === userId) && likecount > 0  ? <FaHeart size={21} className='cursor-pointer' color='red' onClick={handleUnlike} /> : <FaRegHeart size={21} className='cursor-pointer' onClick={handleLike} />}
+                            <span className='mx-2'>{likecount}</span>
+                        </div>
+
+
                         <button className="flex text-gray-500 flex-grow justify-end gap-6">
-                            <span ><BsBookmark onClick={handleBookmark} className='cursor-pointer' size={21} /></span>
+
+                            {/* Bookmark  */}
+
+                            {bookmarkedPosts?.some((post) => post.postId === postId) ? (<FaBookmark size={21} className='cursor-pointer' color='black' onClick={handleRemoveBookmark} />
+                            ) : (<BsBookmark size={21} className='cursor-pointer' onClick={handleBookmark} />)}
+
                             <span><IoPlayCircleOutline size={21} className='cursor-pointer' title="Play" /></span>
                             <span><IoShareOutline size={21} className='cursor-pointer' title="Share" /></span>
                         </button>
@@ -190,11 +214,32 @@ const PostDetails = () => {
 
                     <div className='border-b-2 mb-5 border-gray-100 '></div>
 
-                    <img
-                        src={`${import.meta.env.VITE_IMG_URL}${data?.getPost?.photo}`}
-                        alt=""
-                        className='w-full rounded-lg mb-6 shadow-xl'
-                    />
+                    <div className='flex  justify-start items-center gap-3 mb-3'>
+                        <img src={userData?.user?.profilePhoto ? img + userData.user.profilePhoto : avatar} className='w-10 h-10 rounded-full ring-1 ring-black cursor-pointer' alt="" />
+                        <p className='font-semibold text-md cursor-pointer' onClick={() => navigate(`/profile/${data?.getPost?.userId}`)}>{userData?.user?.username}</p>
+
+                        {/* Follow And Unfollow  */}
+
+                        {userId === data?.getPost?.userId ? (<>
+                            <span className='text-gray-300'>•</span>
+                            <p className='text-green-500 font-sans hover:text-zinc-400 cursor-pointer' onClick={() => navigate(`/profile/${userId}`)}>Your Profile</p>
+                        </>) : (<>
+                            <span className='text-gray-300'>•</span>
+                            <p className='text-green-500 font-sans hover:text-zinc-400 cursor-pointer'>Follow</p>
+                        </>)}
+
+
+                    </div>
+                    {data?.getPost?.photo && (
+                        <img
+                            src={`${import.meta.env.VITE_IMG_URL}${data?.getPost?.photo}`}
+                            loading='lazy'
+                            className='w-full rounded-lg mb-6 shadow-xl'
+                            alt=""
+                        />
+                    )}
+
+
                     <div className='text-lg text-gray-800 leading-relaxed mb-6 font-serif' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data?.getPost?.description) }} />
 
                     <div className='flex flex-wrap items-center space-x-2 mb-6'>
