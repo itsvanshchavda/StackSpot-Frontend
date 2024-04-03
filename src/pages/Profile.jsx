@@ -28,68 +28,72 @@ const Profile = () => {
   return (
     <>
       <Navbar />
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <div className='px-4 overflow-y-auto  md:h-screen'>
+      <div className='px-4 max-sm:overflow-y-auto md:h-screen'>
 
-          <div className='flex md:flex-row justify-center flex-col-reverse '>
+        <div className='flex md:flex-row justify-center flex-col-reverse '>
 
-            <div className='md:w-2/3 md:px-4 '>
+          <div className='md:w-2/3 md:px-4 mt-4'>
+            {userInfo?.user?._id === userId && (
               <div className='flex justify-start items-center gap-6'>
                 <h1 className={`text-xl  font-semibold cursor-pointer ${activeLink === 'posts' ? 'border-b-2 border-zinc-800  duration-300 ' : ''}`} onClick={() => setActiveLink('posts')}>Your posts</h1>
                 <h1 className={`text-xl font-semibold cursor-pointer ${activeLink === 'bookmarks' ? 'border-b-2 border-zinc-800  duration-300 ' : ''}`} onClick={() => setActiveLink('bookmarks')}>Bookmarks</h1>
               </div>
-              {activeLink === 'posts' ? (
-                <>
-                  <h1 className='text-xl font-bold mt-5'>Posts</h1>
-                  <MyBlogs userId={userId} />
-                </>
+            )}
+            {activeLink === 'posts' ? (
+              <>
+                <h1 className='text-xl font-bold mt-5'>Posts</h1>
+                <MyBlogs userId={userId} />
+              </>
+            ) : (
+              <>
+                <h1 className='text-xl font-bold mt-5'>Bookmarks</h1>
+                <MyBookmark userId={userId} />
+              </>
+
+            )}
+          </div>
+
+          {/* right */}
+          <div className='md:w-1/3 pl-4 mt-8 md:mt-20'>
+            <div className='border-b-2 border-gray-100 mb-5'></div>
+            <div className='px-4'>
+              {/* <h1 className='text-xl font-bold mb-4'>Profile</h1> */}
+              {!userData ? (
+                <div>
+                  <p>Loading...</p>
+                </div>
               ) : (
                 <>
-                  <h1 className='text-xl font-bold mt-5'>Bookmarks</h1>
-                  <MyBookmark userId={userId} />
-                </>
+                  <div className='flex items-center mb-4'>
+                    {!userData?.profilePhoto?.url ? (
+                      <img src={avatar} alt='profile' className='w-24 h-24 rounded-full mr-4' />
+                    ) : (
+                      <img src={userData?.profilePhoto?.url} alt='profile' className='w-24 h-24 rounded-full object-cover mr-4' />
+                    )}
+                    <div>
+                      <h1 className='text-lg font-semibold'>
+                        {userData?.firstname} {userData?.lastname}
+                      </h1>
+                      <p>{userData?.bio}</p>
+                    </div>
+                  </div>
+                  {/* Edit profile */}
 
+                  {userInfo?.user?._id === userId ? (
+                    <button className='btn-donate mt-3 btn-custom' onClick={() => navigate(`/profile/edit/${userInfo?.user?._id}`)}>Edit profile</button>
+                  ) : (
+                    <button>
+                      <p className='text-md font-semibold px-28 border py-1 bg-zinc-900 text-white hover:bg-zinc-800 rounded-md'>Follow</p>
+                    </button>
+                  )}
+                </>
               )}
             </div>
-
-            {/* right */}
-            <div className='md:w-1/3 pl-4 mt-8 md:mt-20'>
-              <div className='border-b-2 border-gray-100 mb-5'></div>
-              <div className='px-4'>
-                {/* <h1 className='text-xl font-bold mb-4'>Profile</h1> */}
-                {!userData ? (
-                  <Loader />
-                ) : (
-                  <>
-                    <div className='flex items-center mb-4'>
-                      {!userData?.profilePhoto ? (
-                        <img src={avatar} alt='profile' className='w-24 h-24 rounded-full mr-4' />
-                      ) : (
-                        <img src={IMG + userData?.profilePhoto} alt='profile' className='w-24 h-24 rounded-full object-cover mr-4' />
-                      )}
-                      <div>
-                        <h1 className='text-lg font-semibold'>
-                          {userData?.firstname} {userData?.lastname}
-                        </h1>
-                        <p>{userData?.bio}</p>
-                      </div>
-                    </div>
-                    {/* Edit profile */}
-                    {userInfo?.user?._id === userId && (
-                      <div>
-                        <button className='btn-donate mt-3 btn-custom' onClick={() => navigate(`/profile/edit/${userInfo?.user?._id}`)}>Edit profile</button>
-                      </div>
-                    )}
-                  </>
-                )}
-              </div>
-              <div className='border-b-2 border-gray-100 mb-3 mt-8'></div>
-            </div>
+            <div className='border-b-2 border-gray-100 mb-3 mt-8'></div>
           </div>
         </div>
-      )}
+      </div>
+
       <Footer />
     </>
   );

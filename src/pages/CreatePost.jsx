@@ -15,6 +15,7 @@ const CreatePost = () => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [file, setFile] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const { userInfo } = useSelector((state) => state.auth);
 
@@ -22,31 +23,31 @@ const CreatePost = () => {
     const [postUpload] = usePostUploadMutation();
     const navigate = useNavigate();
 
-     //React quill module options 
-     const [editorHtml, setEditorHtml] = useState('');
+    //React quill module options 
+    const [editorHtml, setEditorHtml] = useState('');
 
-     const modules = {
-         toolbar: [
-             [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
-             [{ size: [] }],
-             ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+    const modules = {
+        toolbar: [
+            [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
+            [{ size: [] }],
+            ['bold', 'italic', 'underline', 'strike', 'blockquote'],
             //  [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-             ['link'],
-             [{ 'color': [] }, { 'background': [] }],          
-             [{ 'align': [] }],
-             ['clean']
-         ],
-     }
- 
-     const formats = [
-         'header', 'font', 'size',
-         'bold', 'italic', 'underline', 'strike', 'blockquote',
-         'list', 'bullet', 'indent',
-         'link', 'image', 'video',
-         'color', 'background',
-         'align'
-     ]
- 
+            ['link'],
+            [{ 'color': [] }, { 'background': [] }],
+            [{ 'align': [] }],
+            ['clean']
+        ],
+    }
+
+    const formats = [
+        'header', 'font', 'size',
+        'bold', 'italic', 'underline', 'strike', 'blockquote',
+        'list', 'bullet', 'indent',
+        'link', 'image', 'video',
+        'color', 'background',
+        'align'
+    ]
+
 
     const addCategory = () => {
         setCategoryList([...categoryList, category]);
@@ -64,6 +65,7 @@ const CreatePost = () => {
 
         try {
             // Upload file first, if available
+            setLoading(true);
             if (file) {
                 const formData = new FormData();
                 formData.append('image', file);
@@ -78,13 +80,14 @@ const CreatePost = () => {
                     lastname: userInfo.user?.lastname,
                     userId: userInfo.user?._id,
                     categories: categoryList,
-                    photo: res?.img?.filename
+                    photo: { url: res?.secure_url, public_id: res?.public_id }
                 };
 
                 // Create post
                 const data = await postUpload(post).unwrap();
-                navigate("/posts/post/" + data?.newPost._id);
+                navigate("/posts/post/" + data?.newPost?._id);
                 toast.success(data?.message);
+                setLoading(false);
             } else {
                 // If no file is uploaded
                 const post = {
@@ -97,17 +100,19 @@ const CreatePost = () => {
 
                 // Create post
                 const data = await postUpload(post).unwrap();
-                navigate("/posts/post/" + data?.newPost._id);
+                navigate("/posts/post/" + data?.newPost?._id);
                 toast.success(data?.message);
+                setLoading(false);
             }
         } catch (err) {
             toast.error(err?.message || "Something went wrong");
+            setLoading(false);
         }
     };
 
     const handleEditorChange = (content) => {
         setDescription(content);
-      };
+    };
 
     return (
         <>
@@ -115,12 +120,18 @@ const CreatePost = () => {
             <div className='px-6 md:px-[200px] mt-14'>
                 <h1 className='font-bold md:text-2xl text-xl mt-8'>Create a post</h1>
                 <form className='w-full flex flex-col space-y-4 md:space-y-8 mt-4' onSubmit={submitHandler}>
-                    <input value={title} onChange={(e) => setTitle(e.target.value)} type="text" className='bg-zinc-100 outline-none px-4 py-2 rounded-md' placeholder='Enter post title...' />
-                    <ReactQuill value={description} modules={modules} formats={formats} onChange={handleEditorChange} className="bg-zinc-50 w-full  outline-none px-4 py-2 rounded-md" placeholder="Write description..." />
+                    <input value={title} onChange={(e) => setTitle(e.target.value)} type="text" className='bg-zinc-100 outline-none px-4 py-2 rounded-md' placeholder='Enter post title...' required />
+                    <ReactQuill value={description} modules={modules} formats={formats} onChange={handleEditorChange} className="bg-zinc-50 w-full  outline-none px-4 py-2 rounded-md" placeholder="Write description..." required/>
                     {file ? (
                         <div>
                             <p className='font-semibold text-md'>File Name:{file.name}</p>
                             <img src={URL.createObjectURL(file)} alt="Uploaded File" width={500} className="mt-2 object-cover rounded-lg" />
+                            <button
+                                className="absolute top-0 right-12 p-2 text-gray-600 hover:text-gray-800"
+                                onClick={() => setFile(null)}
+                            >
+                                <IoMdCloseCircle size={24} />
+                            </button>
                         </div>
                     ) : (
                         <div className="relative top-5 bottom-5 border-2 border-dashed border-gray-300 rounded-lg p-8 flex justify-center items-center cursor-pointer">
@@ -129,6 +140,12 @@ const CreatePost = () => {
                                 <p className="text-gray-500">Drag & Drop or Click to Upload</p>
                                 <p className="text-sm text-gray-500">(Max file size: 10MB)</p>
                             </div>
+                        </div>
+                    )}
+
+                    {loading && (
+                        <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
+                            <span className="block sm:inline">Please wait, post is updating...</span>
                         </div>
                     )}
                     <div className='flex items-center space-x-4 md:space-x-8 '>

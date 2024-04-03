@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -7,8 +7,11 @@ import { toast } from 'react-toastify';
 import { IoMdCloseCircle } from 'react-icons/io';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../components/Loader';
-import DOMPurify from 'dompurify';import ReactQuill from 'react-quill';
+import DOMPurify from 'dompurify'; import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Import Quill styles
+import LoadingBar from 'react-top-loading-bar';
+import PostDetailSkeleton from '../components/PostDetailSkeleton';
+
 
 const EditPost = () => {
   const [category, setCategory] = useState('');
@@ -18,7 +21,7 @@ const EditPost = () => {
   const [file, setFile] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const [loading, setLoading] = useState(false);
 
 
 
@@ -48,29 +51,34 @@ const EditPost = () => {
     e.preventDefault();
 
     try {
-      const post = {
+      setLoading(true);
+      let post = {
         title,
-        description: description,
+        description,
         username: userInfo?.user?.username,
         userId: userInfo?.user?._id,
         categories: categoryList,
       };
-
       if (file) {
         const formData = new FormData();
         formData.append('image', file);
         const res = await uploadFile(formData).unwrap();
-        post.photo = res?.img?.filename;
+        post.photo = { url: res?.secure_url, public_id: res.public_id };
+        setLoading(false);
       }
-
       const updatedData = await updatePost({ updateData: post, postId: id }).unwrap();
-      navigate("/posts/post/" + updatedData?.updatePost?._id);
+      navigate("/posts/post/" + updatedData?.updatedPost?._id);
       toast.success("Post updated successfully");
+      setLoading(false);
       window.location.reload();
     } catch (err) {
       toast.error(err?.message || "Something went wrong");
+      setLoading(false);
     }
   };
+
+
+
 
   const addCategory = () => {
     if (category.trim() !== '') {
@@ -84,7 +92,6 @@ const EditPost = () => {
     updatedCategories.splice(index, 1);
     setCategoryList(updatedCategories);
   };
-
   if (isLoading) {
     return <Loader />;
   }
@@ -96,14 +103,20 @@ const EditPost = () => {
         <h1 className="font-bold md:text-2xl text-xl mt-8">Update Post</h1>
         <form className="w-full flex flex-col space-y-4 md:space-y-8 mt-4" onSubmit={submitHandler}>
           <input value={title} onChange={(e) => setTitle(e.target.value)} type="text" className="bg-zinc-50 outline-none px-4 py-2 rounded-md" placeholder="Enter post title..." />
-          <ReactQuill value={description}  onChange={handleEditorChange} className="bg-zinc-50 w-full  outline-none px-4 py-2 rounded-md" placeholder="Write description..." />
+          <ReactQuill value={description} onChange={handleEditorChange} className="bg-zinc-50 w-full  outline-none px-4 py-2 rounded-md" placeholder="Write description..." />
           {file ? (
-            <div>
+            <div className="relative">
               <p className='font-semibold text-md'>File Name:{file.name}</p>
               <img src={URL.createObjectURL(file)} alt="Uploaded File" width={500} className="mt-2 object-cover rounded-lg" />
+              <button
+                className="absolute top-0 right-12 p-2 text-gray-600 hover:text-gray-800"
+                onClick={() => setFile(null)}
+              >
+                <IoMdCloseCircle size={24} />
+              </button>
             </div>
           ) : (
-            <div className="relative top-5 bottom-5 border-2 border-dashed border-gray-300 rounded-lg p-8 flex justify-center items-center cursor-pointer">
+            <div className="relative top-1 bottom-5 border-2 border-dashed border-gray-300 rounded-lg p-8 flex justify-center items-center cursor-pointer">
               <input type="file" className="absolute inset-0 opacity-0" onChange={(e) => setFile(e.target.files[0])} />
               <div className="text-center">
                 <p className="text-gray-500">Drag & Drop or Click to Upload</p>
@@ -112,21 +125,27 @@ const EditPost = () => {
             </div>
           )}
 
-          <div className="flex items-center space-x-4 md:space-x-8 ">
+          {loading && (
+            <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
+              <span className="block sm:inline">Please wait, post is updating...</span>
+            </div>
+          )}
+
+          <div className="flex items-center space-x-4 md:space-x-8">
             <input value={category} onChange={(e) => setCategory(e.target.value)} type="text" name="category" id="category" className="px-4 bg-zinc-100 py-2 outline-none rounded-md" placeholder="Enter category..." />
             <button type="button" onClick={addCategory} className="bg-black text-white px-4 py-2 font-semibold cursor-pointer rounded-md ">
               Add
             </button>
           </div>
           <div className="flex mt-4">
-            {categoryList?.map((item) => (
-              <div key={item._id} className="flex justify-center w-24 items-center mr-4 p-5 space-x-2 bg-gray-200 py-1 rounded-md">
+            {categoryList?.map((item, index) => (
+              <div key={index} className="flex justify-center w-24 items-center mr-4 p-5 space-x-2 bg-gray-200 py-1 rounded-md">
                 <p>{item}</p>
                 <p onClick={() => deleteCategory(index)} className="p-1 cursor-pointer" ><IoMdCloseCircle size={18} /></p>
               </div>
             ))}
           </div>
-          <button type="submit" className="bg-zinc-900 mx-auto w-full md:w-[30%] py-3 px-4 text-white rounded-md mt-24">Update</button>
+          <button disabled={loading} type="submit" className="bg-zinc-900 mx-auto w-full md:w-[30%] py-3 px-4 text-white rounded-md mt-24 disabled:bg-gray-500">Update</button>
         </form>
       </div>
       <Footer />

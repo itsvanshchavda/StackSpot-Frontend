@@ -39,10 +39,10 @@ const MobileMenu = () => {
         </Link>
       </>}
       {userInfo && <>
-        <Link to={`/profile/${userInfo?.user?._id}`} >
+        <Link to={`/profile/${userInfo?.user?._id || userInfo?.updatedUser?._id}`} >
           <h3 className='text-white hover:text-gray-500 cursor-pointer'>Profile</h3>
         </Link>
-    
+
         <Link to='/finduser'>
           <h3 className='text-white hover:text-gray-500 cursor-pointer'>Find users</h3>
         </Link>

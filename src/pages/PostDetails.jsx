@@ -50,6 +50,7 @@ const PostDetails = () => {
 
 
     const img = import.meta.env.VITE_IMG_URL;
+    const postimg = import.meta.env.VITE_POST_URL;
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -81,7 +82,7 @@ const PostDetails = () => {
             const res = await addBookmark(postId).unwrap();
             toast.success("Post bookmarked successfully");
             console.log(res);
-            await dispatch(addBookmarkPost(postId))// Update Redux state with postId in an array
+            await dispatch(addBookmarkPost(postId))
         } catch (err) {
             toast.error(err?.message || "Failed to bookmark the post");
             console.log(err);
@@ -140,12 +141,7 @@ const PostDetails = () => {
     };
 
 
-
-
-
-    //User details of post liked 
-
-    const userId = userInfo?.user?._id; // Get userId from userInfo
+    const userId = userInfo?.user?._id;
 
     const handleLike = async () => {
         try {
@@ -156,7 +152,7 @@ const PostDetails = () => {
             }
             await likePost({ id: postId, userId: userInfo?.user?._id });
             toast.success("Post liked");
-            dispatch(addLike(userId)); // Dispatch addLike action with userId
+            dispatch(addLike(userId));
             setLikeCount((prevCount) => Math.max(prevCount + 1, 1));
         } catch (err) {
             console.log(err);
@@ -167,11 +163,30 @@ const PostDetails = () => {
         try {
             await unlikePost({ id: postId, userId: userInfo?.user?._id });
             toast.success("Post unliked");
-            dispatch(removeLike(userId)); // Dispatch removeLike action with userId
-            setLikeCount((prevCount) => Math.max(prevCount - 1, 0)); // Ensure like count doesn't go below 0
+            dispatch(removeLike(userId));
+            setLikeCount((prevCount) => Math.max(prevCount - 1, 0));
 
         } catch (err) {
             console.log(err);
+        }
+    };
+
+    const handleShare = async () => {
+        const shareText = `${data?.getPost?.title}\n${window.location.href}`;
+
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: data?.getPost?.title,
+                    text: shareText,
+                    url: window.location.href
+                });
+                console.log("Post shared successfully");
+            } catch (err) {
+                console.error("Error sharing post:", err);
+            }
+        } else {
+            console.log("Web Share API not supported");
         }
     };
 
@@ -195,7 +210,7 @@ const PostDetails = () => {
 
                         {/* Like  */}
                         <div className='flex gap-3 justify-start items-center mx-2'>
-                            {likedPosts?.some((post) => post.userId === userId) && likecount > 0  ? <FaHeart size={21} className='cursor-pointer' color='red' onClick={handleUnlike} /> : <FaRegHeart size={21} className='cursor-pointer' onClick={handleLike} />}
+                            {likedPosts?.some((post) => post.userId === userId && post.postId === postId) && likecount > 0 ? <FaHeart size={21} className='cursor-pointer' color='red' onClick={handleUnlike} /> : <FaRegHeart size={21} className='cursor-pointer' onClick={handleLike} />}
                             <span className='mx-2'>{likecount}</span>
                         </div>
 
@@ -208,14 +223,14 @@ const PostDetails = () => {
                             ) : (<BsBookmark size={21} className='cursor-pointer' onClick={handleBookmark} />)}
 
                             <span><IoPlayCircleOutline size={21} className='cursor-pointer' title="Play" /></span>
-                            <span><IoShareOutline size={21} className='cursor-pointer' title="Share" /></span>
+                            <span><IoShareOutline size={21} className='cursor-pointer' title="Share" onClick={handleShare} /></span>
                         </button>
                     </div>
 
                     <div className='border-b-2 mb-5 border-gray-100 '></div>
 
                     <div className='flex  justify-start items-center gap-3 mb-3'>
-                        <img src={userData?.user?.profilePhoto ? img + userData.user.profilePhoto : avatar} className='w-10 h-10 rounded-full ring-1 ring-black cursor-pointer' alt="" />
+                        <img src={userData?.user?.profilePhoto?.url ? userData.user.profilePhoto?.url : avatar} className='w-10 h-10 rounded-full ring-1 ring-black cursor-pointer object-cover' alt="" />
                         <p className='font-semibold text-md cursor-pointer' onClick={() => navigate(`/profile/${data?.getPost?.userId}`)}>{userData?.user?.username}</p>
 
                         {/* Follow And Unfollow  */}
@@ -230,9 +245,9 @@ const PostDetails = () => {
 
 
                     </div>
-                    {data?.getPost?.photo && (
+                    {data?.getPost?.photo?.url && (
                         <img
-                            src={`${import.meta.env.VITE_IMG_URL}${data?.getPost?.photo}`}
+                            src={data?.getPost?.photo?.url}
                             loading='lazy'
                             className='w-full rounded-lg mb-6 shadow-xl'
                             alt=""

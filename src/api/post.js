@@ -54,14 +54,12 @@ export const postApi = createApi({
         },
       }),
     }),
+
     updatePost: builder.mutation({
       query: ({ updateData, postId }) => ({
         url: `/post/${postId}`,
         method: "PUT",
         body: updateData,
-        headers: {
-          "Content-Type": "application/json",
-        },
       }),
     }),
 
@@ -119,5 +117,5 @@ export const {
   useLikePostMutation,
   useUnlikePostMutation,
   useAddBookmarkMutation,
-  useRemoveBookmarkMutation
+  useRemoveBookmarkMutation,
 } = postApi;

@@ -7,7 +7,7 @@ const MyBlogs = () => {
 
     const userId = useParams().id;
     const { data , isLoading } = useGetUserPostQuery(userId);
-    const IMG = import.meta.env.VITE_IMG_URL;
+    const IMG = import.meta.env.VITE_POST_URL;
     const navigate = useNavigate();
 
     return (
@@ -18,7 +18,7 @@ const MyBlogs = () => {
             {data?.userPost?.map((post) => (
                 <>
                     <div className='h-[200px] md:h-auto' key={post._id}>
-                        <img src={IMG + post.photo} alt="" className='w-full h-full object-cover' />
+                        <img src={post.photo?.url} alt="" className='w-full h-full object-cover' />
                     </div>
                     <div className='flex flex-col cursor-pointer' onClick={() => navigate(`/posts/post/${post._id}`)}>
                         <h1 className='text-xl font-bold md:text-2xl'>{post.title}</h1>

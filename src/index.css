@@ -99,3 +99,19 @@
   transform: translateY(-1px);
 }
 
+
+.progress-container {
+  width: 100%;
+  position: relative;
+  height: 4px;
+  background-color: #f3f3f3;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: #4caf50;
+  width: 0%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}

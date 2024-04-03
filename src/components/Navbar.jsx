@@ -17,8 +17,7 @@ const Navbar = () => {
 
 
     const { userInfo } = useSelector((state) => state.auth);
-    const img = import.meta.env.VITE_IMG_URL;
-    const profilePhoto = img + userInfo?.user?.profilePhoto;
+    const profilePhoto = userInfo?.updatedUser?.profilePhoto?.url || userInfo?.user?.profilePhoto?.url;
     const toggleNav = () => {
         setNav(!nav);
     };
@@ -96,7 +95,7 @@ const Navbar = () => {
                 )}
                 <div className='cursor-pointer' onClick={toggleNav}>
                     {
-                        !userInfo?.user?.profilePhoto ? (
+                        !profilePhoto ? (
                             <img src={avatar} className='w-10 h-10 mb-2 rounded-full object-cover' />
                         ) : (
                             <img src={profilePhoto} className='w-10 h-10 rounded-full object-cover' />

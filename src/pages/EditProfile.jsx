@@ -39,7 +39,7 @@ const EditProfile = () => {
             setLastname(user.lastname);
 
             if (user.profilePhoto) {
-                setPreview(`${img}${user.profilePhoto}`);
+                setPreview(user?.profilePhoto?.url);
             }
         }
     }, [data]);
@@ -52,20 +52,12 @@ const EditProfile = () => {
             setPreview(imageUrl);
         }
     };
-    
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            let profilePhotoFilename = null;
-            if (file) {
-                const formData = new FormData();
-                formData.append('profilePhoto', file);
-                const res = await addProfilePhoto(formData).unwrap();
-                profilePhotoFilename = res.profilePhoto;
-                toast.success('Profile photo updated');
-            }
 
             const newUserInfo = {
                 username: username,
@@ -74,8 +66,17 @@ const EditProfile = () => {
                 password: password,
                 firstname: firstname,
                 lastname: lastname,
-                profilePhoto: profilePhotoFilename,
             };
+
+            if (file) {
+                const formData = new FormData();
+                formData.append('profilePhoto', file);
+                const res = await addProfilePhoto(formData).unwrap();
+                console.log(res);
+                newUserInfo.profilePhoto = { url: res?.profilePhoto?.url, public_id: res?.profilePhoto?.public_id };
+                toast.success('Profile photo updated');
+
+            }
 
             const updatedUser = await updateUser({ userid: id, user: newUserInfo }).unwrap();
             toast.success('User info updated');
