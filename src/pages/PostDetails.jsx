@@ -23,7 +23,7 @@ import { BiEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import { BsBookmark } from 'react-icons/bs';
 import { IoPlayCircleOutline, IoShareOutline } from "react-icons/io5";
-import { useGetUserQuery } from '../api/user';
+import { useFollowUserMutation, useGetUserQuery, useUnfollowUserMutation, useUserFollowerListQuery, useUserFollowingListQuery } from '../api/user';
 import PostDetailSkeleton from '../components/PostDetailSkeleton';
 import { FaBookmark } from "react-icons/fa6";
 
@@ -45,12 +45,7 @@ const PostDetails = () => {
     const { bookmarkedPosts } = useSelector((state) => state.post);
     const { likedPosts } = useSelector((state) => state.post);
     const [likecount, setLikeCount] = useState(false);
-    const { data: userData } = useGetUserQuery(data?.getPost?.userId);
-
-
-
-    const img = import.meta.env.VITE_IMG_URL;
-    const postimg = import.meta.env.VITE_POST_URL;
+    const { data: userData , isSuccess } = useGetUserQuery(data?.getPost?.userId);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -104,7 +99,6 @@ const PostDetails = () => {
 
 
 
-
     const handleDelete = async () => {
         try {
             await deletePost(postId);
@@ -139,7 +133,6 @@ const PostDetails = () => {
     const handleNavigate = (path) => {
         navigate(path);
     };
-
 
     const userId = userInfo?.user?._id;
 
@@ -190,6 +183,8 @@ const PostDetails = () => {
         }
     };
 
+    // Handle follow and unfollow logic
+
 
 
     return (
@@ -235,13 +230,16 @@ const PostDetails = () => {
 
                         {/* Follow And Unfollow  */}
 
-                        {userId === data?.getPost?.userId ? (<>
+                        {userId === data?.getPost?.userId && (<>
                             <span className='text-gray-300'>•</span>
                             <p className='text-green-500 font-sans hover:text-zinc-400 cursor-pointer' onClick={() => navigate(`/profile/${userId}`)}>Your Profile</p>
-                        </>) : (<>
-                            <span className='text-gray-300'>•</span>
-                            <p className='text-green-500 font-sans hover:text-zinc-400 cursor-pointer'>Follow</p>
                         </>)}
+
+
+                        
+
+                  
+
 
 
                     </div>

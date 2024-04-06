@@ -8,6 +8,7 @@ import Loader from '../components/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getPost } from '../slices/PostSlice';
+import Sidebar from '../components/Sidebar';
 
 const Home = () => {
     const { data, isLoading, error } = useGetAllPostQuery();
@@ -17,7 +18,7 @@ const Home = () => {
     const [loading, setLoading] = useState(false);
 
     const { userInfo } = useSelector((state) => state.auth);
-    const [getSearchPost, { isLoading:searchLoader }] = useGetSearchPostMutation();
+    const [getSearchPost, { isLoading: searchLoader }] = useGetSearchPostMutation();
 
     useEffect(() => {
         const fetchSearch = async () => {
@@ -45,9 +46,20 @@ const Home = () => {
             <Navbar />
             <div className='px-8 py-8 md:px-[200px] min-h-[90vh]'>
                 {error && <h1 className='text-2xl font-bold text-center mt-8'>Something went wrong</h1>}
+
+
+
+
                 {userInfo && (
                     <>
-                        {searchLoader && <Loader />} 
+
+                        {
+                            !search && (
+                                <Sidebar />
+                            )
+                        }
+
+                        {searchLoader && <Loader />}
                         {!loading && searchedPosts.length === 0 && search && (
                             <h1 className='font-bold text-xl text-center mt-8'>No Post Found</h1>
                         )}

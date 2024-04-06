@@ -42,7 +42,7 @@ const Login = () => {
 
   return (
     <>
-      <div>
+      <div className=''> 
         <div className='flex items-center justify-between px-6 md:px-[200px] py-4'>
           <h1 className='font-bold md:text-lg text-xl'><Link to='/'>Stack Spot</Link></h1>
           <h3><Link to='/login'>Login</Link></h3>

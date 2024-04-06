@@ -17,7 +17,7 @@ const Navbar = () => {
 
 
     const { userInfo } = useSelector((state) => state.auth);
-    const profilePhoto = userInfo?.updatedUser?.profilePhoto?.url || userInfo?.user?.profilePhoto?.url;
+    const profilePhoto = userInfo?.user?.profilePhoto?.url;
     const toggleNav = () => {
         setNav(!nav);
     };

@@ -24,7 +24,7 @@ const CreatePost = () => {
     const navigate = useNavigate();
 
     //React quill module options 
-    const [editorHtml, setEditorHtml] = useState('');
+    const [descriptionError, setDescriptionError] = useState('');
 
     const modules = {
         toolbar: [
@@ -64,13 +64,14 @@ const CreatePost = () => {
         e.preventDefault();
 
         try {
-            // Upload file first, if available
+            if (!description) {
+                setDescriptionError('Description is required');
+                return;
+            }
+
             setLoading(true);
             if (file) {
-                const formData = new FormData();
-                formData.append('image', file);
-                const res = await uploadFile(formData).unwrap();
-                console.log("File Response", res); // Make sure to check the response structure
+
 
                 const post = {
                     title,
@@ -80,14 +81,21 @@ const CreatePost = () => {
                     lastname: userInfo.user?.lastname,
                     userId: userInfo.user?._id,
                     categories: categoryList,
-                    photo: { url: res?.secure_url, public_id: res?.public_id }
+
                 };
+
+                const formData = new FormData();
+                formData.append('image', file);
+                const res = await uploadFile(formData).unwrap();
+                post.photo = { url: res?.secure_url, public_id: res.public_id };
+                console.log("File Response", res); // Make sure to check the response structure
 
                 // Create post
                 const data = await postUpload(post).unwrap();
                 navigate("/posts/post/" + data?.newPost?._id);
                 toast.success(data?.message);
                 setLoading(false);
+                setDescriptionError('');
             } else {
                 // If no file is uploaded
                 const post = {
@@ -103,6 +111,7 @@ const CreatePost = () => {
                 navigate("/posts/post/" + data?.newPost?._id);
                 toast.success(data?.message);
                 setLoading(false);
+                setDescriptionError('');
             }
         } catch (err) {
             toast.error(err?.message || "Something went wrong");
@@ -112,6 +121,8 @@ const CreatePost = () => {
 
     const handleEditorChange = (content) => {
         setDescription(content);
+        setDescriptionError('');
+
     };
 
     return (
@@ -121,16 +132,18 @@ const CreatePost = () => {
                 <h1 className='font-bold md:text-2xl text-xl mt-8'>Create a post</h1>
                 <form className='w-full flex flex-col space-y-4 md:space-y-8 mt-4' onSubmit={submitHandler}>
                     <input value={title} onChange={(e) => setTitle(e.target.value)} type="text" className='bg-zinc-100 outline-none px-4 py-2 rounded-md' placeholder='Enter post title...' required />
-                    <ReactQuill value={description} modules={modules} formats={formats} onChange={handleEditorChange} className="bg-zinc-50 w-full  outline-none px-4 py-2 rounded-md" placeholder="Write description..." required/>
+                    <ReactQuill value={description} modules={modules} formats={formats} onChange={handleEditorChange} className="bg-zinc-50 w-full  outline-none px-4 py-2 rounded-md" placeholder="Write description..." required />
+                    {descriptionError && <p className="text-red-500">{descriptionError}</p>}
+
                     {file ? (
-                        <div>
+                        <div className='relative'>
                             <p className='font-semibold text-md'>File Name:{file.name}</p>
                             <img src={URL.createObjectURL(file)} alt="Uploaded File" width={500} className="mt-2 object-cover rounded-lg" />
                             <button
-                                className="absolute top-0 right-12 p-2 text-gray-600 hover:text-gray-800"
+                                className="absolute top-0 right-0 p-2 text-gray-600 hover:text-gray-800"
                                 onClick={() => setFile(null)}
                             >
-                                <IoMdCloseCircle size={24} />
+                                <IoMdCloseCircle size={24} color='black' />
                             </button>
                         </div>
                     ) : (
@@ -145,7 +158,7 @@ const CreatePost = () => {
 
                     {loading && (
                         <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
-                            <span className="block sm:inline">Please wait, post is updating...</span>
+                            <span className="block sm:inline">Please wait, post is creating...</span>
                         </div>
                     )}
                     <div className='flex items-center space-x-4 md:space-x-8 '>

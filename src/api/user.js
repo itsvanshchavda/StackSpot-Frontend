@@ -26,7 +26,42 @@ export const userApi = createApi({
         body: photo,
       }),
     }),
+
+    getAllUsers: builder.query({
+      query: (id) => `/alluser/${id}`,
+    }),
+
+    followUser: builder.mutation({
+      query: (id) => ({
+        url: `/alluser/follow/${id}`,
+        method: "PUT",
+      }),
+    }),
+
+    userFollowingList: builder.query({
+      query: (id) => `/alluser/following/${id}`,
+    }),
+
+    userFollowerList: builder.query({
+      query: (id) => `/alluser/followers/${id}`,
+    }),
+
+    unfollowUser: builder.mutation({
+      query: (id) => ({
+        url: `/alluser/unfollow/${id}`,
+        method: "PUT",
+      }),
+    }),
   }),
 });
 
-export const { useGetUserQuery, useUpdateUserMutation ,  useAddProfilePhotoMutation } = userApi;
+export const {
+  useGetUserQuery,
+  useUpdateUserMutation,
+  useAddProfilePhotoMutation,
+  useGetAllUsersQuery,
+  useFollowUserMutation,
+  useUserFollowingListQuery,
+  useUserFollowerListQuery,
+  useUnfollowUserMutation,
+} = userApi;
