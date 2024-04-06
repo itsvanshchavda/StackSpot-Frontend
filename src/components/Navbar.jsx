@@ -68,7 +68,7 @@ const Navbar = () => {
                 <input
                     type='text'
                     placeholder='Search...'
-                    className='p-2 rounded-md outline-none bg-transparent border-b-2'
+                    className='p-2 rounded-md outline-none bg-transparent border-b-2 max-sm:w-[70%]'
                     value={search}
                     onChange={handleInputChange}
                     onKeyDown={handleKeyPress}
