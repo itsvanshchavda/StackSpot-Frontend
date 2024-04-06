@@ -52,6 +52,16 @@ export const userApi = createApi({
         method: "PUT",
       }),
     }),
+
+
+    getAllUsersList:builder.query({
+      query:()=> `/user/allUser`,
+      
+    }),
+
+    searchUser: builder.query({
+      query: (search) => `/user/search/${search}`,
+    }),
   }),
 });
 
@@ -64,4 +74,6 @@ export const {
   useUserFollowingListQuery,
   useUserFollowerListQuery,
   useUnfollowUserMutation,
+  useGetAllUsersListQuery,
+  useSearchUserQuery,
 } = userApi;

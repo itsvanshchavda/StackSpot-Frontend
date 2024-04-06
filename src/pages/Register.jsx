@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { FaGoogle } from "react-icons/fa";
+import { FaEye, FaGoogle } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { useRegisterMutation } from '../api/auth';
 import { toast } from 'react-toastify';
 import { setCredentials as authCredentials, setCredentials } from '../slices/AuthSlice';
 import Loader from '../components/Loader';
+import { FaRegEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
+
 
 
 
@@ -15,6 +18,7 @@ const Register = () => {
   const [username, setUsername] = useState('');
   const [firstname, setFirstname] = useState('');
   const [lastname, setLastname] = useState('');
+  const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
@@ -46,6 +50,9 @@ const Register = () => {
     setUsername(value.startsWith('@') ? value : `@${value}`);
   }
 
+  const handleShowPassword = () => {
+    setShowPassword((prev) => !prev)
+  }
   if (isLoading) return <Loader />
 
 
@@ -81,9 +88,11 @@ const Register = () => {
                           type="text"
                           name="firstname"
                           placeholder="Firstname"
+                          maxLength={10}
                           required
                         />
                       </div>
+                      <span className='text-xs float-end mt-2 text-gray-400'>{firstname.length}/10</span>
                     </div>
 
                     {/* Right Div */}
@@ -99,8 +108,10 @@ const Register = () => {
                           type="text"
                           name="lastname"
                           placeholder="Lastname"
+                          maxLength={10}
                           required
                         />
+                        <span className='text-xs float-end mt-2 text-gray-400'>{lastname.length}/10</span>
                       </div>
                     </div>
                   </div>
@@ -115,8 +126,9 @@ const Register = () => {
                       <div className="relative w-full">
                         <input
                           value={username} onChange={handleUsernameChange} className="block w-full border bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500  placeholder-gray-400 focus:ring-cyan-500 p-2.5 text-sm rounded-lg"
-                          type="text" name="username" placeholder='@exampleuser' required
+                          type="text" name="username" placeholder='@exampleuser' required maxLength={15}
                         />
+                        <span className='text-xs float-end mt-2 text-gray-400'>{username.length}/15</span>
                       </div>
                     </div>
                   </div>
@@ -135,15 +147,22 @@ const Register = () => {
                     </div>
                   </div>
                   <div>
+
                     <div className="mb-2">
                       <label className="text-sm font-medium text-gray-900" htmlFor="password">Password</label>
                     </div>
                     <div className="flex w-full rounded-lg pt-1">
                       <div className="relative w-full">
+                        {showPassword ? <FaRegEye onClick={handleShowPassword}  className='absolute right-4 top-3 cursor-pointer' /> : <FaEyeSlash className='absolute right-4 top-3 cursor-pointer' onClick={handleShowPassword} />}
                         <input
                           value={password} onChange={(e) => setPassword(e.target.value)} className="block w-full border bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500  placeholder-gray-400 focus:ring-cyan-500 p-2.5 text-sm rounded-lg"
-                          id="password" type="password" name="password" required
+                          id="password" type={showPassword ? "text" : "password"} 
+                          name="password" required maxLength={8}
+
                         />
+
+
+
                       </div>
                     </div>
                     {/* <p className="mt-2 cursor-pointer text-blue-500 hover:text-blue-600">Forgot password?</p> */}
@@ -153,13 +172,13 @@ const Register = () => {
                       className="border transition-colors focus:ring-2 p-0.5 border-transparent bg-sky-600 hover:bg-sky-700 active:bg-sky-800 text-white rounded-lg">
                       <span className="flex items-center justify-center gap-1 font-medium py-1 px-2.5 text-base">Register</span>
                     </button>
-                    <button type="button"
+                    {/* <button type="button"
                       className="transition-colors focus:ring-2 p-0.5 bg-white hover:bg-gray-100 text-gray-900 border border-gray-200 rounded-lg">
                       <span className="flex items-center justify-center gap-1 font-medium py-1 px-2.5 text-base">
                         <span className='px-2'> <FaGoogle /></span>
                         Sign in with Google
                       </span>
-                    </button>
+                    </button> */}
 
                   </div>
                 </form>

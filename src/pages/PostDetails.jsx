@@ -45,7 +45,7 @@ const PostDetails = () => {
     const { bookmarkedPosts } = useSelector((state) => state.post);
     const { likedPosts } = useSelector((state) => state.post);
     const [likecount, setLikeCount] = useState(false);
-    const { data: userData , isSuccess } = useGetUserQuery(data?.getPost?.userId);
+    const { data: userData, isSuccess } = useGetUserQuery(data?.getPost?.userId);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -183,10 +183,6 @@ const PostDetails = () => {
         }
     };
 
-    // Handle follow and unfollow logic
-
-
-
     return (
         <>
             <Navbar />
@@ -205,8 +201,13 @@ const PostDetails = () => {
 
                         {/* Like  */}
                         <div className='flex gap-3 justify-start items-center mx-2'>
-                            {likedPosts?.some((post) => post.userId === userId && post.postId === postId) && likecount > 0 ? <FaHeart size={21} className='cursor-pointer' color='red' onClick={handleUnlike} /> : <FaRegHeart size={21} className='cursor-pointer' onClick={handleLike} />}
+                            {likedPosts.find((post) => post.userId === userId && post.postId === postId) !== undefined && likecount > 0 ? (
+                                <FaHeart size={21} className='cursor-pointer' color='red' onClick={handleUnlike} />
+                            ) : (
+                                <FaRegHeart size={21} className='cursor-pointer' onClick={handleLike} />
+                            )}
                             <span className='mx-2'>{likecount}</span>
+
                         </div>
 
 
@@ -234,12 +235,6 @@ const PostDetails = () => {
                             <span className='text-gray-300'>•</span>
                             <p className='text-green-500 font-sans hover:text-zinc-400 cursor-pointer' onClick={() => navigate(`/profile/${userId}`)}>Your Profile</p>
                         </>)}
-
-
-                        
-
-                  
-
 
 
                     </div>

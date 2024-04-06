@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FaGoogle } from "react-icons/fa";
+import { FaEyeSlash, FaGoogle, FaRegEye } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router-dom';
 import { useLoginMutation } from '../api/auth';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,6 +12,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
 
   const [login, { isLoading, isError }] = useLoginMutation();
+  const [showPassword, setShowPassword] = useState(false)
 
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -37,12 +38,16 @@ const Login = () => {
     }
   }
 
+  const handleShow = () => {
+    setShowPassword((prev) => !prev)
+  }
+
   if (isLoading) return <Loader />
 
 
   return (
     <>
-      <div className=''> 
+      <div className=''>
         <div className='flex items-center justify-between px-6 md:px-[200px] py-4'>
           <h1 className='font-bold md:text-lg text-xl'><Link to='/'>Stack Spot</Link></h1>
           <h3><Link to='/login'>Login</Link></h3>
@@ -74,26 +79,26 @@ const Login = () => {
                       </div>
                       <div className="flex w-full rounded-lg pt-1">
                         <div className="relative w-full">
+                          {showPassword ? <FaRegEye className='absolute right-4 top-3 cursor-pointer' onClick={handleShow}/> : <FaEyeSlash className='absolute right-4 top-3 cursor-pointer' onClick={handleShow}/>}
                           <input
                             value={password} onChange={(e) => setPassword(e.target.value)} className="block w-full border bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500  placeholder-gray-400 focus:ring-cyan-500 p-2.5 text-sm rounded-lg"
-                            id="password" type="password" name="password" required
+                            id="password" type={showPassword ? "text" : "password"} name="password" required
                           />
                         </div>
                       </div>
-                      <p className="mt-2 cursor-pointer text-blue-500 hover:text-blue-600">Forgot password?</p>
                     </div>
                     <div className="flex flex-col gap-2">
                       <button type="submit"
                         className="border transition-colors focus:ring-2 p-0.5 border-transparent bg-sky-600 hover:bg-sky-700 active:bg-sky-800 text-white rounded-lg">
                         <span className="flex items-center justify-center gap-1 font-medium py-1 px-2.5 text-base">Login</span>
                       </button>
-                      <button type="button"
+                      {/* <button type="button"
                         className="transition-colors focus:ring-2 p-0.5 bg-white hover:bg-gray-100 text-gray-900 border border-gray-200 rounded-lg">
                         <span className="flex items-center justify-center gap-1 font-medium py-1 px-2.5 text-base">
                           <span className='px-2'> <FaGoogle /></span>
                           Sign in with Google
                         </span>
-                      </button>
+                      </button> */}
 
                     </div>
                   </form>

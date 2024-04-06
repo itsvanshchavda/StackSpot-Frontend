@@ -7,7 +7,6 @@ import { useUserFollowerListQuery } from '../api/user';
 
 const Userfollowing = () => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
     const { id: userId } = useParams(); // Extracting userId from route params
 
     // Fetch user's following list based on userId

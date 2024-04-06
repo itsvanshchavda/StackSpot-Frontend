@@ -48,8 +48,6 @@ const Home = () => {
                 {error && <h1 className='text-2xl font-bold text-center mt-8'>Something went wrong</h1>}
 
 
-
-
                 {userInfo && (
                     <>
 

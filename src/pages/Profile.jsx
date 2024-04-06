@@ -67,7 +67,7 @@ const Profile = () => {
 
   const handleFollow = async () => {
     try {
-      const res = await followUser(userId);
+      const res = await followUser(userId).unwrap();
       refetchFollowing();
       refetchFollowers();
       toast.success(res?.message || 'User followed successfully');
@@ -80,7 +80,7 @@ const Profile = () => {
 
   const handleUnfollow = async () => {
     try {
-      await unfollowUser(userId);
+      await unfollowUser(userId).unwrap();
       refetchFollowing();
       refetchFollowers();
       toast.success('User unfollowed successfully');
@@ -126,7 +126,7 @@ const Profile = () => {
               ) : (
                 <>
                   <div className='flex items-center mb-4'>
-                    <img src={userData?.profilePhoto?.url || avatar} alt='profile' className='w-24 h-24 rounded-full object-cover mr-4' />
+                    <img src={userData?.profilePhoto?.url ?? avatar} alt='profile' className='w-24 h-24 rounded-full object-cover mr-4' />
                     <div>
                       <div className='text-lg font-semibold flex gap-3 items-center'>
                         <p>{userData?.firstname}</p>
