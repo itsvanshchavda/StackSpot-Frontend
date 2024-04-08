@@ -17,6 +17,7 @@ const AllUsersList = ({ users }) => {
   const [unfollowUser] = useUnfollowUserMutation();
   const [followingUsers, setFollowingUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const { theme } = useSelector((state) => state.theme)
 
 
   useEffect(() => {
@@ -57,55 +58,59 @@ const AllUsersList = ({ users }) => {
   const endIndex = startIndex + 10;
 
   return (
-    <div className="max-w-sm mx-auto mt-10">
-      {users?.slice(startIndex, endIndex).map((user) => (
-        <div key={user._id} className="p-3 flex items-center justify-between border-t cursor-pointer hover:bg-gray-200 border-gray-200 duration-300">
-          <div className="flex items-center" onClick={() => navigate(`/profile/${user?._id}`)}>
-            <img className="rounded-full h-10 w-10" src={user.profilePhoto?.url ?? avatar} alt="John Doe" />
-            <div className="ml-2 flex flex-col">
-              <div className="leading-snug text-sm text-gray-900 font-bold">{user.firstname} {user.lastname}</div>
-              <div className="leading-snug text-xs text-gray-600">{user.username}</div>
+
+    // 
+    <div className={`h-screen ${theme ? "bg-gradient-to-b from-black to-gray-800 via-black text-white " : "" } `}>
+      <div className="max-w-sm mx-auto mt-10">
+        {users?.slice(startIndex, endIndex).map((user) => (
+          <div key={user._id} className="p-3 flex items-center justify-between border-t cursor-pointer hover:bg-gray-200 border-gray-200 duration-300">
+            <div className="flex items-center" onClick={() => navigate(`/profile/${user?._id}`)}>
+              <img className="rounded-full h-10 w-10" src={user.profilePhoto?.url ?? avatar} alt="John Doe" />
+              <div className="ml-2 flex flex-col">
+                <div className={`leading-snug text-sm  font-bold ${theme ? "text-white" : "text-gray-600"}`}>{user.firstname} {user.lastname}</div>
+                <div className={`leading-snug text-xs `}>{user.username}</div>
+              </div>
+            </div>
+            <div>
+              {followingUsers.includes(user._id) ? (
+                <button className={`h-8 px-3 text-md font-semibold  border border-zinc-400 rounded-full  ${theme ? "hover:text-black text-white" : "hover:bg-zinc-900 hover:text-white text-black"}`} onClick={() => handleUnfollow(user._id)}>Unfollow</button>
+              ) : (
+                <button className={`h-8 px-3 text-md font-semibold  border border-zinc-400 rounded-full  ${theme ? "hover:text-black text-white" : "hover:bg-zinc-900 hover:text-white text-black"}`} onClick={() => handleUnfollow(user._id)}>Follow</button>
+              )}
             </div>
           </div>
-          <div>
-            {followingUsers.includes(user._id) ? (
-              <button className="h-8 px-3 text-md font-semibold text-black border border-zinc-400 rounded-full hover:bg-zinc-900 hover:text-white" onClick={() => handleUnfollow(user._id)}>Unfollow</button>
-            ) : (
-              <button className="h-8 px-3 text-md font-semibold text-black border border-zinc-400 rounded-full hover:bg-zinc-900 hover:text-white" onClick={() => handleFollow(user._id)}>Follow</button>
-            )}
+        ))}
+
+
+
+
+
+
+
+        {/* Pagination */}
+
+        {users?.length > 10 && (
+          <div className="flex justify-between mt-4">
+            <button
+              onClick={() => setCurrentPage(prevPage => Math.max(prevPage - 1, 1))}
+              disabled={currentPage === 1}
+              className="text-black border rounded-md px-5 py-1 font-semibold"
+            >
+              Previous
+            </button>
+            <button
+              onClick={() => setCurrentPage(prevPage => prevPage + 1)}
+              disabled={endIndex >= users.length}
+              className="text-black rounded-md  border px-5 py-1 font-semibold"
+            >
+              Next
+            </button>
           </div>
-        </div>
-      ))}
+        )}
 
+      </div >
+    </div>
 
-      {/* Searched Users List */}
-
-      
-
-
-
-      {/* Pagination */}
-
-      {users?.length > 10 && (
-        <div className="flex justify-between mt-4">
-          <button
-            onClick={() => setCurrentPage(prevPage => Math.max(prevPage - 1, 1))}
-            disabled={currentPage === 1}
-            className="text-black border rounded-md px-5 py-1 font-semibold"
-          >
-            Previous
-          </button>
-          <button
-            onClick={() => setCurrentPage(prevPage => prevPage + 1)}
-            disabled={endIndex >= users.length}
-            className="text-black rounded-md  border px-5 py-1 font-semibold"
-          >
-            Next
-          </button>
-        </div>
-      )}
-
-    </div >
   );
 };
 

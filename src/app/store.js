@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "../slices/AuthSlice";
+import themeSlice from '../slices/Theme'
 import { authApi } from "../api/auth";
 import { postApi } from "../api/post";
 import { commentApi } from "../api/comment";
@@ -10,6 +11,7 @@ const store = configureStore({
   reducer: {
     auth: authReducer,
     post: PostSlice,
+    theme:themeSlice,
     [authApi.reducerPath]: authApi.reducer,
     [postApi.reducerPath]: postApi.reducer,
     [commentApi.reducerPath]: commentApi.reducer,

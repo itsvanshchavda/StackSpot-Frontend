@@ -16,6 +16,7 @@ const Home = () => {
     const { search } = useLocation();
     const [searchedPosts, setSearchedPosts] = useState([]);
     const [loading, setLoading] = useState(false);
+    const {theme} = useSelector((state) => state.theme)
 
     const { userInfo } = useSelector((state) => state.auth);
     const [getSearchPost, { isLoading: searchLoader }] = useGetSearchPostMutation();
@@ -44,7 +45,7 @@ const Home = () => {
     return (
         <>
             <Navbar />
-            <div className='px-8 py-8 md:px-[200px] min-h-[90vh]'>
+            <div className={`px-8 py-8 md:px-[200px] min-h-auto ${theme ? " bg-gradient-to-b from-black to-gray-900 via-black text-white" : ""} `}>
                 {error && <h1 className='text-2xl font-bold text-center mt-8'>Something went wrong</h1>}
 
 

@@ -1,16 +1,17 @@
 import React, { useEffect } from 'react'
 import { useAddBookmarkMutation, useRemoveBookmarkMutation } from '../api/post';
 import { addBookmarkPost, removeBookmarkPost } from '../slices/PostSlice';
-import { useSelector , useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { BsBookmark } from 'react-icons/bs';
 import { FaBookmark } from 'react-icons/fa';
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify'
 
-const Bookmark = ({postId}) => {
+const Bookmark = ({ postId }) => {
 
     const [addBookmark] = useAddBookmarkMutation();
     const [removeBookmark] = useRemoveBookmarkMutation();
     const { bookmarkedPosts } = useSelector((state) => state.post);
+    const { theme } = useSelector((state) => state.theme)
 
     const dispatch = useDispatch();
 
@@ -42,7 +43,7 @@ const Bookmark = ({postId}) => {
 
     return (
         <div>
-            {bookmarkedPosts?.some((post) => post.postId === postId) ? (<FaBookmark size={21} className='cursor-pointer' color='black' onClick={handleRemoveBookmark} />
+            {bookmarkedPosts?.some((post) => post.postId === postId) ? (<FaBookmark size={21} className='cursor-pointer' color={`${theme ? "white" : "black"} `} onClick={handleRemoveBookmark} />
             ) : (<BsBookmark size={21} className='cursor-pointer' onClick={handleBookmark} />)}
         </div>
     )

@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import AllUsersList from './AllUsersList';
 import { useGetAllUsersListQuery, useSearchUserQuery } from '../api/user';
+import { useSelector } from 'react-redux'
 
 const FindAllUsers = () => {
   const [searchInput, setSearchInput] = useState('');
@@ -14,6 +15,7 @@ const FindAllUsers = () => {
   const navigate = useNavigate();
   const { data } = useSearchUserQuery(search);
   const { data: allUsersList } = useGetAllUsersListQuery();
+  const { theme } = useSelector((state) => state.theme)
 
   useEffect(() => {
     if (data && data.searchedUser) {
@@ -54,12 +56,13 @@ const FindAllUsers = () => {
   return (
     <>
       <Navbar />
-      <div className='h-[90vh]'>
+      <div className={`h-[90vh] ${theme ? "bg-zinc-950" : ""}`}>
         <div className='flex justify-center items-center mr-10 -mt-14'>
           <BsSearch
             className='cursor-pointer'
             size={20}
             onClick={handleSearch}
+            color={`${theme ? "white" : ""}`}
           />
           <input
             type='text'
@@ -72,15 +75,17 @@ const FindAllUsers = () => {
         </div>
 
         {/* Render AllUsersList when there is no search query */}
-        {!search && <AllUsersList users={usersList} />}
+        <div className=''>
+          {!search && <AllUsersList users={usersList} />}
 
-        {/* Render searchedUsers when there is a search query */}
-        {search && searchedUsers.length > 0 && <AllUsersList users={searchedUsers} />}
+          {/* Render searchedUsers when there is a search query */}
+          {search && searchedUsers.length > 0 && <AllUsersList users={searchedUsers} />}
 
-        {/* Render message when no users found for search query */}
-        {search && searchedUsers.length === 0 && (
-          <h1 className='font-bold text-xl text-center mt-8'>No User Found</h1>
-        )}
+          {/* Render message when no users found for search query */}
+          {search && searchedUsers.length === 0 && (
+            <h1 className='font-bold text-xl text-center mt-8'>No User Found</h1>
+          )}
+        </div>
       </div>
       <Footer />
     </>

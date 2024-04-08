@@ -31,18 +31,19 @@ import Bookmark from '../components/Bookmark';
 
 const PostDetails = () => {
     const postId = useParams().id;
-    const {  data, isLoading } = useGetPostByIdQuery(postId);
+    const { data, isLoading } = useGetPostByIdQuery(postId);
     console.log("🚀 ~ PostDetails ~ data:", data?.getPost?.userId)
     const { data: commentData, isLoading: commentLoader, error: commentError, refetch } = useGetAllCommentQuery(postId);
     const navigate = useNavigate();
     const [deletePost] = useDeletePostMutation();
-   
+
     const [createComment] = useCreateCommentMutation();
     const { data: userData, isSuccess } = useGetUserQuery(data?.getPost?.userId);
     const [comment, setComment] = useState('');
     const { userInfo } = useSelector((state) => state.auth);
     const [showLoader, setShowLoader] = useState(true);
-  
+    const { theme } = useSelector((state) => state.theme)
+
 
     const dispatch = useDispatch();
     const userId = userInfo?.user?._id;
@@ -63,7 +64,7 @@ const PostDetails = () => {
         }
     }, [data, dispatch]);
 
-   
+
 
     const handleDelete = async () => {
         try {
@@ -102,7 +103,7 @@ const PostDetails = () => {
 
 
 
-   
+
 
     const handleShare = async () => {
         const shareText = `${data?.getPost?.title}\n${window.location.href}`;
@@ -127,7 +128,8 @@ const PostDetails = () => {
         <>
             <Navbar />
             {showLoader ? <PostDetailSkeleton /> : (
-                <div className='px-4 md:px-8 py-7 max-w-4xl mx-auto'>
+                <div className={`${theme ? "bg-gradient-to-b from-black to-gray-800 via-black text-white" : ""}`}>
+                    <div className={`px-4 md:px-8 py-7 max-w-4xl mx-auto `}>
                     <h1 className='text-4xl font-bold mb-4'>{data?.getPost?.title}</h1>
                     <div className='flex items-center space-x-2 text-sm text-gray-600 mb-4'>
                         <p>{new Date(data?.getPost?.updatedAt).toLocaleDateString()}</p>
@@ -135,15 +137,15 @@ const PostDetails = () => {
                         <p>{new Date(data?.getPost?.updatedAt).toLocaleTimeString()}</p>
                     </div>
 
-                    <div className='border-gray-100 border-b-2 mb-2'></div>
+                    <div className={` border-b-2 mb-2 ${theme ? "border-slate-600" : "border-gray-100"}`}></div>
 
                     <div className="flex mb-5 mt-4">
 
                         {/* Like  */}
                         <div className=''>
-                    
-                           {/* Like components */}
-                           <Like  postId={postId}/>
+
+                            {/* Like components */}
+                            <Like postId={postId} />
 
                         </div>
 
@@ -159,7 +161,7 @@ const PostDetails = () => {
                         </button>
                     </div>
 
-                    <div className='border-b-2 mb-5 border-gray-100 '></div>
+                    <div className={` border-b-2 mb-5 ${theme ? "border-slate-600" : "border-gray-100"}`}></div>
 
                     <div className='flex  justify-start items-center gap-3 mb-3'>
                         <img src={userData?.user?.profilePhoto?.url ? userData.user.profilePhoto?.url : avatar} className='w-10 h-10 rounded-full ring-1 ring-black cursor-pointer object-cover' alt="" />
@@ -184,7 +186,7 @@ const PostDetails = () => {
                     )}
 
 
-                    <div className='text-lg text-gray-800 leading-relaxed mb-6 font-serif' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data?.getPost?.description) }} />
+                    <div className={`text-lg text-gray-800 leading-relaxed mb-6 font-serif ${theme ? "text-white" : ""}`} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data?.getPost?.description) }} />
 
                     <div className='flex flex-wrap items-center space-x-2 mb-6'>
                         {data?.getPost?.categories.map((item, index) => (
@@ -214,9 +216,10 @@ const PostDetails = () => {
                         <h3 className='text-xl font-semibold mb-4'>Write Comment:</h3>
                         <div className='flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4'>
                             <textarea value={comment} onChange={(e) => setComment(e.target.value)} className='w-full md:w-2/3 px-4 py-2 bg-gray-100 rounded-md text-gray-800 placeholder-gray-500 focus:outline-none focus:ring focus:ring-blue-200' placeholder='Write your comment here...'></textarea>
-                            <button disabled={commentLoader} type='submit' onClick={commentHandler} className='w-full md:w-auto h-12 px-6 bg-zinc-900 text-white rounded-md hover:bg-zinc-600 transition duration-300'>Comment</button>
+                            <button disabled={commentLoader} type='submit' onClick={commentHandler} className={`w-full md:w-auto h-12 px-6 bg-zinc-900 text-white rounded-md hover:bg-zinc-600 transition duration-300 `}>Comment</button>
                         </div>
                     </div>
+                </div>
                 </div>
             )}
             <Footer />
