@@ -57,7 +57,7 @@ const Like = ({postId}) => {
     };
 
     return (
-        <div>
+        <div className='flex gap-3 justify-start items-center mx-2'>
             {likedPosts.find((post) => post.userId === userId && post.postId === postId) !== undefined && likecount > 0 ? (
                 <FaHeart size={21} className='cursor-pointer' color='red' onClick={handleUnlike} />
             ) : (

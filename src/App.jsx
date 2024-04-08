@@ -14,6 +14,7 @@ import MyBlogs from './components/MyBlogs'
 import EditProfile from './pages/EditProfile'
 import MyBookmark from './pages/MyBookmark'
 import FiindAllUsers from './pages/FiindAllUsers'
+import Dashboard from './pages/Dashboard'
 
 
 
@@ -31,6 +32,7 @@ const App = () => {
         <Route path='/finduser' element={<FiindAllUsers />} />
         <Route path="/profile/:id" element={<Profile />} />
         <Route path='/profile/edit/:id' element={<EditProfile />} />
+        <Route path='/dashboard' element={<Dashboard />} />
         <Route path="*" element={<Notfound />} />
         <Route path='/write' element={<CreatePost />} />
 

@@ -8,11 +8,15 @@ import MobileMenu from './MobileMenu';
 import { TfiPencilAlt } from "react-icons/tfi";
 import avatar from '../assets/avatar.jpg';
 import logo from '../assets/logo.png';
+import { BsMoonStarsFill } from "react-icons/bs";
+import { MdSunny } from "react-icons/md";
+
 
 
 const Navbar = () => {
     const [search, setSearch] = useState('');
     const [nav, setNav] = useState(false);
+    const [theme, setTheme] = useState(true)
     const navigate = useNavigate();
 
 
@@ -35,6 +39,10 @@ const Navbar = () => {
             handleSearch();
         }
     };
+
+    const handleTheme = () => {
+        setTheme((prev) => !prev)
+    }
 
     const handleInputChange = (e) => {
         setSearch(e.target.value);
@@ -59,7 +67,7 @@ const Navbar = () => {
                 </Link>
             </h1>
 
-            {path === '/' && <div className='flex justify-center items-center space-x-2'>
+            {path === '/' && <div className='flex justify-center items-center space-x-2 '>
                 <BsSearch
                     className='cursor-pointer'
                     size={20}
@@ -74,14 +82,18 @@ const Navbar = () => {
                     onKeyDown={handleKeyPress}
                 />
             </div>}
-          
+
             <div className='flex items-center justify-center space-x-4 '>
                 {userInfo ? (
-                    <div className='flex flex-row'>
+                    <div className='flex flex-row '>
                         <Link to='/write' className='flex items-center gap-2 text-black cursor-pointer'>
                             <TfiPencilAlt size={17} />
                             <h3>Write</h3>
                         </Link>
+
+                        <div className='mx-6 mt-1'>
+                          {theme ? <BsMoonStarsFill onClick={handleTheme} className='cursor-pointer ' /> : <MdSunny onClick={handleTheme} className='cursor-pointer'  />}
+                        </div>
                     </div>
                 ) : (
                     <h3>
@@ -96,7 +108,10 @@ const Navbar = () => {
                 <div className='cursor-pointer' onClick={toggleNav}>
                     {
                         !profilePhoto ? (
-                            <img src={avatar} className='w-10 h-10 mb-2 rounded-full object-cover' />
+                            <div>
+                                <img src={avatar} className='w-10 h-10 mb-2 rounded-full object-cover' />
+                            </div>
+
                         ) : (
                             <img src={profilePhoto} className='w-10 h-10 rounded-full object-cover' />
                         )

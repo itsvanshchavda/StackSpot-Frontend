@@ -65,11 +65,6 @@ const PostDetails = () => {
 
    
 
-
-
-
-
-
     const handleDelete = async () => {
         try {
             await deletePost(postId);
@@ -145,8 +140,8 @@ const PostDetails = () => {
                     <div className="flex mb-5 mt-4">
 
                         {/* Like  */}
-                        <div className='flex gap-3 justify-start items-center mx-2'>
-                           
+                        <div className=''>
+                    
                            {/* Like components */}
                            <Like  postId={postId}/>
 
