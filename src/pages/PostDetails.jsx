@@ -5,10 +5,10 @@ import { toast } from 'react-toastify';
 import DOMPurify from 'dompurify';
 import {
     useGetPostByIdQuery,
-    useLikePostMutation,
+
     useDeletePostMutation,
     useAddBookmarkMutation,
-    useUnlikePostMutation,
+
     useRemoveBookmarkMutation,
 } from '../api/post';
 import { useCreateCommentMutation, useGetAllCommentQuery } from '../api/comment';
@@ -17,36 +17,35 @@ import Footer from '../components/Footer';
 import Comment from '../components/Comment';
 import Loader from '../components/Loader';
 import avatar from '../assets/avatar.jpg';
-import { addBookmarkPost, addLike, getPost, removeBookmarkPost, removeLike } from '../slices/PostSlice';
-import { FaHeart, FaRegHeart } from 'react-icons/fa';
+import { addBookmarkPost, getPost, removeBookmarkPost } from '../slices/PostSlice';
 import { BiEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import { BsBookmark } from 'react-icons/bs';
 import { IoPlayCircleOutline, IoShareOutline } from "react-icons/io5";
-import { useFollowUserMutation, useGetUserQuery, useUnfollowUserMutation, useUserFollowerListQuery, useUserFollowingListQuery } from '../api/user';
 import PostDetailSkeleton from '../components/PostDetailSkeleton';
 import { FaBookmark } from "react-icons/fa6";
+import Like from '../components/Like';
+import { useGetUserQuery } from '../api/user';
+import Bookmark from '../components/Bookmark';
 
 
 const PostDetails = () => {
     const postId = useParams().id;
-    const { data, isLoading } = useGetPostByIdQuery(postId);
+    const {  data, isLoading } = useGetPostByIdQuery(postId);
+    console.log("🚀 ~ PostDetails ~ data:", data?.getPost?.userId)
     const { data: commentData, isLoading: commentLoader, error: commentError, refetch } = useGetAllCommentQuery(postId);
     const navigate = useNavigate();
     const [deletePost] = useDeletePostMutation();
-    const [addBookmark] = useAddBookmarkMutation();
-    const [removeBookmark] = useRemoveBookmarkMutation();
+   
     const [createComment] = useCreateCommentMutation();
-    const [likePost, { data: LikedData }] = useLikePostMutation();
-    const [unlikePost] = useUnlikePostMutation();
+    const { data: userData, isSuccess } = useGetUserQuery(data?.getPost?.userId);
     const [comment, setComment] = useState('');
     const { userInfo } = useSelector((state) => state.auth);
     const [showLoader, setShowLoader] = useState(true);
-    const { bookmarkedPosts } = useSelector((state) => state.post);
-    const { likedPosts } = useSelector((state) => state.post);
-    const [likecount, setLikeCount] = useState(false);
-    const { data: userData, isSuccess } = useGetUserQuery(data?.getPost?.userId);
+  
+
     const dispatch = useDispatch();
+    const userId = userInfo?.user?._id;
 
     useEffect(() => {
         const delay = setTimeout(() => {
@@ -62,39 +61,11 @@ const PostDetails = () => {
             dispatch(getPost(data?.getPost));
 
         }
-    }, [data, dispatch, bookmarkedPosts, likedPosts]);
+    }, [data, dispatch]);
 
-    useEffect(() => {
-        if (data && data?.getPost) {
-            setLikeCount(data?.getPost?.likes?.length)
-        }
-    }, [data])
+   
 
 
-
-    const handleBookmark = async () => {
-        try {
-            const res = await addBookmark(postId).unwrap();
-            toast.success("Post bookmarked successfully");
-            console.log(res);
-            await dispatch(addBookmarkPost(postId))
-        } catch (err) {
-            toast.error(err?.message || "Failed to bookmark the post");
-            console.log(err);
-        }
-    };
-
-    const handleRemoveBookmark = async () => {
-        try {
-            const res = await removeBookmark(postId).unwrap();
-            toast.success("Bookmark removed successfully");
-            console.log(res);
-            await dispatch(removeBookmarkPost(postId))
-        } catch (err) {
-            toast.error(err?.message || "Failed to remove bookmark");
-            console.log(err);
-        }
-    };
 
 
 
@@ -134,35 +105,9 @@ const PostDetails = () => {
         navigate(path);
     };
 
-    const userId = userInfo?.user?._id;
 
-    const handleLike = async () => {
-        try {
 
-            if (likedPosts?.some((post) => post.postId === postId)) {
-                return toast.error("You have already liked this post");
-
-            }
-            await likePost({ id: postId, userId: userInfo?.user?._id });
-            toast.success("Post liked");
-            dispatch(addLike(userId));
-            setLikeCount((prevCount) => Math.max(prevCount + 1, 1));
-        } catch (err) {
-            console.log(err);
-        }
-    };
-
-    const handleUnlike = async () => {
-        try {
-            await unlikePost({ id: postId, userId: userInfo?.user?._id });
-            toast.success("Post unliked");
-            dispatch(removeLike(userId));
-            setLikeCount((prevCount) => Math.max(prevCount - 1, 0));
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
+   
 
     const handleShare = async () => {
         const shareText = `${data?.getPost?.title}\n${window.location.href}`;
@@ -201,12 +146,9 @@ const PostDetails = () => {
 
                         {/* Like  */}
                         <div className='flex gap-3 justify-start items-center mx-2'>
-                            {likedPosts.find((post) => post.userId === userId && post.postId === postId) !== undefined && likecount > 0 ? (
-                                <FaHeart size={21} className='cursor-pointer' color='red' onClick={handleUnlike} />
-                            ) : (
-                                <FaRegHeart size={21} className='cursor-pointer' onClick={handleLike} />
-                            )}
-                            <span className='mx-2'>{likecount}</span>
+                           
+                           {/* Like components */}
+                           <Like  postId={postId}/>
 
                         </div>
 
@@ -215,8 +157,7 @@ const PostDetails = () => {
 
                             {/* Bookmark  */}
 
-                            {bookmarkedPosts?.some((post) => post.postId === postId) ? (<FaBookmark size={21} className='cursor-pointer' color='black' onClick={handleRemoveBookmark} />
-                            ) : (<BsBookmark size={21} className='cursor-pointer' onClick={handleBookmark} />)}
+                            <Bookmark postId={postId} />
 
                             <span><IoPlayCircleOutline size={21} className='cursor-pointer' title="Play" /></span>
                             <span><IoShareOutline size={21} className='cursor-pointer' title="Share" onClick={handleShare} /></span>
