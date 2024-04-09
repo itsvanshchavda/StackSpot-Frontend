@@ -17,6 +17,7 @@ const EditProfile = () => {
     const [preview, setPreview] = useState('');
     const [firstname, setFirstname] = useState('');
     const [lastname, setLastname] = useState('');
+    const [loading, setLoading] = useState(0)
 
     const [updateUser] = useUpdateUserMutation();
     const [addProfilePhoto] = useAddProfilePhotoMutation();
@@ -59,15 +60,19 @@ const EditProfile = () => {
         e.preventDefault();
 
         try {
+            setLoading(10);
 
-            const newUserInfo = {
+            let newUserInfo = {
                 username: username,
                 email: email,
                 bio: bio,
-                password: password,
                 firstname: firstname,
                 lastname: lastname,
             };
+
+            if (password) {
+                newUserInfo.password = password
+            }
 
             if (file) {
                 const formData = new FormData();
@@ -75,23 +80,39 @@ const EditProfile = () => {
                 const res = await addProfilePhoto(formData).unwrap();
                 console.log(res);
                 newUserInfo.profilePhoto = { url: res?.profilePhoto?.url, public_id: res?.profilePhoto?.public_id };
-                toast.success('Profile photo updated');
+                setLoading(100)
 
             }
 
             const updatedUser = await updateUser({ userid: id, user: newUserInfo }).unwrap();
-            toast.success('User info updated');
             dispatch(setCredentials(updatedUser));
-            // window.location.reload();
+            setLoading(100)
+            window.location.reload();
         } catch (err) {
             console.log(err);
             toast.error(err?.message || 'Failed to update user info');
+            setLoading(0)
         }
     };
+
+
+
 
     return (
         <>
             <Navbar />
+
+            <span
+                role="progressbar"
+                aria-labelledby="ProgressLabel"
+                aria-valuenow={loading}
+                className="block rounded-full bg-slate-900 relative overflow-hidden"
+                style={{ height: '3px' }}
+            >
+                <span className="block absolute inset-0 bg-indigo-600" style={{ width: `${loading}%`, transition: 'width 0.3s ease-in-out' }}></span>
+            </span>
+
+
 
             <div className={` w-full flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row ${theme ? " bg-gradient-to-b from-black to-gray-800 via-black text-white" : "bg-white"}`}>
                 {/* Sidebar */}
@@ -132,13 +153,13 @@ const EditProfile = () => {
                                                 </button>
                                             </label>
                                             {/* 
-                                            <button
-                                                type="button"
-                                                className="py-3.5 px-7 text-base font-medium text-black focus:outline-none bg-white rounded-lg border border-zinc-200 hover:bg-zinc-100 hover:text-black focus:z-10 focus:ring-4 focus:ring-zinc-200"
-                                                onClick={() => setFile(null)}
-                                            >
-                                                Remove Picture
-                                            </button> */}
+                                                <button
+                                                    type="button"
+                                                    className="py-3.5 px-7 text-base font-medium text-black focus:outline-none bg-white rounded-lg border border-zinc-200 hover:bg-zinc-100 hover:text-black focus:z-10 focus:ring-4 focus:ring-zinc-200"
+                                                    onClick={() => setFile(null)}
+                                                >
+                                                    Remove Picture
+                                                </button> */}
                                         </div>
                                     </div>
 

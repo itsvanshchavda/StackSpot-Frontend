@@ -57,7 +57,7 @@ const FindAllUsers = () => {
     <>
       <Navbar />
       <div className={`h-[90vh]  ${theme ? "bg-zinc-950" : ""}`}>
-        <div className='flex justify-center items-center mr-10 -space-y-24'>
+        <div className='flex justify-center items-center mr-10 -space-y-24 pt-2'>
           <BsSearch
             className='cursor-pointer -mt-24'
             size={20}

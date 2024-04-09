@@ -18,10 +18,12 @@ const CreatePost = () => {
     const [loading, setLoading] = useState(false);
 
     const { userInfo } = useSelector((state) => state.auth);
+    const { theme } = useSelector((state) => state.theme)
 
     const [uploadFile] = useUploadFileMutation();
     const [postUpload] = usePostUploadMutation();
     const navigate = useNavigate();
+
 
     //React quill module options 
     const [descriptionError, setDescriptionError] = useState('');
@@ -32,8 +34,7 @@ const CreatePost = () => {
             [{ size: [] }],
             ['bold', 'italic', 'underline', 'strike', 'blockquote'],
             //  [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-            ['link'],
-            [{ 'color': [] }, { 'background': [] }],
+           
             [{ 'align': [] }],
             ['clean']
         ],
@@ -43,8 +44,6 @@ const CreatePost = () => {
         'header', 'font', 'size',
         'bold', 'italic', 'underline', 'strike', 'blockquote',
         'list', 'bullet', 'indent',
-        'link', 'image', 'video',
-        'color', 'background',
         'align'
     ]
 
@@ -128,55 +127,61 @@ const CreatePost = () => {
     return (
         <>
             <Navbar />
-            <div className='px-6 md:px-[200px] mt-14'>
-                <h1 className='font-bold md:text-2xl text-xl mt-8'>Create a post</h1>
-                <form className='w-full flex flex-col space-y-4 md:space-y-8 mt-4' onSubmit={submitHandler}>
-                    <input value={title} onChange={(e) => setTitle(e.target.value)} type="text" className='bg-zinc-100 outline-none px-4 py-2 rounded-md' placeholder='Enter post title...' required />
-                    <ReactQuill value={description} modules={modules} formats={formats} onChange={handleEditorChange} className="bg-zinc-50 w-full  outline-none px-4 py-2 rounded-md" placeholder="Write description..." required />
-                    {descriptionError && <p className="text-red-500">{descriptionError}</p>}
+            <div className={`${theme ? "bg-gradient-to-b from-black to-gray-800 via-black text-white" : ""}`}>
+                <div className={`px-6 pt-10 md:px-[200px] ${theme ? "" : ""}`}>
+                    <h1 className='font-bold md:text-2xl text-xl mt-8'>Create a post</h1>
+                    <form className='w-full flex flex-col space-y-4 md:space-y-8 mt-4' onSubmit={submitHandler}>
+                        <input value={title} onChange={(e) => setTitle(e.target.value)} type="text" className='bg-zinc-100 outline-none px-4 py-2 rounded-md text-black' placeholder='Enter post title...' required />
+                        <ReactQuill value={description} modules={modules} formats={formats} onChange={handleEditorChange} className="bg-zinc-50 w-full text-black outline-none px-4 py-2 rounded-md" placeholder="Write description..." required />
+                        {descriptionError && <p className="text-red-500">{descriptionError}</p>}
 
-                    {file ? (
-                        <div className='relative'>
-                            <p className='font-semibold text-md'>File Name:{file.name}</p>
-                            <img src={URL.createObjectURL(file)} alt="Uploaded File" width={500} className="mt-2 object-cover rounded-lg" />
-                            <button
-                                className="absolute top-0 right-0 p-2 text-gray-600 hover:text-gray-800"
-                                onClick={() => setFile(null)}
-                            >
-                                <IoMdCloseCircle size={24} color='black' />
+                        {file ? (
+                            <div className='relative'>
+                                <p className='font-semibold text-md'>File Name:{file.name}</p>
+                                <img src={URL.createObjectURL(file)} alt="Uploaded File" width={500} className="mt-2 object-cover rounded-lg" />
+                                <button
+                                    className="absolute top-0 right-0 p-2 text-gray-600 hover:text-gray-800"
+                                    onClick={() => setFile(null)}
+                                >
+                                    <IoMdCloseCircle size={24} color='black' />
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="relative  top-5 bottom-5 border-2 border-dashed border-gray-300 rounded-lg p-8 flex justify-center items-center cursor-pointer">
+                                <input type="file" className="absolute inset-0 opacity-0" onChange={(e) => setFile(e.target.files[0])} />
+                                <div className="text-center">
+                                    <p className="text-gray-500">Drag & Drop or Click to Upload</p>
+                                    <p className="text-sm text-gray-500">(Max file size: 10MB)</p>
+                                </div>
+                            </div>
+                        )}
+
+                        {loading && (
+                            <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
+                                <span className="block sm:inline">Please wait, post is creating...</span>
+                            </div>
+                        )}
+                        <div className='flex items-center space-x-4 max-sm:pt-10 md:space-x-8 '>
+                            <input value={category} onChange={(e) => setCategory(e.target.value)} type="text" name="category" id="category" className='px-4 bg-zinc-100 py-2 outline-none rounded-md' placeholder='Enter category...' />
+                            <button type="button" onClick={addCategory} className='bg-black text-white px-4 py-2 font-semibold cursor-pointer rounded-md '>
+                                Add
                             </button>
                         </div>
-                    ) : (
-                        <div className="relative top-5 bottom-5 border-2 border-dashed border-gray-300 rounded-lg p-8 flex justify-center items-center cursor-pointer">
-                            <input type="file" className="absolute inset-0 opacity-0" onChange={(e) => setFile(e.target.files[0])} />
-                            <div className="text-center">
-                                <p className="text-gray-500">Drag & Drop or Click to Upload</p>
-                                <p className="text-sm text-gray-500">(Max file size: 10MB)</p>
-                            </div>
+                        <div className='flex mt-4'>
+                            {categoryList?.map((item, index) => (
+                                <div key={index} className='flex justify-center w-24 items-center mr-4 p-5 space-x-2 bg-gray-200 py-1 rounded-md'>
+                                    <p>{item}</p>
+                                    <p onClick={() => deleteCategory(index)} className='p-1 cursor-pointer' ><IoMdCloseCircle size={18} /></p>
+                                </div>
+                            ))}
                         </div>
-                    )}
 
-                    {loading && (
-                        <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
-                            <span className="block sm:inline">Please wait, post is creating...</span>
+                        <div className='pb-10 flex justify-center items-center'>
+                            <button type='submit' className='bg-zinc-900  mx-auto w-full md:w-[30%] py-3 px-4 text-white rounded-md mt-24 '>Create</button>
+
                         </div>
-                    )}
-                    <div className='flex items-center space-x-4 md:space-x-8 '>
-                        <input value={category} onChange={(e) => setCategory(e.target.value)} type="text" name="category" id="category" className='px-4 bg-zinc-100 py-2 outline-none rounded-md' placeholder='Enter category...' />
-                        <button type="button" onClick={addCategory} className='bg-black text-white px-4 py-2 font-semibold cursor-pointer rounded-md '>
-                            Add
-                        </button>
-                    </div>
-                    <div className='flex mt-4'>
-                        {categoryList?.map((item, index) => (
-                            <div key={index} className='flex justify-center w-24 items-center mr-4 p-5 space-x-2 bg-gray-200 py-1 rounded-md'>
-                                <p>{item}</p>
-                                <p onClick={() => deleteCategory(index)} className='p-1 cursor-pointer' ><IoMdCloseCircle size={18} /></p>
-                            </div>
-                        ))}
-                    </div>
-                    <button type='submit' className='bg-zinc-900 mx-auto w-full md:w-[30%] py-3 px-4 text-white rounded-md mt-24'>Create</button>
-                </form>
+                    </form>
+                </div>
             </div>
             <Footer />
         </>
