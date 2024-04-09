@@ -56,10 +56,10 @@ const FindAllUsers = () => {
   return (
     <>
       <Navbar />
-      <div className={`h-[90vh] ${theme ? "bg-zinc-950" : ""}`}>
-        <div className='flex justify-center items-center mr-10 -mt-14'>
+      <div className={`h-[90vh]  ${theme ? "bg-zinc-950" : ""}`}>
+        <div className='flex justify-center items-center mr-10 -space-y-24'>
           <BsSearch
-            className='cursor-pointer'
+            className='cursor-pointer -mt-24'
             size={20}
             onClick={handleSearch}
             color={`${theme ? "white" : ""}`}
@@ -67,10 +67,11 @@ const FindAllUsers = () => {
           <input
             type='text'
             placeholder='Search...'
-            className='p-2 rounded-md max-sm:w-2/5  outline-none bg-transparent border-b-2'
+            className={`p-2 rounded-md max-sm:w-2/5 outline-none bg-transparent border-b-2 ${theme ? "text-white" : ""}`}
             value={searchInput}
             onChange={handleInputChange}
             onKeyDown={handleKeyPress}
+            style={{ verticalAlign: 'middle' }} // Add this style for vertical alignment
           />
         </div>
 

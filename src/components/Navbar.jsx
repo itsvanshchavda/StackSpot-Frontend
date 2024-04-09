@@ -63,6 +63,8 @@
 
 
         return (
+            <>
+            
             <div className={`flex items-center justify-between px-6 md:px-[200px] py-4 bg-white ${theme ? "bg-zinc-950 text-white" : "" }`}>
                 <h1 className='font-bold md:text-lg text-xs'>
                     <Link to='/'>
@@ -128,6 +130,9 @@
                 </div>
                 {nav && <MobileMenu />}
             </div>
+
+            <div className='border-b-2 border-slate-800 w-full'></div>
+            </>
         );
     };
 

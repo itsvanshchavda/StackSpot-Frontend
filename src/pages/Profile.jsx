@@ -32,6 +32,7 @@ const Profile = () => {
   const { data: isFollowerData, isLoading: isFollowerLoading, refetch: refetchFollowers, isSuccess: Followers } = useUserFollowerListQuery(userId); // Query to check if the user is already following
   const dispatch = useDispatch();
 
+  const { theme } = useSelector((state) => state.theme);
 
 
 
@@ -45,7 +46,7 @@ const Profile = () => {
 
   useEffect(() => {
     return () => {
-      setShowModal(false); 
+      setShowModal(false);
     };
   }, [userId]);
 
@@ -96,7 +97,7 @@ const Profile = () => {
   return (
     <>
       <Navbar />
-      <div className='px-4 pb-20 overflow-y-auto'>
+      <div className={`px-4 pb-20 overflow-y-auto ${theme ? " bg-gradient-to-b from-black to-gray-900 via-black text-white" : ""}  `}>
         <div className='flex md:flex-row justify-center flex-col-reverse '>
           <div className='md:w-2/3 md:px-4 mt-4'>
             {userInfo?.user?._id === userId && (
@@ -119,7 +120,7 @@ const Profile = () => {
 
           </div>
           <div className='md:w-1/3 pl-4 mt-8 md:mt-20'>
-            <div className='border-b-2 border-gray-100 mb-5'></div>
+            <div className={`border-b-2  mb-5 ${theme ? "border-slate-700" : "border-gray-100"}`}></div>
             <div className='px-4'>
               {!userData ? (
                 <Loader />
@@ -173,12 +174,12 @@ const Profile = () => {
                 <div className='flex gap-2'>
                   <p className='font-sans'>{userData?.followers?.length || 0}</p>
                   <p className='font-semibold cursor-pointer' onClick={handleFollowersClick}>Followers</p>
-                  <p className='font-sans'>{userData?.following?.length|| 0}</p>
+                  <p className='font-sans'>{userData?.following?.length || 0}</p>
                   <p className='cursor-pointer font-semibold' onClick={handleFollowingClick}>Following</p>
                 </div>
               </div>
             </div>
-            <div className='border-b-2 border-gray-100 mb-3 mt-8'></div>
+            <div className={`border-b-2 mt-5 ${theme ? "border-slate-700" : "border-gray-100"}`}></div>
           </div>
         </div>
       </div>

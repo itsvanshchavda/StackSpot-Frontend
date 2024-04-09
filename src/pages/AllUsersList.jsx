@@ -61,9 +61,9 @@ const AllUsersList = ({ users }) => {
 
     // 
     <div className={`h-screen ${theme ? "bg-gradient-to-b from-black to-gray-800 via-black text-white " : "" } `}>
-      <div className="max-w-sm mx-auto mt-10">
+      <div className="max-w-sm mx-auto py-10">
         {users?.slice(startIndex, endIndex).map((user) => (
-          <div key={user._id} className="p-3 flex items-center justify-between border-t cursor-pointer hover:bg-gray-200 border-gray-200 duration-300">
+          <div key={user._id} className="p-3 flex items-center justify-between border-t cursor-pointer hover:bg-slate-800 border-gray-200 duration-300">
             <div className="flex items-center" onClick={() => navigate(`/profile/${user?._id}`)}>
               <img className="rounded-full h-10 w-10" src={user.profilePhoto?.url ?? avatar} alt="John Doe" />
               <div className="ml-2 flex flex-col">
@@ -73,9 +73,9 @@ const AllUsersList = ({ users }) => {
             </div>
             <div>
               {followingUsers.includes(user._id) ? (
-                <button className={`h-8 px-3 text-md font-semibold  border border-zinc-400 rounded-full  ${theme ? "hover:text-black text-white" : "hover:bg-zinc-900 hover:text-white text-black"}`} onClick={() => handleUnfollow(user._id)}>Unfollow</button>
+                <button className={`h-8 px-3 text-md font-semibold  border border-zinc-400 rounded-full  ${theme ? " text-white" : "hover:bg-gray-400 hover:text-white text-black"}`} onClick={() => handleUnfollow(user._id)}>Unfollow</button>
               ) : (
-                <button className={`h-8 px-3 text-md font-semibold  border border-zinc-400 rounded-full  ${theme ? "hover:text-black text-white" : "hover:bg-zinc-900 hover:text-white text-black"}`} onClick={() => handleUnfollow(user._id)}>Follow</button>
+                <button className={`h-8 px-3 text-md font-semibold  border border-zinc-400 rounded-full  ${theme ? " text-white" : "hover:bg-gray-400 hover:text-white text-black"}`} onClick={() => handleFollow(user._id)}>Follow</button>
               )}
             </div>
           </div>
