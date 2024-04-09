@@ -8,6 +8,9 @@ const themeSlice = createSlice({
   name: "theme",
   initialState,
   reducers: {
+
+
+    // working 
     toggleDarkMode: (state, action) => {
       state.theme = !state.theme;
       localStorage.setItem("darkMode", JSON.stringify(state.theme));
