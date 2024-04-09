@@ -2,44 +2,88 @@ import React from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
+import { useSelector } from 'react-redux'
+import { FaEye } from "react-icons/fa6";
+import { BsGraphDownArrow, BsGraphUpArrow } from "react-icons/bs";
+import { FaHeart } from 'react-icons/fa';
+
+
+
 const Dashboard = () => {
   return (
     <>
       <Navbar />
 
-      <div className='container mx-auto px-4 py-8'>
-        <h1 className='text-3xl font-bold mb-8'>Dashboard</h1>
+      <div className='max-w-4xl h-[90vh]'>
+        <article className="flex items-center gap-4 rounded-lg border border-gray-100 bg-white p-6">
 
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-          <div className='bg-white shadow-md rounded-lg p-6'>
-            <h2 className='text-xl font-semibold mb-4'>Views</h2>
-           
-          </div>
 
-          {/* User Posts */}
-          <div className='bg-white shadow-md rounded-lg p-6'>
-            <h2 className='text-xl font-semibold mb-4'>User Posts</h2>
-            {/* Your user posts content goes here */}
+
+          {/* Views */}
+
+          <div className='flex items-center gap-5 mx-auto'>
+            <span className="rounded-full bg-blue-100 p-3  text-blue-600 ">
+
+              <FaEye />
+            </span>
+
+            <div>
+              <p className="text-2xl font-medium text-gray-900">200</p>
+
+              <p className="text-sm text-gray-500">Total Views</p>
+            </div>
+
+            <div className='inline-flex gap-2 px-3 mb-3 rounded bg-green-100 p-1 text-green-600'>
+
+              <div className='inline-flex'>
+                <BsGraphUpArrow color='green' />
+              </div>
+
+              <span class="text-xs font-medium text-green-500"> 67.81% </span>
+            </div>
+
           </div>
 
           {/* Likes */}
-          <div className='bg-white shadow-md rounded-lg p-6'>
-            <h2 className='text-xl font-semibold mb-4'>Likes</h2>
-            {/* Your likes content goes here */}
+
+          <div className='flex items-center gap-5 mx-auto '>
+            <span className="rounded-full bg-blue-100 p-3  text-blue-600 ">
+
+              <FaHeart />
+            </span>
+
+            <div>
+              <p className="text-2xl font-medium text-gray-900">200</p>
+
+              <p className="text-sm text-gray-500">Total Likes</p>
+            </div>
+
+            <div className='inline-flex gap-2 px-3 mb-3 rounded bg-green-100 p-1 text-red-600'>
+
+              <div className='inline-flex'>
+                <BsGraphDownArrow color='red' />
+              </div>
+
+              <span class="text-xs font-medium text-red-500"> 67.81% </span>
+            </div>
+
           </div>
 
-          {/* Comments */}
-          <div className='bg-white shadow-md rounded-lg p-6'>
-            <h2 className='text-xl font-semibold mb-4'>Comments</h2>
-            {/* Your comments content goes here */}
-          </div>
 
-          {/* Bookmarks */}
-          <div className='bg-white shadow-md rounded-lg p-6'>
-            <h2 className='text-xl font-semibold mb-4'>Bookmarks</h2>
-            {/* Your bookmarks content goes here */}
+
+
+        </article>
+
+        {/* <article
+          className="flex items-center gap-4 rounded-lg border border-gray-100 bg-white p-6 sm:justify-between"
+        >
+
+          <div>
+            <p className="text-2xl font-medium text-gray-900">$240.94</p>
+
+            <p className="text-sm text-gray-500">Total Sales</p>
           </div>
-        </div>
+        </article> */}
       </div>
 
       <Footer />
