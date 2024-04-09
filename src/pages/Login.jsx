@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setCredentials } from '../slices/AuthSlice';
 import { toast } from 'react-toastify'
 import Loader from '../components/Loader';
+import logo from  '../assets/logo.png'
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -42,19 +43,20 @@ const Login = () => {
     setShowPassword((prev) => !prev)
   }
 
-  if (isLoading) return <Loader />
 
 
   return (
     <>
-      <div className=''>
+      <div className={`h-screen bg-black`}>
         <div className='flex items-center justify-between px-6 md:px-[200px] py-4'>
-          <h1 className='font-bold md:text-lg text-xl'><Link to='/'>Stack Spot</Link></h1>
-          <h3><Link to='/login'>Login</Link></h3>
+          <Link to='/login'>
+            <img src={logo} className='w-11 h-11 mt-1 rounded-full object-cover' alt="" />
+          </Link>
+          <h3 className='text-white'><Link to='/login'>Login</Link></h3>
         </div>
         <div className="py-20">
           <div className="flex h-full items-center justify-center">
-            <div className="rounded-lg border border-gray-200 bg-white shadow-md flex-col flex h-full items-center justify-center sm:px-4">
+            <div className="rounded-lg border border-slate-800 text-white bg-black shadow-md flex-col flex h-full items-center justify-center sm:px-4">
               <div className="flex h-full flex-col justify-center gap-4 p-6">
                 <div className="left-0 right-0 inline-block border-gray-200 px-2 py-2.5 sm:px-4">
                   <form className="flex flex-col gap-4 pb-4" onSubmit={handleSubmit}>
@@ -62,12 +64,12 @@ const Login = () => {
 
                     <div>
                       <div className="mb-2">
-                        <label className="text-sm font-medium text-gray-900" htmlFor="email">Email:</label>
+                        <label className="text-sm font-medium text-white" htmlFor="email">Email:</label>
                       </div>
                       <div className="flex w-full rounded-lg pt-1">
                         <div className="relative w-full">
                           <input
-                            value={email} onChange={(e) => setEmail(e.target.value)} className="block w-full border bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500  placeholder-gray-400 focus:ring-cyan-500 p-2.5 text-sm rounded-lg"
+                            value={email} onChange={(e) => setEmail(e.target.value)} className="block w-full border bg-black text-white border-slate-800  focus:border-cyan-500  placeholder-gray-400 focus:ring-cyan-500 p-2.5 text-sm rounded-lg"
                             id="email" type="email" name="email" placeholder="email@example.com" required
                           />
                         </div>
@@ -75,13 +77,13 @@ const Login = () => {
                     </div>
                     <div>
                       <div className="mb-2">
-                        <label className="text-sm font-medium text-gray-900" htmlFor="password">Password</label>
-                      </div>
+                        <label className="text-sm font-medium text-white" htmlFor="password">Password</label>
+                     </div>
                       <div className="flex w-full rounded-lg pt-1">
                         <div className="relative w-full">
-                          {showPassword ? <FaRegEye className='absolute right-4 top-3 cursor-pointer' onClick={handleShow}/> : <FaEyeSlash className='absolute right-4 top-3 cursor-pointer' onClick={handleShow}/>}
+                          {showPassword ? <FaRegEye className='absolute right-4 top-3 cursor-pointer' onClick={handleShow} /> : <FaEyeSlash className='absolute right-4 top-3 cursor-pointer' onClick={handleShow} />}
                           <input
-                            value={password} onChange={(e) => setPassword(e.target.value)} className="block w-full border bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500  placeholder-gray-400 focus:ring-cyan-500 p-2.5 text-sm rounded-lg"
+                            value={password} onChange={(e) => setPassword(e.target.value)} className="block w-full border bg-black text-white border-slate-800  focus:border-cyan-500  placeholder-gray-400 focus:ring-cyan-500 p-2.5 text-sm rounded-lg"
                             id="password" type={showPassword ? "text" : "password"} name="password" required
                           />
                         </div>
@@ -89,7 +91,7 @@ const Login = () => {
                     </div>
                     <div className="flex flex-col gap-2">
                       <button type="submit"
-                        className="border transition-colors focus:ring-2 p-0.5 border-transparent bg-sky-600 hover:bg-sky-700 active:bg-sky-800 text-white rounded-lg">
+                        className="border transition-colors focus:ring-2 p-0.5 border-transparent bg-slate-100 text-black hover:bg-slate-400 hover:text-white active:bg-sky-800  rounded-lg">
                         <span className="flex items-center justify-center gap-1 font-medium py-1 px-2.5 text-base">Login</span>
                       </button>
                       {/* <button type="button"
@@ -103,8 +105,8 @@ const Login = () => {
                     </div>
                   </form>
                   <div className="min-w-[270px]">
-                    <div className="mt-4 text-center text-black mx-10">Not have an account?
-                      <Link className="text-blue-500 underline hover:text-blue-600 px-2" to="/register">Register here</Link>
+                    <div className="mt-4 text-center text-white mx-10">Not have an account?
+                      <Link className="text-gray-300 underline hover:text-gray-400 px-2" to="/register">Register here</Link>
                     </div>
                   </div>
                 </div>

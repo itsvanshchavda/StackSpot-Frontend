@@ -27,6 +27,7 @@ const EditPost = () => {
 
   const [uploadFile] = useUploadFileMutation();
   const [updatePost] = useUpdatePostMutation();
+  const { theme } = useSelector((state) => state.theme);
 
   const { data, isLoading } = useGetPostByIdQuery(id);
   const { userInfo } = useSelector((state) => state.auth);
@@ -99,11 +100,11 @@ const EditPost = () => {
   return (
     <>
       <Navbar />
-      <div className="px-6 md:px-[200px] mt-14">
+      <div className={`px-6 md:px-[200px] pt-14 ${theme ? "bg-gradient-to-b from-black to-gray-800 via-black text-white" : ""} `}>
         <h1 className="font-bold md:text-2xl text-xl mt-8">Update Post</h1>
         <form className="w-full flex flex-col space-y-4 md:space-y-8 mt-4" onSubmit={submitHandler}>
-          <input value={title} onChange={(e) => setTitle(e.target.value)} type="text" className="bg-zinc-50 outline-none px-4 py-2 rounded-md" placeholder="Enter post title..." />
-          <ReactQuill value={description} onChange={handleEditorChange} className="bg-zinc-50 w-full  outline-none px-4 py-2 rounded-md" placeholder="Write description..." />
+          <input value={title} onChange={(e) => setTitle(e.target.value)} type="text" className={`outline-none px-4 py-2 rounded-md ${theme ? "bg-black text-white ring-1 ring-gray-600 " : "ring-1 ring-black"}`} placeholder='Enter post title...' required />
+          <ReactQuill value={description} onChange={handleEditorChange} className={`${theme ? "bg-black" : "bg-zinc-50 text-black"}w-full  outline-none px-4 py-2 rounded-md`} placeholder="Write description..." />
           {file ? (
             <div className="relative">
               <p className='font-semibold text-md'>File Name:{file.name}</p>
@@ -132,20 +133,24 @@ const EditPost = () => {
           )}
 
           <div className="flex items-center space-x-4 md:space-x-8">
-            <input value={category} onChange={(e) => setCategory(e.target.value)} type="text" name="category" id="category" className="px-4 bg-zinc-100 py-2 outline-none rounded-md" placeholder="Enter category..." />
+            <input value={category} onChange={(e) => setCategory(e.target.value)} type="text" name="category" id="category" className={`px-4 py-2 outline-none rounded-md ${theme ? "bg-black text-white ring-1 ring-gray-600 " : "border border-black"}`} placeholder='Enter category...' />
             <button type="button" onClick={addCategory} className="bg-black text-white px-4 py-2 font-semibold cursor-pointer rounded-md ">
               Add
             </button>
           </div>
           <div className="flex mt-4">
             {categoryList?.map((item, index) => (
-              <div key={index} className="flex justify-center w-24 items-center mr-4 p-5 space-x-2 bg-gray-200 py-1 rounded-md">
+              <div key={index} className={`flex justify-center w-24 items-center mr-4 p-5 space-x-2  py-1 rounded-md ${theme ? "bg-black" : "bg-gray-200"}`}>
                 <p>{item}</p>
                 <p onClick={() => deleteCategory(index)} className="p-1 cursor-pointer" ><IoMdCloseCircle size={18} /></p>
               </div>
             ))}
           </div>
-          <button disabled={loading} type="submit" className="bg-zinc-900 mx-auto w-full md:w-[30%] py-3 px-4 text-white rounded-md mt-24 disabled:bg-gray-500">Update</button>
+
+          <div className='pb-10 flex justify-center items-center'>
+            <button type='submit' className='bg-gray-200 text-black  mx-auto w-full md:w-[30%] py-3 px-4 rounded-md mt-24 '>Update</button>
+
+          </div>
         </form>
       </div>
       <Footer />
