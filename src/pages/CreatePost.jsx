@@ -169,7 +169,7 @@ const CreatePost = () => {
                         </div>
                         <div className='flex mt-4'>
                             {categoryList?.map((item, index) => (
-                                <div key={index} className={`flex justify-center w-24 items-center mr-4 p-5 space-x-2 bg-gray-200 py-1 rounded-md `}>
+                                <div key={index} className={`flex justify-center w-24 items-center mr-4 p-5 space-x-2 py-1 rounded-md  ${theme ? "bg-black" : "bg-gray-300"}`}>
                                     <p>{item}</p>
                                     <p onClick={() => deleteCategory(index)} className='p-1 cursor-pointer' ><IoMdCloseCircle size={18} /></p>
                                 </div>
@@ -178,7 +178,6 @@ const CreatePost = () => {
 
                         <div className='pb-10 flex justify-center items-center'>
                             <button type='submit' className='bg-gray-200 text-black  mx-auto w-full md:w-[30%] py-3 px-4 rounded-md mt-24 '>Create</button>
-
                         </div>
                     </form>
                 </div>

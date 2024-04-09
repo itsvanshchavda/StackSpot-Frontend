@@ -102,6 +102,10 @@ export const postApi = createApi({
         },
       }),
     }),
+
+    getFollowingPost:builder.query({
+      query:() => `/post/followings`
+    })
   }),
 });
 
@@ -118,4 +122,5 @@ export const {
   useUnlikePostMutation,
   useAddBookmarkMutation,
   useRemoveBookmarkMutation,
+  useGetFollowingPostQuery
 } = postApi;

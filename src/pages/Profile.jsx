@@ -10,7 +10,7 @@ import Loader from '../components/Loader';
 import MyBookmark from './MyBookmark';
 import Userfollowing from './Userfollowing';
 import { FaTimes } from 'react-icons/fa';
-import { useFollowUserMutation } from '../api/user'; // Import the isFollowing query
+import { useFollowUserMutation } from '../api/user'; 
 import UserFollowers from './UserFollowers';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -26,10 +26,10 @@ const Profile = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState('following');
   const { data, isLoading } = useGetUserQuery(userId);
-  const [followUser] = useFollowUserMutation(); // Initialize the follow user mutation
-  const [unfollowUser] = useUnfollowUserMutation(); // Initialize the unfollow user mutation
-  const { data: isFollowingData, isLoading: isFollowingLoading, refetch: refetchFollowing, isSuccess: Following } = useUserFollowingListQuery(userId); // Query to check if the user is already following
-  const { data: isFollowerData, isLoading: isFollowerLoading, refetch: refetchFollowers, isSuccess: Followers } = useUserFollowerListQuery(userId); // Query to check if the user is already following
+  const [followUser] = useFollowUserMutation();
+  const [unfollowUser] = useUnfollowUserMutation(); 
+  const { data: isFollowingData, isLoading: isFollowingLoading, refetch: refetchFollowing, isSuccess: Following } = useUserFollowingListQuery(userId); 
+  const { data: isFollowerData, isLoading: isFollowerLoading, refetch: refetchFollowers, isSuccess: Followers } = useUserFollowerListQuery(userId); 
   const dispatch = useDispatch();
 
   const { theme } = useSelector((state) => state.theme);

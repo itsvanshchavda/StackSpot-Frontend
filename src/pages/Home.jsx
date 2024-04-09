@@ -3,7 +3,7 @@ import Navbar from '../components/Navbar';
 import HomePost from '../components/HomePost';
 import Footer from '../components/Footer';
 import { Link, useLocation } from 'react-router-dom';
-import { useGetAllPostQuery, useGetSearchPostMutation, useGetUserPostQuery } from '../api/post';
+import { useGetAllPostQuery, useGetFollowingPostQuery, useGetSearchPostMutation, useGetUserPostQuery } from '../api/post';
 import Loader from '../components/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -25,9 +25,8 @@ const Home = () => {
     const navigate = useNavigate();
     const { userInfo } = useSelector((state) => state.auth);
     const [getSearchPost, { isLoading: searchLoader }] = useGetSearchPostMutation();
+    const { data: followingData } = useGetFollowingPostQuery();
 
-    const { data: followingData } = useUserFollowingListQuery(userInfo?.user?._id)
-    console.log(followingData)
 
 
 
@@ -56,28 +55,19 @@ const Home = () => {
     return (
         <>
             <Navbar />
+
             <div className={`px-8 min-h-screen py-8 md:px-[200px] min-h-auto ${theme ? " bg-gradient-to-b from-black to-gray-900 via-black text-white" : ""} `}>
 
-
+               
                 {!search && (
                     <div className='flex justify-center items-center gap-5 text-xl font-semibold font-sans '>
                         <h1 className={`text-xl  font-semibold cursor-pointer ${activeLink === 'explore' ? 'border-b-2 border-zinc-800  duration-300 ' : ''}`} onClick={() => setActiveLink('explore')}>Explore</h1>
                         <h1 className={`text-xl font-semibold cursor-pointer ${activeLink === 'following' ? 'border-b-2 border-zinc-800  duration-300 ' : ''}`} onClick={() => setActiveLink('following')}>Following</h1>
                     </div>
 
-
-
-
                 )}
 
 
-
-
-                {activeLink === "following" ? (
-                    <div>
-                        Following
-                    </div>
-                ) : (navigate('/'))}
 
                 {error && <h1 className='text-2xl font-bold text-center mt-8'>Something went wrong</h1>}
 
@@ -98,11 +88,23 @@ const Home = () => {
                         {!loading && searchedPosts.map((post) => (
                             <HomePost post={post} key={post._id} />
                         ))}
-                        {!search && data && data.allPost.map((post) => (
-                            <Link to={`/posts/post/${post._id}`} key={post._id}>
-                                <HomePost post={post} key={post._id} />
-                            </Link>
-                        ))}
+
+                        {activeLink === "following" ? (
+                            <div>
+                                {followingData?.followingPost?.map((post) => (
+                                    <HomePost post={post} key={post._id} />
+                                ))}
+                            </div>
+                        ) : (
+                            <>
+                                {!search && data && data.allPost.map((post) => (
+                                    <Link to={`/posts/post/${post._id}`} key={post._id}>
+                                        <HomePost post={post} key={post._id} />
+                                    </Link>
+                                ))}
+                            </>
+                        )}
+
                     </>
                 )}
                 {!userInfo && <h1 className='text-2xl font-bold text-center mt-8'>Login to view posts</h1>}
