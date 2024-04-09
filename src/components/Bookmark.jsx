@@ -20,7 +20,6 @@ const Bookmark = ({ postId }) => {
         try {
             const res = await addBookmark(postId).unwrap();
             toast.success("Post bookmarked successfully");
-            console.log(res);
             await dispatch(addBookmarkPost(postId))
         } catch (err) {
             toast.error(err?.message || "Failed to bookmark the post");
@@ -32,7 +31,6 @@ const Bookmark = ({ postId }) => {
         try {
             const res = await removeBookmark(postId).unwrap();
             toast.success("Bookmark removed successfully");
-            console.log(res);
             await dispatch(removeBookmarkPost(postId))
         } catch (err) {
             toast.error(err?.message || "Failed to remove bookmark");

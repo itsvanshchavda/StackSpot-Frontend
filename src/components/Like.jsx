@@ -9,7 +9,6 @@ import { toast } from 'react-toastify';
 
 const Like = ({postId}) => {
     const { data, isLoading } = useGetPostByIdQuery(postId);
-    console.log("🚀 ~ Like ~ data:", data)
     const { likedPosts } = useSelector((state) => state.post);
     const { postData } = useSelector((state) => state.post)
     const [likecount, setLikeCount] = useState(0);

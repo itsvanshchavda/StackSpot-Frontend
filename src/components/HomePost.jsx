@@ -20,25 +20,31 @@ const HomePost = ({ post }) => {
 
     <section className=''>
       <>
-        {showLoader ? (<div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mt-8 max-xl:grid-cols-1 xl:max-w-[45rem]' >
-            {/* Left (Image Skeleton) */}
-            < div className='h-[200px] md:h-auto bg-gray-300 animate-pulse rounded-lg'></div>
-            {/* Right (Text Skeleton) */}
-            < div className='flex flex-col' >
-              <div className='h-6 w-3/4 bg-gray-300 animate-pulse rounded-md mb-2'></div>
-              <div className='h-4 w-1/2 bg-gray-300 animate-pulse rounded-md mb-4'></div>
-              <div className='flex mb-2 items-center'>
-                <div className='h-4 w-16 bg-gray-300 animate-pulse rounded-md mr-2'></div>
-                <div className='h-4 w-16 bg-gray-300 animate-pulse rounded-md'></div>
-              </div>
-              <div className='h-20 w-full bg-gray-300 animate-pulse rounded-md'></div>
+        {showLoader ? (
+
+          <div>
+
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mt-8 max-xl:grid-cols-1 xl:max-w-[45rem]' >
+
+              <div className='h-[200px] md:h-auto bg-gray-300 animate-pulse rounded-lg'></div>
+
+              <div className='flex flex-col' >
+                <div className='h-6 w-3/4 bg-gray-300 animate-pulse rounded-md mb-2'></div>
+                <div className='h-4 w-1/2 bg-gray-300 animate-pulse rounded-md mb-4'></div>
+                <div className='flex mb-2 items-center'>
+                  <div className='h-4 w-16 bg-gray-300 animate-pulse rounded-md mr-2'></div>
+                  <div className='h-4 w-16 bg-gray-300 animate-pulse rounded-md'></div>
+                </div>
+                <div className='h-20 w-full bg-gray-300 animate-pulse rounded-md'></div>
+              </div >
             </div >
-          </div >) : (<div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mt-8 max-xl:grid-cols-1 xl:max-w-[45rem] '>
-            {/* Left (Image) */}
+
+          </div>) : (<div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mt-8 max-xl:grid-cols-1 xl:max-w-[45rem] '>
+
             <div className='h-[150px] md:h-auto'>
               <img src={post.photo?.url} alt="" className={`w-full h-full max-xl:object-contain object-cover rounded-lg`} />
             </div>
-            {/* Right (Text) */}
+
             <div className='flex flex-col'>
               <h1 className='text-xl font-bold md:text-2xl'>{post.title}</h1>
               <div className='flex mb-2 text-sm font-semibold text-gray-500 justify-between items-center md:mb-4'>

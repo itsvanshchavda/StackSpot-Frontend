@@ -71,7 +71,7 @@ const FindAllUsers = () => {
             value={searchInput}
             onChange={handleInputChange}
             onKeyDown={handleKeyPress}
-            style={{ verticalAlign: 'middle' }} // Add this style for vertical alignment
+          style={{ verticalAlign: 'middle' }}
           />
         </div>
 
@@ -84,7 +84,7 @@ const FindAllUsers = () => {
 
           {/* Render message when no users found for search query */}
           {search && searchedUsers.length === 0 && (
-            <h1 className='font-bold text-xl text-center mt-8'>No User Found</h1>
+            <h1 className={`font-bold text-xl text-center mt-8 ${theme ? "text-white" : "text-black"}`}>No User Found</h1>
           )}
         </div>
       </div>

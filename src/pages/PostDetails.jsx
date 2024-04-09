@@ -32,7 +32,6 @@ import Bookmark from '../components/Bookmark';
 const PostDetails = () => {
     const postId = useParams().id;
     const { data, isLoading } = useGetPostByIdQuery(postId);
-    console.log("🚀 ~ PostDetails ~ data:", data?.getPost?.userId)
     const { data: commentData, isLoading: commentLoader, error: commentError, refetch } = useGetAllCommentQuery(postId);
     const navigate = useNavigate();
     const [deletePost] = useDeletePostMutation();
@@ -216,7 +215,7 @@ const PostDetails = () => {
                         <h3 className='text-xl font-semibold mb-4'>Write Comment:</h3>
                         <div className='flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4'>
                             <textarea value={comment} onChange={(e) => setComment(e.target.value)} className='w-full md:w-2/3 px-4 py-2 bg-gray-100 rounded-md text-gray-800 placeholder-gray-500 focus:outline-none focus:ring focus:ring-blue-200' placeholder='Write your comment here...'></textarea>
-                            <button disabled={commentLoader} type='submit' onClick={commentHandler} className={`w-full md:w-auto h-12 px-6 bg-zinc-900 text-white rounded-md hover:bg-zinc-600 transition duration-300 `}>Comment</button>
+                            <button disabled={commentLoader} type='submit' onClick={commentHandler} className={`w-full md:w-auto h-12 px-6 bg-zinc-950 text-white rounded-md hover:bg-zinc-600 transition duration-300 `}>Comment</button>
                         </div>
                     </div>
                 </div>

@@ -22,7 +22,6 @@ const Navbar = () => {
 
     const { userInfo } = useSelector((state) => state.auth);
     const { theme } = useSelector((state) => state.theme)
-    console.log("🚀 ~ Navbar ~ theme:", theme)
     const dispatch = useDispatch();
     const profilePhoto = userInfo?.user?.profilePhoto?.url;
     const toggleNav = () => {
@@ -72,7 +71,7 @@ const Navbar = () => {
                     </Link>
                 </h1>
 
-                {path === '/' && <div className='flex justify-center items-center space-x-1 '>
+                {path === '/' && <div className='flex justify-center items-center space-x-1'>
                     <BsSearch
                         className='cursor-pointer'
                         size={20}

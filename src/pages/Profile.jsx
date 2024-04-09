@@ -150,13 +150,13 @@ const Profile = () => {
                       <div>
                         {isFollowerData?.followers?.find((user) => user._id === userInfo?.user?._id) ? (
                           <div>
-                            <button className='px-20 py-1 bg-zinc-900 text-white rounded-md' onClick={handleUnfollow}>
+                            <button className={`px-20 py-1 rounded-lg ${theme ? "bg-gray-200 text-black" : "bg-zinc-900 text-white"}`} onClick={handleUnfollow}>
                               Unfollow
                             </button>
                           </div>
                         ) : (
                           <div>
-                            <button className='px-20 py-1 bg-zinc-900 text-white rounded-md' onClick={handleFollow}>
+                            <button className={`px-20 py-1 rounded-lg ${theme ? "bg-gray-200 text-black" : "bg-zinc-900 text-white"}`} onClick={handleFollow}>
                               Follow
                             </button>
                           </div>
@@ -187,7 +187,7 @@ const Profile = () => {
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50">
           <div className="flex items-center justify-center min-h-screen">
-            <div className="bg-white p-4 rounded-lg max-w-2xl">
+            <div className={`${theme? "bg-zinc-950 text-white" : "bg-white text-black"} p-4 rounded-lg max-w-2xl`}>
               <div className=''>
                 <button onClick={closeModal} className='flex gap-3 mt-2'>
                   <span className='font-semibold'>{modalType === 'following' ? 'Following' : 'Followers'}</span>

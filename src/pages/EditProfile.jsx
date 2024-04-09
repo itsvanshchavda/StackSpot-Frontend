@@ -78,7 +78,6 @@ const EditProfile = () => {
                 const formData = new FormData();
                 formData.append('profilePhoto', file);
                 const res = await addProfilePhoto(formData).unwrap();
-                console.log(res);
                 newUserInfo.profilePhoto = { url: res?.profilePhoto?.url, public_id: res?.profilePhoto?.public_id };
                 setLoading(100)
 
@@ -106,7 +105,7 @@ const EditProfile = () => {
                 role="progressbar"
                 aria-labelledby="ProgressLabel"
                 aria-valuenow={loading}
-                className="block rounded-full bg-slate-900 relative overflow-hidden"
+                className="block rounded-full bg-slate-700 relative overflow-hidden"
                 style={{ height: '3px' }}
             >
                 <span className="block absolute inset-0 bg-indigo-600" style={{ width: `${loading}%`, transition: 'width 0.3s ease-in-out' }}></span>
@@ -172,7 +171,7 @@ const EditProfile = () => {
                                                     type="text"
                                                     value={firstname}
                                                     onChange={(e) => setFirstname(e.target.value)}
-                                                    className="bg-zinc-100 border text-black font-semibold border-zinc-100  text-sm rounded-lg focus:ring-zinc-500 focus:border-zinc-500 block w-full p-2.5"
+                                                    className={`border font-semibold  text-sm rounded-lg  block w-full p-2.5 ${theme ? "border-slate-900  bg-black text-white" : "bg-zinc-100 "}`}
                                                     placeholder={data?.user?.firstname}
                                                     required
                                                 />
@@ -183,7 +182,7 @@ const EditProfile = () => {
                                                     type="text"
                                                     value={lastname}
                                                     onChange={(e) => setLastname(e.target.value)}
-                                                    className="bg-zinc-100 border text-black font-semibold border-zinc-100  text-sm rounded-lg focus:ring-zinc-500 focus:border-zinc-500 block w-full p-2.5"
+                                                    className={`border font-semibold  text-sm rounded-lg  block w-full p-2.5 ${theme ? "border-slate-900  bg-black text-white" : "bg-zinc-100 "}`}
                                                     placeholder={data?.user?.lastname}
                                                     required
                                                 />
@@ -196,7 +195,7 @@ const EditProfile = () => {
                                                 type="text"
                                                 value={username}
                                                 onChange={(e) => setUsername(e.target.value)}
-                                                className="bg-zinc-100 border text-black font-semibold border-zinc-100  text-sm rounded-lg focus:ring-zinc-500 focus:border-zinc-500 block w-full p-2.5"
+                                                className={`border font-semibold  text-sm rounded-lg  block w-full p-2.5 ${theme ? "border-slate-900  bg-black text-white" : "bg-zinc-100 "}`}
                                                 placeholder={data?.user?.username}
                                                 required
                                             />
@@ -207,7 +206,7 @@ const EditProfile = () => {
                                             <input
                                                 type="email"
                                                 onChange={(e) => setEmail(e.target.value)}
-                                                className="bg-zinc-100 border text-black font-semibold border-zinc-100 text-sm rounded-lg focus:ring-zinc-500 focus:border-zinc-500 block w-full p-2.5"
+                                                className={`border font-semibold  text-sm rounded-lg  block w-full p-2.5 ${theme ? "border-slate-900  bg-black text-white" : "bg-zinc-100 "}`}
                                                 value={email}
                                                 placeholder={data?.user?.email}
                                                 required
@@ -221,7 +220,7 @@ const EditProfile = () => {
                                                 value={bio}
                                                 required
                                                 onChange={(e) => setBio(e.target.value)}
-                                                className="block p-2.5 w-full text-sm  text-black font-semibold bg-zinc-100 rounded-lg border border-zinc-100 focus:ring-zinc-500 focus:border-zinc-500"
+                                                className={`border font-semibold  text-sm rounded-lg  block w-full p-2.5 ${theme ? "border-slate-900  bg-black text-white" : "bg-zinc-100 "}`}
                                                 placeholder={`${!userInfo?.user?.bio ? 'Write your bio...' : userInfo?.user?.bio}`}
                                             ></textarea>
                                         </div>
@@ -233,7 +232,7 @@ const EditProfile = () => {
                                                 type="password"
                                                 value={password}
                                                 onChange={(e) => setPassword(e.target.value)}
-                                                className="block p-2.5 w-full text-sm text-black font-semibold bg-zinc-100 rounded-lg border border-zinc-100 focus:ring-zinc-500 focus:border-zinc-500"
+                                                className={`border font-semibold  text-sm rounded-lg  block w-full p-2.5 ${theme ? "border-slate-900  bg-black text-white" : "bg-zinc-100 "}`}
                                                 placeholder="Password"
                                             ></input>
                                         </div>

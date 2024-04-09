@@ -19,7 +19,6 @@ const AllUsers = ({ user, onFollowSuccess }) => {
             setIsFollowing(true);
             setTimeout(async () => {
                 const res = await followUser(id).unwrap();
-                console.log("🚀 ~ handleFollow ~ res:", res);
                 toast.success(res?.message || 'User followed successfully');
                 onFollowSuccess(id);
             }, 1000);
