@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../components/Loader';
 import DOMPurify from 'dompurify'; import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Import Quill styles
-import LoadingBar from 'react-top-loading-bar';
+
 import PostDetailSkeleton from '../components/PostDetailSkeleton';
 
 
