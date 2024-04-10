@@ -10,12 +10,14 @@ import Loader from '../components/Loader';
 import MyBookmark from './MyBookmark';
 import Userfollowing from './Userfollowing';
 import { FaTimes } from 'react-icons/fa';
-import { useFollowUserMutation } from '../api/user'; 
+import { useFollowUserMutation } from '../api/user';
 import UserFollowers from './UserFollowers';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { addFollower, addFollowing } from '../slices/AuthSlice';
 import PostDetails from './PostDetails';
+import io, { Socket } from 'socket.io-client'
+
 
 const Profile = () => {
   const { userInfo } = useSelector((state) => state.auth);
@@ -27,9 +29,9 @@ const Profile = () => {
   const [modalType, setModalType] = useState('following');
   const { data, isLoading } = useGetUserQuery(userId);
   const [followUser] = useFollowUserMutation();
-  const [unfollowUser] = useUnfollowUserMutation(); 
-  const { data: isFollowingData, isLoading: isFollowingLoading, refetch: refetchFollowing, isSuccess: Following } = useUserFollowingListQuery(userId); 
-  const { data: isFollowerData, isLoading: isFollowerLoading, refetch: refetchFollowers, isSuccess: Followers } = useUserFollowerListQuery(userId); 
+  const [unfollowUser] = useUnfollowUserMutation();
+  const { data: isFollowingData, isLoading: isFollowingLoading, refetch: refetchFollowing, isSuccess: Following } = useUserFollowingListQuery(userId);
+  const { data: isFollowerData, isLoading: isFollowerLoading, refetch: refetchFollowers, isSuccess: Followers } = useUserFollowerListQuery(userId);
   const dispatch = useDispatch();
 
   const { theme } = useSelector((state) => state.theme);
@@ -97,6 +99,9 @@ const Profile = () => {
   return (
     <>
       <Navbar />
+
+    
+
       <div className={`px-4 pb-20 overflow-y-auto ${theme ? " bg-gradient-to-b from-black to-gray-900 via-black text-white" : ""}  `}>
         <div className='flex md:flex-row justify-center flex-col-reverse '>
           <div className='md:w-2/3 md:px-4 mt-4'>
@@ -187,7 +192,7 @@ const Profile = () => {
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50">
           <div className="flex items-center justify-center min-h-screen">
-            <div className={`${theme? "bg-zinc-950 text-white" : "bg-white text-black"} p-4 rounded-lg max-w-2xl`}>
+            <div className={`${theme ? "bg-zinc-950 text-white" : "bg-white text-black"} p-4 rounded-lg max-w-2xl`}>
               <div className=''>
                 <button onClick={closeModal} className='flex gap-3 mt-2'>
                   <span className='font-semibold'>{modalType === 'following' ? 'Following' : 'Followers'}</span>

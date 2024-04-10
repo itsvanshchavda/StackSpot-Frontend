@@ -142,8 +142,9 @@ const CreatePost = () => {
                                 <button
                                     className="absolute top-0 right-0 p-2 text-gray-600 hover:text-gray-800"
                                     onClick={() => setFile(null)}
+                                    disabled={loading}
                                 >
-                                    <IoMdCloseCircle size={24} color='black' />
+                                    <IoMdCloseCircle  size={24} color={`${theme ? 'white' : 'black'}`} />
                                 </button>
                             </div>
                         ) : (

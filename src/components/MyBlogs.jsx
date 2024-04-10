@@ -3,12 +3,12 @@ import DOMPurify from 'dompurify';
 import { useGetUserPostQuery } from '../api/post';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import Loader from './Loader'; // Add missing import statement for Loader component
+import Loader from './Loader'; 
 import { myPosts } from '../slices/PostSlice';
 
-const MyBlogs = () => {
+const MyBlogs = ({userId}) => {
     const { id } = useParams();
-    const { data, isLoading } = useGetUserPostQuery(id);
+    const { data, isLoading } = useGetUserPostQuery(userId);
     const [userPost, setUserPost] = useState([]);
     const { usersPosts } = useSelector(state => state.post);
     const dispatch = useDispatch();

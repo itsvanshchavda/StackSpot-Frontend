@@ -12,8 +12,8 @@ const Footer = () => {
     <div>
       <footer className={`${theme ? "bg-zinc-950" : "bg-black"}`}>
         <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
-          <div className="flex justify-center text-teal-600">
-            <img src={logo} className='w-20 h-20 rounded-md' />
+          <div className="flex justify-center text-teal-600 ">
+            <img src={logo} className='w-20 h-20 rounded-md shadow-gray-500 shadow-2xl backdrop-blur-md' />
           </div>
 
           <p className="mx-auto mt-6 max-w-md text-center leading-relaxed text-gray-500">

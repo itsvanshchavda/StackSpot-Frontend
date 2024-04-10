@@ -24,6 +24,7 @@
     "react-router-dom": "^6.22.3",
     "react-toastify": "^10.0.5",
     "react-tooltip": "^5.26.3",
+    "socket.io-client": "^4.7.5",
     "tiptap": "^1.32.2",
     "tiptap-extensions": "^1.35.2"
   },

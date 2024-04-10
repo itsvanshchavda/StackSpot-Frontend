@@ -173,7 +173,7 @@ const Register = () => {
                   <div className="flex flex-col gap-2">
                     <button type="submit"
                       className="border transition-colors focus:ring-2 p-0.5 border-transparent bg-slate-100 text-black hover:bg-slate-400 hover:text-white active:bg-sky-800  rounded-lg">
-                      <span className="flex items-center justify-center gap-1 font-medium py-1 px-2.5 text-base">Login</span>
+                      <span className="flex items-center justify-center gap-1 font-medium py-1 px-2.5 text-base">Register</span>
                     </button>
                     {/* <button type="button"
                       className="transition-colors focus:ring-2 p-0.5 bg-white hover:bg-gray-100 text-gray-900 border border-gray-200 rounded-lg">

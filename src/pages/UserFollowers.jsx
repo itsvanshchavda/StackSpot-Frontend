@@ -7,9 +7,8 @@ import { useUserFollowerListQuery } from '../api/user';
 
 const Userfollowing = () => {
     const navigate = useNavigate();
-    const { id: userId } = useParams(); // Extracting userId from route params
+    const { id: userId } = useParams(); 
 
-    // Fetch user's following list based on userId
     const { data, isLoading, isError } = useUserFollowerListQuery(userId);
 
     useEffect(() => {

@@ -27,6 +27,7 @@ const Home = () => {
 
     const [activePage, setActivePage] = useState(1);
     const [postLength, setPostLength] = useState(0);
+    const [showAllPosts, setShowAllPosts] = useState(false);
 
 
 
@@ -47,7 +48,6 @@ const Home = () => {
             setPostLength(allPosts.length);
         }
     };
-
 
     useEffect(() => {
         if (followingData) {
@@ -78,10 +78,14 @@ const Home = () => {
         }
     }, [search, getSearchPost]);
 
+  
+
+    { isLoading && <Loader /> }
 
     return (
         <>
             <Navbar />
+            {isLoading && <Loader />}
             <div className={`px-8 min-h-screen py-8 md:px-[200px] min-h-auto ${theme ? " bg-gradient-to-b from-black to-gray-900 via-black text-white" : ""} `}>
                 {!search && (
                     <div className='flex justify-center items-center gap-5 text-xl font-semibold font-sans '>
@@ -104,35 +108,39 @@ const Home = () => {
                                 dataLength={followingPosts?.length || 0}
                                 hasMore={followingPosts.length < postLength}
                                 next={fetchMoreFollowing}
-                                loader={<Loader />}
                                 endMessage={
                                     <div className={`text-center mt-5 ${theme ? "text-slate-400" : "text-black"}`}>
                                         Follow more users :)
                                     </div>
                                 }
                             >
-                                {followingPosts?.map((post) => (
-                                    <Link to={`/posts/post/${post._id}`} key={post._id}>
-                                        <HomePost post={post} />
-                                    </Link>
-                                ))}
+
+
+                                {followingPosts.length === 0 ? <div className='text-center mt-10 font-bold text-xl'>No post found</div> : (
+                                    <>
+                                        {followingPosts?.map((post) => (
+                                            <Link to={`/posts/post/${post._id}`} key={post._id}>
+                                                <HomePost post={post} />
+                                            </Link>
+                                        ))}
+                                    </>
+                                )}
                             </InfiniteScroll>
                         ) : (
                             <InfiniteScroll
                                 dataLength={allPost?.length || 0}
                                 hasMore={allPost.length < postLength}
+                                next={fetchMorePosts}
                                 loader={<Loader />}
-                                endMessage={
-                                    <div className={`text-center mt-5 ${theme ? "text-slate-400" : "text-black"}`}>
-                                       You seen all post :)
-                                    </div>
-                                }
+
                             >
                                 {!search && data && data?.allPost.map((post) => (
                                     <Link to={`/posts/post/${post._id}`} key={post._id}>
                                         <HomePost post={post} key={post._id} />
                                     </Link>
                                 ))}
+
+                                
                             </InfiniteScroll>
                         )}
                     </>

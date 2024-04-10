@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { addLike, removeLike } from '../slices/PostSlice';
-import { useSelector , useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { useGetUserQuery } from '../api/user';
 import { useGetPostByIdQuery, useLikePostMutation, useUnlikePostMutation } from '../api/post';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-const Like = ({postId}) => {
+const Like = ({ postId }) => {
     const { data, isLoading } = useGetPostByIdQuery(postId);
     const { likedPosts } = useSelector((state) => state.post);
     const { postData } = useSelector((state) => state.post)
@@ -15,21 +15,30 @@ const Like = ({postId}) => {
     const [likePost, { data: LikedData }] = useLikePostMutation();
     const [unlikePost] = useUnlikePostMutation();
     const { userInfo } = useSelector((state) => state.auth)
+
     const dispatch = useDispatch();
 
 
 
     useEffect(() => {
-        if(data && postId){
+        if (data && postId) {
             setLikeCount(data?.getPost?.likes?.length)
         }
-    }, [data?.getPost , postId])
+    }, [data?.getPost, postId])
+
+
 
 
     const userId = userInfo?.user?._id;
+
+    if(data?.likes?.includes(userId)){
+        return true;
+    }
     const handleLike = async () => {
         try {
 
+            
+            
             if (likedPosts?.some((post) => post.postId === postId)) {
                 return toast.error("You have already liked this post");
 
@@ -37,7 +46,7 @@ const Like = ({postId}) => {
             await likePost({ id: postId, userId: userInfo?.user?._id });
             toast.success("Post liked");
             dispatch(addLike(userId));
-            setLikeCount((prev) => prev+1)
+            setLikeCount((prev) => prev + 1)
         } catch (err) {
             console.log(err);
         }
@@ -57,7 +66,7 @@ const Like = ({postId}) => {
 
     return (
         <div className='flex gap-3 justify-start items-center mx-2'>
-            {likedPosts.find((post) => post.userId === userId && post.postId === postId) !== undefined && likecount > 0 ? (
+            {likedPosts.find((post) => post.userId === userId && post.postId === postId)  ? (
                 <FaHeart size={21} className='cursor-pointer' color='red' onClick={handleUnlike} />
             ) : (
                 <FaRegHeart size={21} className='cursor-pointer' onClick={handleLike} />
