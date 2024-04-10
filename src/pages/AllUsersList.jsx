@@ -53,7 +53,7 @@ const AllUsersList = ({ users }) => {
     }
   };
 
-  // Calculate the index range of users to display based on the current page number
+
   const startIndex = (currentPage - 1) * 10;
   const endIndex = startIndex + 10;
 
