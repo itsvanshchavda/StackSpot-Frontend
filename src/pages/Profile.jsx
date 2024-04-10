@@ -16,7 +16,6 @@ import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { addFollower, addFollowing } from '../slices/AuthSlice';
 import PostDetails from './PostDetails';
-import io, { Socket } from 'socket.io-client'
 
 
 const Profile = () => {
