@@ -68,6 +68,12 @@ const CreatePost = () => {
                 return;
             }
 
+            if (!file) {
+                setDescriptionError('File is required');
+                return;
+            }
+
+
             setLoading(true);
             if (file) {
 

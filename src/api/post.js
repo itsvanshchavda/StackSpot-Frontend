@@ -105,6 +105,10 @@ export const postApi = createApi({
 
     getFollowingPost:builder.query({
       query:() => `/post/followings`
+    }),
+
+    getAnalytics:builder.query({
+        query:() => '/post/analytics'
     })
   }),
 });
@@ -122,5 +126,6 @@ export const {
   useUnlikePostMutation,
   useAddBookmarkMutation,
   useRemoveBookmarkMutation,
-  useGetFollowingPostQuery
+  useGetFollowingPostQuery,
+  useGetAnalyticsQuery
 } = postApi;

@@ -48,7 +48,7 @@ const MobileMenu = () => {
         </Link>
 
         <Link to='/dashboard'>
-          <h3 className='text-white hover:text-gray-500 cursor-pointer'>Anayltics</h3>
+          <h3 className='text-white hover:text-gray-500 cursor-pointer'>Analytics</h3>
         </Link>
 
         <Link to='/write'>
