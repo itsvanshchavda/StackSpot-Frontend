@@ -160,7 +160,7 @@ const Register = () => {
                         <input
                           value={password} onChange={(e) => setPassword(e.target.value)} className="block w-full border bg-black border-slate-800 text-white focus:border-cyan-500  placeholder-gray-400 focus:ring-cyan-500 p-2.5 text-sm rounded-lg"
                           id="password" type={showPassword ? "text" : "password"}
-                          name="password" required maxLength={8}
+                          name="password" required maxLength={16}
 
                         />
 
