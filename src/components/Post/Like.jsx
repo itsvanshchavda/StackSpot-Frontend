@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
-import { addLike, removeLike } from '../../slices/PostSlice';
+import { addLike, getLikedPost, removeLike } from '../../slices/PostSlice';
 import { useSelector, useDispatch } from 'react-redux'
 import { toast } from 'react-toastify';
 import { useGetPostByIdQuery, useLikePostMutation, useUnlikePostMutation } from '../../api/post';
 
 const Like = ({ postId }) => {
-    const { data } = useGetPostByIdQuery(postId);
+ 
     const { likedPosts } = useSelector((state) => state.post);
     const [likecount, setLikeCount] = useState(0);
     const [isLiked, setisLiked] = useState(false)
@@ -14,13 +14,20 @@ const Like = ({ postId }) => {
     const [unlikePost] = useUnlikePostMutation();
     const { userInfo } = useSelector((state) => state.auth)
     const userId = userInfo?.user?._id;
+    const { data } = useGetPostByIdQuery(postId);
     const dispatch = useDispatch();
 
     useEffect(() => {
         if (data && postId) {
             setLikeCount(data?.getPost?.likes?.length)
         }
+
+
     }, [data?.getPost, postId])
+
+    useEffect(() => {
+        dispatch(getLikedPost())
+    },[dispatch])       
 
 
     if (data?.likes?.includes(userId)) {

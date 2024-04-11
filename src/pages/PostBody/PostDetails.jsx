@@ -13,13 +13,10 @@ import { useDeletePostMutation, useGetPostByIdQuery } from '../../api/post';
 import { useGetUserQuery } from '../../api/user';
 import Bookmark from '../../components/Post/Bookmark'
 import Like from '../../components/Post/Like'
-import { getPost } from '../../slices/PostSlice'
+import { getLikedPost, getPost } from '../../slices/PostSlice'
 import Navbar from '../../components/Navbar/Navbar';
 import Comment from '../../components/Post/Comment'
 import Footer from '../../components/Footer/Footer';
-
-
-
 
 
 
@@ -55,6 +52,8 @@ const PostDetails = () => {
 
         }
     }, [data, dispatch]);
+
+   
 
 
 

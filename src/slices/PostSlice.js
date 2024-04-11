@@ -11,7 +11,7 @@ const initialState = {
     ? JSON.parse(localStorage.getItem("bookmarkedPosts"))
     : [],
 
-    profilePosts: localStorage.getItem("profilePosts")
+  profilePosts: localStorage.getItem("profilePosts")
     ? JSON.parse(localStorage.getItem("profilePosts"))
     : null,
   isBookmarked: false,
@@ -61,7 +61,6 @@ const postSlice = createSlice({
       state.postLiked = false;
       state.likesCount -= 1;
 
-  
       localStorage.setItem("likedPosts", JSON.stringify(state.likedPosts));
     },
 
@@ -100,6 +99,11 @@ const postSlice = createSlice({
       state.profilePosts = action.payload;
       localStorage.setItem("usersPosts", JSON.stringify(state.profilePosts));
     },
+
+    getLikedPost: (state) => {
+      const likedPosts = JSON.parse(localStorage.getItem("likedPosts")) || [];
+      state.likedPosts = likedPosts;
+    },
   },
 });
 
@@ -112,4 +116,5 @@ export const {
   addBookmarkPost,
   removeBookmarkPost,
   myPosts,
+  getLikedPost,
 } = postSlice.actions;
