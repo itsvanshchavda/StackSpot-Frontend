@@ -83,7 +83,7 @@ const Login = () => {
                         <div className="relative w-full">
                           {showPassword ? <FaRegEye className='absolute right-4 top-3 cursor-pointer' onClick={handleShow} /> : <FaEyeSlash className='absolute right-4 top-3 cursor-pointer' onClick={handleShow} />}
                           <input
-                            value={password} onChange={(e) => setPassword(e.target.value)} className="block w-full border bg-black text-white border-slate-800  focus:border-cyan-500  placeholder-gray-400 focus:ring-cyan-500 p-2.5 text-sm rounded-lg"
+                            value={password} maxLength={16} onChange={(e) => setPassword(e.target.value)} className="block w-full border bg-black text-white border-slate-800  focus:border-cyan-500  placeholder-gray-400 focus:ring-cyan-500 p-2.5 text-sm rounded-lg"
                             id="password" type={showPassword ? "text" : "password"} name="password" required
                           />
                         </div>
