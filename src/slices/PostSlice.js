@@ -61,7 +61,7 @@ const postSlice = createSlice({
       state.postLiked = false;
       state.likesCount -= 1;
 
-      // Update localStorage
+  
       localStorage.setItem("likedPosts", JSON.stringify(state.likedPosts));
     },
 

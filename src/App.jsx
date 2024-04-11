@@ -1,20 +1,20 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Home from './pages/Home'
-import Login from './pages/Login'
-import Register from './pages/Register'
-import { ToastContainer } from 'react-toastify'
+import Home from './pages/Home/Home'
+import Login from './pages/Auth/Login'
+import Register from  './pages/Auth/Register'
+import PostDetails from './pages/PostBody/PostDetails'
+import EditPost from './pages/PostAction/EditPost'
+import MyBookmark from './pages/ProfileDetail/MyBookmark'
+import FiindAllUsers from './pages/FindUser/FiindAllUsers'
+import Profile from './pages/ProfileDetail/Profile'
+import EditProfile from './pages/ProfileAction/EditProfile'
+import Dashboard from './pages/Analytics/Dashboard'
+import Notfound from './components/ErrorPage/Notfound'
+import CreatePost from './pages/PostAction/CreatePost'
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import PostDetails from './pages/PostDetails'
-import EditPost from './pages/EditPost'
-import Profile from './pages/Profile'
-import Notfound from './components/Notfound'
-import CreatePost from './pages/CreatePost'
-import MyBlogs from './components/MyBlogs'
-import EditProfile from './pages/EditProfile'
-import MyBookmark from './pages/MyBookmark'
-import FiindAllUsers from './pages/FiindAllUsers'
-import Dashboard from './pages/Dashboard'
+
 
 
 
