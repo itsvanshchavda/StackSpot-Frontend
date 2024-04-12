@@ -106,7 +106,7 @@ const EditPost = () => {
           <ReactQuill value={description} onChange={handleEditorChange} className={`${theme ? "bg-black" : "bg-zinc-50 text-black"}w-full  outline-none px-4 py-2 rounded-md`} placeholder="Write description..." />
           {file ? (
             <div className="relative">
-              <p className='font-semibold text-md'>File Name:{file.name}</p>
+              <p className='font-semibold text-md'>File Name: {file.name}</p>
               <img src={URL.createObjectURL(file)} alt="Uploaded File" width={500} className="mt-2 object-cover rounded-lg" />
               <button
                 className="absolute top-0 right-12 p-2 text-gray-600 hover:text-gray-800"

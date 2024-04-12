@@ -145,7 +145,7 @@ const CreatePost = () => {
 
                         {file ? (
                             <div className='relative'>
-                                <p className='font-semibold text-md'>File Name:{file.name}</p>
+                                <p className='font-semibold text-md'>File Name: {file.name}</p>
                                 <img src={URL.createObjectURL(file)} alt="Uploaded File" width={500} className="mt-2 object-cover rounded-lg" />
                                 <button
                                     className="absolute top-0 right-0 p-2 text-gray-600 hover:text-gray-800"
