@@ -61,6 +61,7 @@ const EditProfile = () => {
         try {
             setLoading(10);
 
+            // Prepare user data
             let newUserInfo = {
                 username: username,
                 email: email,
@@ -69,29 +70,38 @@ const EditProfile = () => {
                 lastname: lastname,
             };
 
+
             if (password) {
-                newUserInfo.password = password
+                newUserInfo.password = password;
             }
+
 
             if (file) {
                 const formData = new FormData();
                 formData.append('profilePhoto', file);
                 const res = await addProfilePhoto(formData).unwrap();
-                newUserInfo.profilePhoto = { url: res?.profilePhoto?.url, public_id: res?.profilePhoto?.public_id };
-                setLoading(100)
+                setLoading(50);
 
+                newUserInfo.profilePhoto = {
+                    public_id: res?.public_id,
+                    url: res?.secure_url
+                };
             }
 
-            const updatedUser = await updateUser({ userid: id, user: newUserInfo }).unwrap();
-            dispatch(setCredentials(updatedUser));
-            setLoading(100)
-            window.location.reload();
+
+            const updatedUserResponse = await updateUser({ user: newUserInfo }).unwrap();
+            dispatch(setCredentials(updatedUserResponse));
+            setLoading(100);
+            console.log(updatedUserResponse);
+
         } catch (err) {
             console.log(err);
             toast.error(err?.message || 'Failed to update user info');
-            setLoading(0)
+            setLoading(0);
         }
     };
+
+
 
 
 
@@ -253,10 +263,11 @@ const EditProfile = () => {
                 </main>
             </div>
 
-        <Footer />
+            <Footer />
         </>
 
     );
-};
+
+}
 
 export default EditProfile;

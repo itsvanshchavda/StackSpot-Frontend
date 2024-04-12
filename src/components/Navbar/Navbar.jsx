@@ -129,7 +129,7 @@ const Navbar = () => {
                 {nav && <MobileMenu />}
             </div>
 
-            <div className='border-b-2 border-slate-800 w-full'></div>
+            <div className={`border-b-2  w-full ${theme ? "border-slate-800" : ""}`}></div>
         </>
     );
 };

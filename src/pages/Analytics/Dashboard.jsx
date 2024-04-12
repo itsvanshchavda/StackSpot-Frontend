@@ -45,10 +45,10 @@ const Dashboard = () => {
               <p className={`text-2xl text-center font-medium ${theme ? 'text-white' : 'text-gray-700'}`}>{followerData?.followers?.length || 0}</p>
               <p className="text-sm text-gray-500">Total Followers</p>
             </div>
-            <div className='inline-flex gap-2 px-3 mb-3 rounded bg-green-100 p-1 text-green-600'>
+            {/* <div className='inline-flex gap-2 px-3 mb-3 rounded bg-green-100 p-1 text-green-600'>
               <BsGraphUpArrow color='green' />
               <span className="text-xs font-medium text-green-500"> 67.81% </span>
-            </div>
+            </div> */}
           </div>
           {/* Likes */}
           <div className='flex flex-col items-center mx-auto md:w-1/3'>
@@ -59,10 +59,10 @@ const Dashboard = () => {
               <p className={`text-2xl text-center font-medium ${theme ? 'text-white' : 'text-gray-700'}`}>{analytics?.analytics?.totalLikes || 0}</p>
               <p className="text-sm text-gray-500">Total Likes</p>
             </div>
-            <div className='inline-flex gap-2 px-3 mb-3 rounded bg-red-100 p-1 text-red-600'>
+            {/* <div className='inline-flex gap-2 px-3 mb-3 rounded bg-red-100 p-1 text-red-600'>
               <BsGraphDownArrow color='red' />
               <span className="text-xs font-medium text-red-500"> 67.81% </span>
-            </div>
+            </div> */}
           </div>
           {/* Bookmark */}
           <div className='flex flex-col items-center mx-auto md:w-1/3'>
@@ -73,10 +73,10 @@ const Dashboard = () => {
               <p className={`text-2xl text-center font-medium ${theme ? 'text-white' : 'text-gray-700'}`}>{analytics?.analytics?.totalBookmarks || 0}</p>
               <p className="text-sm text-gray-500">Total Bookmark</p>
             </div>
-            <div className='inline-flex gap-2 px-3 mb-3 rounded bg-red-100 p-1 text-red-600'>
+            {/* <div className='inline-flex gap-2 px-3 mb-3 rounded bg-red-100 p-1 text-red-600'>
               <BsGraphDownArrow color='red' />
               <span className="text-xs font-medium text-red-500"> 80.81% </span>
-            </div>
+            </div> */}
           </div>
         </article>
         <div className={`md:px-[160px] mt-14 flex flex-col md:flex-row ${theme ? 'text-white' : ''}`}>
