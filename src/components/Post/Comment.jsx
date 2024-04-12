@@ -75,7 +75,7 @@ const Comment = ({ comment, userData }) => {
                 <div className='px-2 py-2  my-2 rounded-md'>
                     <div className='flex items-center justify-between'>
                         <div className='flex items-center'>
-                            <img src={data?.user?.profilePhoto?.url ?? avatar} alt="" className='w-10 h-10 rounded-full mt-2' /> {/* Corrected image source */}
+                            <img src={data?.user?.profilePhoto?.url ?? avatar} alt="" className='w-10 h-10 object-cover rounded-full mt-2' /> {/* Corrected image source */}
                             <p className='font-bold  cursor-pointer ml-2' onClick={() => navigate(`/profile/${comment.userId}`)}>{comment.author}</p> {/* Added margin for spacing */}
                         </div>
                         <div className='flex justify-center items-center space-x-4 text-sm'>

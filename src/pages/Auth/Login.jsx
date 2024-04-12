@@ -90,7 +90,7 @@ const Login = () => {
                     </div>
                     <div className="flex flex-col gap-2">
                       <button type="submit"
-                        className="border transition-colors focus:ring-2 p-0.5 border-transparent bg-slate-100 text-black hover:bg-slate-400 hover:text-white active:bg-sky-800  rounded-lg">
+                        className="border transition-colors focus:ring-2 p-0.5 border-transparent bg-slate-100 text-black hover:bg-slate-300  rounded-lg">
                         <span className="flex items-center justify-center gap-1 font-medium py-1 px-2.5 text-base">Login</span>
                       </button>
                       {/* <button type="button"

@@ -67,7 +67,7 @@ const Navbar = () => {
                     </Link>
                 </h1>
 
-                {path === '/' && <div className='flex justify-center items-center space-x-1'>
+                {path === '/' && <div className='flex justify-center items-center space-x-1 pr-2'>
                     <BsSearch
                         className='cursor-pointer'
                         size={20}
@@ -76,7 +76,7 @@ const Navbar = () => {
                     <input
                         type='text'
                         placeholder='Search...'
-                        className='p-1 rounded-md outline-none bg-transparent border-b-2 max-sm:w-2/3'
+                        className='p-1 rounded-md outline-none bg-transparent border-b-2 max-sm:w-2/4'
                         value={search}
                         onChange={handleInputChange}
                         onKeyDown={handleKeyPress}
@@ -88,13 +88,13 @@ const Navbar = () => {
 
                 <div className='flex items-center justify-center'>
                     {userInfo ? (
-                        <div className='flex flex-row '>
+                        <div className='flex flex-row'>
                             <Link to='/write' className='flex items-center gap-2 cursor-pointer max-sm:hidden'>
                                 <TfiPencilAlt size={17} />
                                 <h3>Write</h3>
                             </Link>
 
-                            <div className='max-sm:mr-2 mt-1'>
+                            <div className='max-sm:mr-2 mt-1 mx-5 max-sm:-mx-5'>
                                 {theme ? <BsMoonStarsFill onClick={handleTheme} className='cursor-pointer ' /> : <MdSunny onClick={handleTheme} className='cursor-pointer' />}
                             </div>
                         </div>
