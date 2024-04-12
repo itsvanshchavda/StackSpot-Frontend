@@ -94,7 +94,7 @@ const Navbar = () => {
                                 <h3>Write</h3>
                             </Link>
 
-                            <div className='max-sm:mr-4 mt-1 mx-5'>
+                            <div className='max-sm:mr-2 mt-1'>
                                 {theme ? <BsMoonStarsFill onClick={handleTheme} className='cursor-pointer ' /> : <MdSunny onClick={handleTheme} className='cursor-pointer' />}
                             </div>
                         </div>
