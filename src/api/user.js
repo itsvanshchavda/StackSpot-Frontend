@@ -19,13 +19,7 @@ export const userApi = createApi({
       }),
     }),
 
-    addProfilePhoto: builder.mutation({
-      query: (photo) => ({
-        url: `/user/upload`,
-        method: "POST",
-        body: photo,
-      }),
-    }),
+   
 
     getAllUsers: builder.query({
       query: (id) => `/alluser/${id}`,
@@ -68,7 +62,6 @@ export const userApi = createApi({
 export const {
   useGetUserQuery,
   useUpdateUserMutation,
-  useAddProfilePhotoMutation,
   useGetAllUsersQuery,
   useFollowUserMutation,
   useUserFollowingListQuery,

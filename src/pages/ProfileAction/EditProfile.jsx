@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import avatar from '../../assets/avatar.jpg'
-import { useAddProfilePhotoMutation, useGetUserQuery, useUpdateUserMutation } from '../../api/user';
+import { useGetUserQuery, useUpdateUserMutation } from '../../api/user';
 import { setCredentials } from '../../slices/AuthSlice';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
@@ -20,7 +20,6 @@ const EditProfile = () => {
     const [lastname, setLastname] = useState('');
     const [loading, setLoading] = useState(0)
     const [updateUser] = useUpdateUserMutation();
-    const [addProfilePhoto] = useAddProfilePhotoMutation();
     const { userInfo } = useSelector((state) => state.auth);
     const id = useParams().id;
     const img = import.meta.env.VITE_IMG_URL;
@@ -79,13 +78,15 @@ const EditProfile = () => {
             if (file) {
                 const formData = new FormData();
                 formData.append('profilePhoto', file);
-                const res = await addProfilePhoto(formData).unwrap();
+                const res = await updateUser(formData).unwrap();
+
                 setLoading(50);
 
                 newUserInfo.profilePhoto = {
                     public_id: res?.public_id,
                     url: res?.secure_url
                 };
+                
             }
 
 
