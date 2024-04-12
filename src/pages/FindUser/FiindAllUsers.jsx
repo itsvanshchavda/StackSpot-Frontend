@@ -6,6 +6,7 @@ import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import AllUsersList from '../AllUsers/AllUsersList'
 import { useGetAllUsersListQuery, useSearchUserQuery } from '../../api/user';
+import Loader from '../../components/Loader/Loader';
 
 const FindAllUsers = () => {
   const [searchInput, setSearchInput] = useState('');
@@ -14,7 +15,7 @@ const FindAllUsers = () => {
   const { search } = useLocation();
   const navigate = useNavigate();
   const { data } = useSearchUserQuery(search);
-  const { data: allUsersList } = useGetAllUsersListQuery();
+  const { data: allUsersList , isLoading } = useGetAllUsersListQuery();
   const { theme } = useSelector((state) => state.theme)
 
   useEffect(() => {
@@ -53,10 +54,12 @@ const FindAllUsers = () => {
     }
   };
 
+  {isLoading && <Loader />}
+
   return (
     <>
       <Navbar />
-      <div className={`h-[90vh]  ${theme ? "bg-zinc-950" : ""}`}>
+      <div className={`h-[90vh]  ${theme ? "bg-gradient-to-b from-black to-gray-800 via-black" : ""}`}>
         <div className='flex justify-center items-center mr-10 -space-y-24 pt-2'>
           <BsSearch
             className='cursor-pointer -mt-24'
@@ -84,7 +87,7 @@ const FindAllUsers = () => {
 
           {/* Render message when no users found for search query */}
           {search && searchedUsers.length === 0 && (
-            <h1 className={`font-bold text-xl text-center mt-8 ${theme ? "text-white" : "text-black"}`}>No User Found</h1>
+            <h1 className={`font-bold text-xl text-center mt-8 ${theme ? "text-white " : "text-black"}`}>No User Found</h1>
           )}
         </div>
       </div>

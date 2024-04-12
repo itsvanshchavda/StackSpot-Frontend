@@ -20,7 +20,7 @@ const Profile = () => {
   const { userInfo } = useSelector((state) => state.auth);
   const userId = useParams().id;
   const navigate = useNavigate();
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState(null)
   const [activeLink, setActiveLink] = useState('posts');
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState('following');
@@ -32,6 +32,10 @@ const Profile = () => {
   const dispatch = useDispatch();
 
   const { theme } = useSelector((state) => state.theme);
+  const [loading, setLoading] = useState(0);
+  const [followerCount, setFollowerCount] = useState(0);
+  const [processing, setProcessing] = useState(false)
+
 
 
 
@@ -39,6 +43,7 @@ const Profile = () => {
   useEffect(() => {
     if (!isLoading && data) {
       setUserData(data.user);
+      setFollowerCount(data?.user?.followers?.length)
 
     }
   }, [isLoading, data, userData]);
@@ -67,36 +72,58 @@ const Profile = () => {
 
   const handleFollow = async () => {
     try {
+      setProcessing(true)
+      setLoading(50);
       const res = await followUser(userId).unwrap();
       refetchFollowing();
       refetchFollowers();
-      toast.success(res?.message || 'User followed successfully');
-      window.location.reload();
+      setFollowerCount((prev) => Math.max(prev - 1, 1))
     } catch (error) {
       console.error('Error following user:', error);
       toast.error(error?.data?.message || 'Failed to follow user');
+
+    } finally {
+      setProcessing(false)
+      setLoading(0)
     }
   };
 
   const handleUnfollow = async () => {
     try {
+      setProcessing(true)
+      setLoading(50); 
       await unfollowUser(userId).unwrap();
       refetchFollowing();
       refetchFollowers();
-      toast.success('User unfollowed successfully');
-      window.location.reload();
+      setFollowerCount((prev) => Math.max(prev - 1, -1))
+
     } catch (error) {
       console.error('Error unfollowing user:', error);
       toast.error(error?.data?.message || 'Failed to unfollow user');
+      setLoading(0);
+    } finally {
+      setProcessing(false)
+      setLoading(0)
     }
   };
-
-
 
   return (
     <>
       <Navbar />
 
+      {loading > 0 && (
+        <div>
+          <span
+            role="progressbar"
+            aria-labelledby="ProgressLabel"
+            aria-valuenow={loading}
+            className="block rounded-full bg-slate-700 relative overflow-hidden"
+            style={{ height: '3px' }}
+          >
+            <span className="block absolute inset-0 bg-indigo-600" style={{ width: `${loading}%`, transition: 'width 0.3s ease-in-out' }}></span>
+          </span>
+        </div>
+      )}
 
 
       <div className={`px-4 pb-20 overflow-y-auto ${theme ? " bg-gradient-to-b from-black to-gray-900 via-black text-white" : ""}  `}>
@@ -152,13 +179,13 @@ const Profile = () => {
                       <div>
                         {isFollowerData?.followers?.find((user) => user._id === userInfo?.user?._id) ? (
                           <div>
-                            <button className={`px-20 py-1 rounded-lg ${theme ? "bg-gray-200 text-black" : "bg-zinc-900 text-white"}`} onClick={handleUnfollow}>
+                            <button  disabled={processing} className={`px-20 py-1 rounded-lg ${theme ? "bg-gray-200 text-black" : "bg-zinc-900 text-white"}`} onClick={handleUnfollow}>
                               Unfollow
                             </button>
                           </div>
                         ) : (
                           <div>
-                            <button className={`px-20 py-1 rounded-lg ${theme ? "bg-gray-200 text-black" : "bg-zinc-900 text-white"}`} onClick={handleFollow}>
+                            <button disabled={processing} className={`px-20 py-1 rounded-lg ${theme ? "bg-gray-200 text-black" : "bg-zinc-900 text-white"}`} onClick={handleFollow}>
                               Follow
                             </button>
                           </div>
@@ -174,7 +201,7 @@ const Profile = () => {
 
               <div className='mt-4 '>
                 <div className='flex gap-2'>
-                  <p className='font-sans'>{userData?.followers?.length || 0}</p>
+                  <p className='font-sans'>{followerCount}</p>
                   <p className='font-semibold cursor-pointer' onClick={handleFollowersClick}>Followers</p>
                   <p className='font-sans'>{userData?.following?.length || 0}</p>
                   <p className='cursor-pointer font-semibold' onClick={handleFollowingClick}>Following</p>
