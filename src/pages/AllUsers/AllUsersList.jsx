@@ -93,7 +93,7 @@ const AllUsersList = ({ users }) => {
           {users?.slice(startIndex, endIndex).map((user) => (
             <div key={user._id} className={`p-3 flex items-center justify-between border-t cursor-pointer duration-300 ${theme ? " hover:bg-slate-800 border-gray-200" : "hover:bg-gray-200 text-black"}`}>
               <div className="flex items-center" onClick={() => navigate(`/profile/${user?._id}`)}>
-                <img className="rounded-full h-10 w-10" src={user.profilePhoto?.url ?? avatar} alt="John Doe" />
+                <img className="rounded-full h-10 w-10 object-cover" src={user.profilePhoto?.url ?? avatar} alt="John Doe" />
                 <div className="ml-2 flex flex-col">
                   <div className={`leading-snug text-sm  font-bold ${theme ? "text-white" : "text-gray-600"}`}>{user.firstname} {user.lastname}</div>
                   <div className={`leading-snug text-xs `}>{user.username}</div>

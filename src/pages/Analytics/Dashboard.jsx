@@ -7,9 +7,9 @@ import { useNavigate } from 'react-router-dom';
 import avatar from '../../assets/avatar.jpg'
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer'
-import {useGetAnalyticsQuery, useGetUserPostQuery} from '../../api/post'
+import { useGetAnalyticsQuery, useGetUserPostQuery } from '../../api/post'
 import { useUserFollowerListQuery } from '../../api/user';
- 
+
 const Dashboard = () => {
   const { userInfo } = useSelector((state) => state.auth);
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ const Dashboard = () => {
   return (
     <>
       <Navbar />
-      <div className={`h-screen ${theme ? 'bg-black' : 'bg-white'}`}>
+      <div className={`h-auto  ${theme ? 'bg-black' : 'bg-white'}`}>
         <h1 className={`text-2xl font-semibold pt-5 pb-5 px-5 ${theme ? 'text-white' : 'text-black'}`}>Your Analytics</h1>
         <article className={`flex flex-col md:flex-row gap-4 rounded-lg p-6 ${theme ? 'bg-black text-white ring-1 ring-slate-700' : 'bg-white border border-gray-200'}`}>
           {/* Views */}
@@ -79,31 +79,62 @@ const Dashboard = () => {
             </div> */}
           </div>
         </article>
-        <div className={`md:px-[160px] mt-14 flex flex-col md:flex-row ${theme ? 'text-white' : ''}`}>
-          <div className="w-full md:w-1/2">
+        <div className={`md:px-[160px] w-full mt-14 flex flex-col md:flex-row ${theme ? 'text-white' : ''}`}>
+
+
+          {/* User posts  */}
+          <div className='grid grid-cols-1 max-sm:px-10 pb-10'>
+
             {userData?.userPost?.length > 0 ? (
+
               <>
-                <h1 className='font-semibold text-xl max-sm:px-5'>Recent posts</h1>
-                <div className='max-sm:max-w-xs max-w-2xl mt-10'>
-                  {userData?.userPost?.map((post) => (
-                    <div key={post._id} className="grid grid-cols-1 grid-flow-col mb-6 gap-4 cursor-pointer " onClick={() => navigate(`/posts/post/${post._id}`)}>
-                      <img src={post.photo.url} alt="" className=" max-sm:w-[200px] w-full rounded-lg object-cover" />
-                      <div>
-                        <h3 className={`text-lg/tight font-medium mb-3 ${theme ? 'text-white ' : 'text-gray-800'}`}>{post.title}</h3>
-                        <p className='text-sm md:text-md ' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.description.slice(0, 30) + "..Read More") }} />
-                      </div>
+
+                {userData?.userPost?.map((post) => (
+                  <>
+                    <div className='cursor-pointer pb-5' onClick={() => navigate(`/posts/post/${post._id}`)}>
+                      <article
+                        class="hover:animate-background  rounded-xl bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 p-0.5 shadow-xl transition hover:bg-[length:400%_400%] hover:shadow-sm hover:[animation-duration:_4s]"
+                      >
+                        <div className={`rounded-[10px] p-4 !pt-[5em] sm:p-6 ${theme ? "bg-black" : "bg-white"}`}>
+                          <time class={`block text-xs ${theme ? "text-white" : "text-gray-400"}`}>{new Date(post.updatedAt).toLocaleDateString()}</time>
+
+                          <a href="#">
+                            <h3 class={`mt-0.5 text-lg font-medium ${theme ? "text-white" : "text-gray-400"}`}>
+                              {post.title}
+                            </h3>
+                          </a>
+
+                          {post.categories.length > 0 && (post.categories?.map((i) =>
+                            <div class="mt-4 flex flex-wrap gap-1">
+                              <span
+                                class="whitespace-nowrap rounded-full bg-purple-100 px-2.5 py-0.5 text-xs text-purple-600"
+                              >
+                                {i}
+                              </span>
+
+
+                            </div>
+
+                          ))}
+
+
+                        </div>
+                      </article>
                     </div>
-                  ))}
-                </div>
+                  </>
+                ))}
               </>
             ) : renderNoPostsMessage()}
+
+
           </div>
+
           {followerData?.followers?.length > 0 && (
-            <div className="w-full md:w-1/2 mt-5 md:mt-0 ">
+            <div className="w-full md:w-1/2 mt-5 md:mt-0">
               <h1 className='font-semibold text-xl max-sm:px-5 md:flex md:justify-end'>Recent followers</h1>
-              <div className="mt-5 max-sm:px-5 md:float-end">
+              <div className="mt-5 max-sm:px-5 pb-9 md:float-end">
                 {followerData?.followers?.slice(startIndex, endIndex).map((followingUser) => (
-                  <div key={followingUser._id} className="flex items-center justify-between gap-3 cursor-pointer" onClick={() => navigate(`/profile/${followingUser._id}`)}>
+                  <div key={followingUser._id} className="flex pb-4 items-center justify-between gap-3 cursor-pointer" onClick={() => navigate(`/profile/${followingUser._id}`)}>
                     <div className='flex items-center gap-3'>
                       <img src={followingUser.profilePhoto?.url ?? avatar} className='w-10 h-10 object-cover rounded-full' alt='' />
                       <p className='font-semibold '>{followingUser.username}</p>
