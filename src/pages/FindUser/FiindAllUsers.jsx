@@ -14,8 +14,8 @@ const FindAllUsers = () => {
   const [usersList, setUsersList] = useState([]);
   const { search } = useLocation();
   const navigate = useNavigate();
-  const { data } = useSearchUserQuery(search);
-  const { data: allUsersList , isLoading } = useGetAllUsersListQuery();
+  const { data, isLoading: searchUserLoading } = useSearchUserQuery(search);
+  const { data: allUsersList, isLoading } = useGetAllUsersListQuery();
   const { theme } = useSelector((state) => state.theme)
 
   useEffect(() => {
@@ -54,7 +54,8 @@ const FindAllUsers = () => {
     }
   };
 
-  {isLoading && <Loader />}
+  { isLoading && <Loader /> }
+  { searchUserLoading && <Loader /> }
 
   return (
     <>
@@ -74,7 +75,7 @@ const FindAllUsers = () => {
             value={searchInput}
             onChange={handleInputChange}
             onKeyDown={handleKeyPress}
-          style={{ verticalAlign: 'middle' }}
+            style={{ verticalAlign: 'middle' }}
           />
         </div>
 

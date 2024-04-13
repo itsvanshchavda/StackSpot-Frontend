@@ -75,9 +75,9 @@ const Profile = () => {
       setProcessing(true)
       setLoading(50);
       const res = await followUser(userId).unwrap();
+      setFollowerCount((prev) => Math.max(prev + 1, 1))
       refetchFollowing();
       refetchFollowers();
-      setFollowerCount((prev) => Math.max(prev - 1, 1))
     } catch (error) {
       console.error('Error following user:', error);
       toast.error(error?.data?.message || 'Failed to follow user');
@@ -91,11 +91,11 @@ const Profile = () => {
   const handleUnfollow = async () => {
     try {
       setProcessing(true)
-      setLoading(50); 
+      setLoading(50);
       await unfollowUser(userId).unwrap();
+      setFollowerCount((prev) => Math.max(prev - 1, -1))
       refetchFollowing();
       refetchFollowers();
-      setFollowerCount((prev) => Math.max(prev - 1, -1))
 
     } catch (error) {
       console.error('Error unfollowing user:', error);
@@ -179,15 +179,35 @@ const Profile = () => {
                       <div>
                         {isFollowerData?.followers?.find((user) => user._id === userInfo?.user?._id) ? (
                           <div>
-                            <button  disabled={processing} className={`px-20 py-1 rounded-lg ${theme ? "bg-gray-200 text-black" : "bg-zinc-900 text-white"}`} onClick={handleUnfollow}>
-                              Unfollow
-                            </button>
+                            {processing ? (
+                              <button type="button" disabled className="inline-flex items-center px-4 py-2 rounded-lg text-white bg-slate-700 focus:outline-none focus:ring focus:ring-slate-100">
+                                <svg className="animate-spin h-5 w-5 mr-3 text-white" viewBox="0 0 24 24" aria-label="Loading">
+                                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A8.003 8.003 0 014.707 14H2c0 4.418 3.582 8 8 8v-2.707a7.965 7.965 0 01-2-2.002zM21.707 10H22c0-4.418-3.582-8-8-8v2.707a7.965 7.965 0 012 2.002L21.707 10z"></path>
+                                </svg>
+                                Processing...
+                              </button>
+                            ) : (
+                              <button className={`px-20 py-1 rounded-lg ${theme ? "bg-gray-200 text-black" : "bg-zinc-900 text-white"}`} onClick={handleUnfollow}>
+                                Unfollow
+                              </button>
+                            )}
                           </div>
                         ) : (
                           <div>
-                            <button disabled={processing} className={`px-20 py-1 rounded-lg ${theme ? "bg-gray-200 text-black" : "bg-zinc-900 text-white"}`} onClick={handleFollow}>
-                              Follow
-                            </button>
+                            {processing ? (
+                              <button type="button" disabled className="inline-flex items-center px-4 py-2 rounded-lg text-white bg-slate-700 focus:outline-none focus:ring focus:ring-slate-100">
+                                <svg className="animate-spin h-5 w-5 mr-3 text-white" viewBox="0 0 24 24" aria-label="Loading">
+                                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A8.003 8.003 0 014.707 14H2c0 4.418 3.582 8 8 8v-2.707a7.965 7.965 0 01-2-2.002zM21.707 10H22c0-4.418-3.582-8-8-8v2.707a7.965 7.965 0 012 2.002L21.707 10z"></path>
+                                </svg>
+                                Processing...
+                              </button>
+                            ) : (
+                              <button className={`px-20 py-1 rounded-lg ${theme ? "bg-gray-200 text-black" : "bg-zinc-900 text-white"}`} onClick={handleFollow}>
+                                Follow
+                              </button>
+                            )}
                           </div>
                         )}
                       </div>
