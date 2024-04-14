@@ -158,7 +158,7 @@ const Profile = () => {
                   <div className='flex items-center mb-4'>
                     <img src={userData?.profilePhoto?.url ?? avatar} alt='profile' className='w-24 h-24 rounded-full object-cover mr-4' />
                     <div>
-                      <div className='text-lg font-semibold flex gap-3 items-center'>
+                      <div className='text-lg font-semibold flex gap-2 items-center'>
                         <p>{userData?.firstname}</p>
                         <p> {userData?.lastname}</p>
                       </div>
