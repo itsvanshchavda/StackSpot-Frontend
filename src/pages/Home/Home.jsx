@@ -94,7 +94,7 @@ const Home = () => {
                         role="progressbar"
                         aria-labelledby="ProgressLabel"
                         aria-valuenow={loading}
-                        className={`block rounded-full  relative overflow-hidden ${theme ? "bg-slate-700" : "bg-red-500" }`}
+                        className={`block rounded-full  relative overflow-hidden ${theme ? "bg-slate-700" : "bg-red-500"}`}
                         style={{ height: '3px' }}
                     >
                         <span className="block absolute inset-0 bg-indigo-600" style={{ width: `${loading}%`, transition: 'width 0.3s ease-in-out' }}></span>
@@ -115,8 +115,17 @@ const Home = () => {
                     <>
                         {!search && <Sidebar />}
                         {searchLoader && <Loader />}
-                        {!searchLoader && searchedPosts.length === 0 && search && (
+                        {!searchLoader && searchedPosts.length === 0 && search ? (
                             <h1 className='font-bold text-xl text-center h-[90vh] mt-8'>No Post Found</h1>
+                        ) : (
+                            <>
+
+                                {searchedPosts?.map((post) => (
+                                    <Link to={`/posts/post/${post._id}`} key={post._id}>
+                                        <HomePost post={post} />
+                                    </Link>
+                                ))}
+                            </>
                         )}
                         {activeLink === "following" ? (
                             <InfiniteScroll
