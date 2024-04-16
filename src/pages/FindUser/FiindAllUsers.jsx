@@ -60,7 +60,7 @@ const FindAllUsers = () => {
   return (
     <>
       <Navbar />
-      <div className={`h-[90vh]  ${theme ? "bg-gradient-to-b from-black to-gray-800 via-black" : ""}`}>
+      <div className={`h-auto  ${theme ? "bg-gradient-to-b from-black to-gray-800 via-black" : ""}`}>
         <div className='flex justify-center items-center mr-10 -space-y-24 pt-2'>
           <BsSearch
             className='cursor-pointer -mt-24'
