@@ -118,14 +118,14 @@ const AllUsersList = ({ users }) => {
               <button
                 onClick={() => setCurrentPage(prevPage => Math.max(prevPage - 1, 1))}
                 disabled={currentPage === 1}
-                className="text-black border rounded-md px-5 py-1 font-semibold"
+                className={`border rounded-md px-5 py-1 font-semibold`}
               >
                 Previous
               </button>
               <button
                 onClick={() => setCurrentPage(prevPage => prevPage + 1)}
                 disabled={endIndex >= users.length}
-                className="text-black rounded-md  border px-5 py-1 font-semibold"
+                className={`rounded-md  border px-5 py-1 font-semibold ${theme ? "text-white" : "text-black"}`}
               >
                 Next
               </button>
