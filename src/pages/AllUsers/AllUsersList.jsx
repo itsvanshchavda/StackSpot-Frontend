@@ -114,7 +114,7 @@ const AllUsersList = ({ users }) => {
           {/* Pagination */}
 
           {users?.length > 10 && (
-            <div className="flex justify-between mt-4">
+            <div className="flex justify-between mt-4 mx-8">
               <button
                 onClick={() => setCurrentPage(prevPage => Math.max(prevPage - 1, 1))}
                 disabled={currentPage === 1}
