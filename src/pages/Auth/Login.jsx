@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setCredentials } from '../../slices/AuthSlice';
 import { toast } from 'react-toastify'
 import logo from '../../assets/logo.png'
-import {useLoginMutation} from '../../api/auth'
+import { useLoginMutation } from '../../api/auth'
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -13,6 +13,7 @@ const Login = () => {
 
   const [login, { isLoading, isError }] = useLoginMutation();
   const [showPassword, setShowPassword] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -26,13 +27,16 @@ const Login = () => {
   }, [navigate, setCredentials])
 
   const handleSubmit = async (e) => {
+    setLoading(true)
     e.preventDefault();
     try {
       const res = await login({ email, password }).unwrap();
       toast.success(res?.message || 'Logged in successfully');
       dispatch(setCredentials(res))
+      setLoading(false)
       navigate('/')
     } catch (err) {
+      setLoading(false)
       toast.error(err?.data?.message)
       console.log(err?.data?.message || err)
     }
@@ -77,7 +81,7 @@ const Login = () => {
                     <div>
                       <div className="mb-2">
                         <label className="text-sm font-medium text-white" htmlFor="password">Password</label>
-                     </div>
+                      </div>
                       <div className="flex w-full rounded-lg pt-1">
                         <div className="relative w-full">
                           {showPassword ? <FaRegEye className='absolute right-4 top-3 cursor-pointer' onClick={handleShow} /> : <FaEyeSlash className='absolute right-4 top-3 cursor-pointer' onClick={handleShow} />}
@@ -91,7 +95,10 @@ const Login = () => {
                     <div className="flex flex-col gap-2">
                       <button type="submit"
                         className="border transition-colors focus:ring-2 p-0.5 border-transparent bg-slate-100 text-black hover:bg-slate-300  rounded-lg">
-                        <span className="flex items-center justify-center gap-1 font-medium py-1 px-2.5 text-base">Login</span>
+                        <div className="flex items-center justify-center gap-1 font-medium py-1 px-2.5 text-base">
+                          {loading && <LoaderCircle className="animate-spin" />}
+                          <h2>Login</h2>
+                        </div>
                       </button>
                       {/* <button type="button"
                         className="transition-colors focus:ring-2 p-0.5 bg-white hover:bg-gray-100 text-gray-900 border border-gray-200 rounded-lg">

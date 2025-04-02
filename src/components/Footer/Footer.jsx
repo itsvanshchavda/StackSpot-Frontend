@@ -1,13 +1,13 @@
 import React from 'react'
 import logo from '../../assets/logo.png'
-import {useSelector} from 'react-redux'
+import { useSelector } from 'react-redux'
 
 
 
 const Footer = () => {
 
-  const {theme} = useSelector((state) => state.theme)
-  
+  const { theme } = useSelector((state) => state.theme)
+
   return (
     <div>
       <footer className={`${theme ? "bg-zinc-950" : "bg-black"}`}>
@@ -48,7 +48,7 @@ const Footer = () => {
           </ul> */}
 
           <ul className="mt-12 flex justify-center gap-6 md:gap-8">
-         
+
             <li>
               <a
                 href="https://twitter.com/vanshchavda_"
@@ -82,12 +82,12 @@ const Footer = () => {
                 </svg>
               </a>
             </li>
-            
+
           </ul>
           <p className="text-slate-500 font-semibold text-center mt-8 text-sm">&copy; Stack Spot 2024</p>
-      
+
         </div>
-       
+
       </footer>
     </div>
   )

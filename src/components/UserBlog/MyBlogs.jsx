@@ -6,7 +6,7 @@ import { useGetUserPostQuery } from '../../api/post';
 import { myPosts } from '../../slices/PostSlice';
 import Loader from '../Loader/Loader';
 
-const MyBlogs = ({userId}) => {
+const MyBlogs = ({ userId }) => {
     const { id } = useParams();
     const { data, isLoading } = useGetUserPostQuery(userId);
     const [userPost, setUserPost] = useState([]);;
@@ -26,7 +26,7 @@ const MyBlogs = ({userId}) => {
 
     return (
         <>
-            {data?.userPost?.length > 0 ? (
+            {data?.userPost?.length > 0 && (
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mt-8 max-xl:grid-cols-1 h-auto'>
                     {data?.userPost?.map((post) => (
                         <div key={post._id} className='flex flex-col cursor-pointer' onClick={() => navigate(`/posts/post/${post._id}`)}>
@@ -48,8 +48,11 @@ const MyBlogs = ({userId}) => {
                     ))}
                     {isLoading && <Loader />}
                 </div>
-            ) : (
-                <h1 className='font-bold text-xl text-center mt-6'>No posts found</h1>
+            )}
+
+
+            {data?.userPost?.length === 0 && (
+                <h1 className='text-2xl font-bold text-center mt-8'>No Post Found</h1>
             )}
         </>
     );
