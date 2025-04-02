@@ -2,7 +2,7 @@ import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home/Home'
 import Login from './pages/Auth/Login'
-import Register from  './pages/Auth/Register'
+import Register from './pages/Auth/Register'
 import PostDetails from './pages/PostBody/PostDetails'
 import EditPost from './pages/PostAction/EditPost'
 import MyBookmark from './pages/ProfileDetail/MyBookmark'
@@ -14,6 +14,7 @@ import Notfound from './components/ErrorPage/Notfound'
 import CreatePost from './pages/PostAction/CreatePost'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ResetPassword from './pages/ResetPassword/ResetPassword'
 
 
 
@@ -33,6 +34,7 @@ const App = () => {
         <Route path="/profile/:id" element={<Profile />} />
         <Route path='/profile/edit/:id' element={<EditProfile />} />
         <Route path='/dashboard' element={<Dashboard />} />
+        <Route path='/reset-password' element={<ResetPassword />} />
         <Route path="*" element={<Notfound />} />
         <Route path='/write' element={<CreatePost />} />
 

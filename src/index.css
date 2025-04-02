@@ -5,6 +5,25 @@
 /* Custom styles */
 /* Loader */
 
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f7fafc;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
+}
+
 .loader {
   --dim: 3rem;
   width: var(--dim);
@@ -117,4 +136,3 @@
 }
 
 /* Tailwind Scrollbar */
-

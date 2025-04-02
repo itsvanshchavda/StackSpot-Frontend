@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import avatar from '../../assets/avatar.jpg'
 import { useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -20,6 +20,7 @@ const Profile = () => {
   const { userInfo } = useSelector((state) => state.auth);
   const userId = useParams().id;
   const navigate = useNavigate();
+  const pathname = window.location.pathname;
   const [userData, setUserData] = useState(null)
   const [activeLink, setActiveLink] = useState('posts');
   const [showModal, setShowModal] = useState(false);
@@ -35,18 +36,17 @@ const Profile = () => {
   const [loading, setLoading] = useState(0);
   const [followerCount, setFollowerCount] = useState(0);
   const [processing, setProcessing] = useState(false)
-
+  const effectRun = useRef(false)
 
 
 
 
   useEffect(() => {
-    if (!isLoading && data) {
+    if (!isLoading && data && pathname.includes(userId)) {
       setUserData(data.user);
       setFollowerCount(data?.user?.followers?.length)
-
     }
-  }, [isLoading, data, userData]);
+  }, [data, isLoading]);
 
   useEffect(() => {
     return () => {

@@ -25,11 +25,29 @@ export const authApi = createApi({
       }),
     }),
 
-    refetch:builder.query({
+    refetch: builder.query({
       query: () => ({
         url: `auth/refetch`,
         method: "GET",
         headers: { "Content-Type": "application/json" },
+      }),
+    }),
+
+    resetPassword: builder.mutation({
+      query: (body) => ({
+        url: `auth/reset-password`,
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body,
+      }),
+    }),
+
+    sendOtp: builder.mutation({
+      query: (email) => ({
+        url: `auth/send-otp`,
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: email,
       }),
     }),
 
@@ -44,5 +62,11 @@ export const authApi = createApi({
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation, useUserlogoutMutation  , useRefetchQuery } =
-  authApi;
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useUserlogoutMutation,
+  useRefetchQuery,
+  useResetPasswordMutation,
+  useSendOtpMutation,
+} = authApi;
