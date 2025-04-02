@@ -7,8 +7,7 @@ import { FaRegEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import logo from '../../assets/logo.png'
 import { useRegisterMutation } from '../../api/auth';
-
-
+import { LoaderCircle } from 'lucide-react';
 
 
 
@@ -175,7 +174,10 @@ const Register = () => {
                   <div className="flex flex-col gap-2">
                     <button type="submit"
                       className="border transition-colors focus:ring-2 p-0.5 border-transparent bg-slate-100 text-black hover:bg-slate-300  rounded-lg">
-                      <span className="flex items-center justify-center gap-1 font-medium py-1 px-2.5 text-base">Register</span>
+                      <div className="flex items-center justify-center gap-1 font-medium py-1 px-2.5 text-base">
+                        <h2>Register</h2>
+                        <LoaderCircle size={16} className={`animate-spin ${loading ? 'block' : 'hidden'}`} />
+                      </div>
                     </button>
                     {/* <button type="button"
                       className="transition-colors focus:ring-2 p-0.5 bg-white hover:bg-gray-100 text-gray-900 border border-gray-200 rounded-lg">

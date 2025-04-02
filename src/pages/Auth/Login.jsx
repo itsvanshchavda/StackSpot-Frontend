@@ -6,6 +6,7 @@ import { setCredentials } from '../../slices/AuthSlice';
 import { toast } from 'react-toastify'
 import logo from '../../assets/logo.png'
 import { useLoginMutation } from '../../api/auth'
+import { LoaderCircle } from 'lucide-react';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -46,8 +47,6 @@ const Login = () => {
     setShowPassword((prev) => !prev)
   }
 
-
-
   return (
     <>
       <div className={`h-screen bg-black`}>
@@ -79,8 +78,9 @@ const Login = () => {
                       </div>
                     </div>
                     <div>
-                      <div className="mb-2">
+                      <div className="mb-2 flex items-center justify-between">
                         <label className="text-sm font-medium text-white" htmlFor="password">Password</label>
+                        <Link to="/reset-password" className="text-xs text-gray-300 hover:text-cyan-500">Forgot Password?</Link>
                       </div>
                       <div className="flex w-full rounded-lg pt-1">
                         <div className="relative w-full">
@@ -96,18 +96,10 @@ const Login = () => {
                       <button type="submit"
                         className="border transition-colors focus:ring-2 p-0.5 border-transparent bg-slate-100 text-black hover:bg-slate-300  rounded-lg">
                         <div className="flex items-center justify-center gap-1 font-medium py-1 px-2.5 text-base">
-                          {loading && <LoaderCircle className="animate-spin" />}
                           <h2>Login</h2>
+                          {loading && <LoaderCircle size={16} className="animate-spin" />}
                         </div>
                       </button>
-                      {/* <button type="button"
-                        className="transition-colors focus:ring-2 p-0.5 bg-white hover:bg-gray-100 text-gray-900 border border-gray-200 rounded-lg">
-                        <span className="flex items-center justify-center gap-1 font-medium py-1 px-2.5 text-base">
-                          <span className='px-2'> <FaGoogle /></span>
-                          Sign in with Google
-                        </span>
-                      </button> */}
-
                     </div>
                   </form>
                   <div className="min-w-[270px]">
