@@ -107,8 +107,41 @@ const Profile = () => {
     }
   };
 
+
+  useEffect(() => {
+    const handleEscapeKey = (event) => {
+      if (event.key === 'Escape') {
+        setShowModal(false);
+      }
+    };
+
+    if (showModal) {
+      document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+    } else {
+      document.body.style.overflow = 'auto'; // Allow scrolling when modal is closed
+    }
+
+    const handleClickOutside = (event) => {
+      const modalOverlay = document.querySelector('.fixed.inset-0');
+      const modalContent = document.querySelector('.profile-modal');
+
+      if (modalOverlay && modalContent && !modalContent.contains(event.target)) {
+        setShowModal(false);
+      }
+    };
+
+    document.addEventListener('keydown', handleEscapeKey);
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('keydown', handleEscapeKey);
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.body.style.overflow = 'auto'; // Reset overflow when component unmounts
+    };
+  }, [showModal]);
+
   return (
-    <>
+    <section className='modal-content'>
       <Navbar />
 
       {loading > 0 && (
@@ -126,7 +159,7 @@ const Profile = () => {
       )}
 
 
-      <div className={`px-4 pb-20 overflow-y-auto ${theme ? " bg-gradient-to-b from-black to-gray-900 via-black text-white" : ""}  `}>
+      <div className={`px-4  pb-20 overflow-y-auto ${theme ? " bg-gradient-to-b from-black to-gray-900 via-black text-white" : ""}  `}>
         <div className='flex md:flex-row justify-center flex-col-reverse '>
           <div className='md:w-2/3 md:px-4 mt-4'>
             {userInfo?.user?._id === userId && (
@@ -221,10 +254,16 @@ const Profile = () => {
 
               <div className='mt-4 '>
                 <div className='flex gap-2'>
-                  <p className='font-sans'>{followerCount}</p>
-                  <p className='font-semibold cursor-pointer' onClick={handleFollowersClick}>Followers</p>
-                  <p className='font-sans'>{userData?.following?.length || 0}</p>
-                  <p className='cursor-pointer font-semibold' onClick={handleFollowingClick}>Following</p>
+                  <div onClick={handleFollowersClick} className='flex gap-2'>
+                    <p className='font-sans'>{followerCount}</p>
+                    <p className='font-semibold cursor-pointer' >Followers</p>
+                  </div>
+
+
+                  <div onClick={handleFollowingClick} className='flex gap-2'>
+                    <p className='font-sans'>{userData?.following?.length || 0}</p>
+                    <p className='cursor-pointer font-semibold' onClick={handleFollowingClick}>Following</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -236,13 +275,8 @@ const Profile = () => {
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50">
           <div className="flex items-center justify-center min-h-screen">
-            <div className={`${theme ? "bg-zinc-950 text-white" : "bg-white text-black"} p-4 rounded-lg max-w-2xl`}>
-              <div className=''>
-                <button onClick={closeModal} className='flex gap-3 mt-2'>
-                  <span className='font-semibold'>{modalType === 'following' ? 'Following' : 'Followers'}</span>
-                  <FaTimes className='mt-1 mb-5' />
-                </button>
-              </div>
+            <div className={`profile-modal ${theme ? "bg-zinc-950 text-white" : "bg-white text-black"} p-4 rounded-lg max-w-2xl`}>
+
               <div className="">
                 {modalType === 'following' ? <Userfollowing /> : <UserFollowers />}
               </div>
@@ -251,7 +285,7 @@ const Profile = () => {
         </div>
       )}
       <Footer />
-    </>
+    </section>
   );
 };
 
