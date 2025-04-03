@@ -11,18 +11,40 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #f7fafc;
+  background: rgba(17, 17, 17, 0.3) !important;
   border-radius: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #cbd5e0;
+  background: rgba(0, 0, 0, 0.8) !important;
   border-radius: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #a0aec0;
+  background: rgba(55, 55, 55, 0.9) !important;
 }
+
+
+.black-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.black-scrollbar::-webkit-scrollbar-track {
+  background: #18181b !important; /* Zinc-900 */
+  border-radius: 10px;
+}
+
+.black-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2) !important; /* Light gray thumb */
+  border-radius: 10px;
+}
+
+.black-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4) !important; /* Lighter on hover */
+}
+
+
+
 
 .loader {
   --dim: 3rem;
